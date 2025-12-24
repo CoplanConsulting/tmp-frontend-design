@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx shadcn-vue@latest add:*)",
+      "Bash(npx nuxi@latest init:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "WebFetch(domain:ui.shadcn.com)",
+      "Skill(frontend-design)",
+      "Bash(npx nuxi dev)",
+      "Bash(npx nuxi typecheck:*)",
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(head:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)"
+    ]
+  }
+}
