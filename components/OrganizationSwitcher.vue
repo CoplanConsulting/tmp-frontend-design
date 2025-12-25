@@ -60,7 +60,7 @@ const activeTeam = ref(props.teams[0])
           :side-offset="4"
         >
           <DropdownMenuLabel class="text-xs text-muted-foreground">
-            Teams
+            Tours
           </DropdownMenuLabel>
           <DropdownMenuItem
             v-for="(team, index) in teams"
@@ -80,7 +80,7 @@ const activeTeam = ref(props.teams[0])
               <Plus class="size-4" />
             </div>
             <div class="font-medium text-muted-foreground">
-              Add team
+              Add tour
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

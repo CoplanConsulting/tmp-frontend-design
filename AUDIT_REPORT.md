@@ -250,7 +250,7 @@ project/
 - **No Pinia stores** (planned per CLAUDE.md but not implemented)
 - **No global user state**
 - **No current tour context**
-- **Team switching** (components/TeamSwitcher.vue:32) uses local `ref` instead of global store
+- **Team switching** (components/OrganizationSwitcher.vue:32) uses local `ref` instead of global store
 
 **Recommended Structure**:
 ```
@@ -457,7 +457,7 @@ global $stat_title, $stat_value, $stat_icon;
 2. **No global state management**
    - WordPress provides `$current_user`, `$wpdb` globals everywhere
    - Nuxt needs explicit Pinia stores for shared state
-   - Team switching (TeamSwitcher.vue) should update global tour context
+   - Team switching (OrganizationSwitcher.vue) should update global tour context
 
 #### 🟡 **Important**
 
@@ -499,7 +499,7 @@ global $stat_title, $stat_value, $stat_icon;
 
 ### **WordPress Multisite Analogy**
 
-Your `TeamSwitcher` component is conceptually similar to WordPress Multisite blog switching:
+Your `OrganizationSwitcher` component is conceptually similar to WordPress Multisite blog switching:
 
 ```php
 // WordPress Multisite
@@ -512,7 +512,7 @@ tourStore.switchTour(tourId)
 // All components react to the new tour context
 ```
 
-**Current Implementation** (TeamSwitcher.vue:32):
+**Current Implementation** (OrganizationSwitcher.vue:32):
 ```ts
 const activeTeam = ref(props.teams[0])  // Local state only
 ```
@@ -531,7 +531,7 @@ export const useTourStore = defineStore('tour', () => {
   return { activeTour, switchTour }
 })
 
-// components/TeamSwitcher.vue
+// components/OrganizationSwitcher.vue
 const tourStore = useTourStore()
 const activeTeam = computed(() => tourStore.activeTour)
 ```

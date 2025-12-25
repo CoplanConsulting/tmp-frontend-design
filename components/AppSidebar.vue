@@ -7,7 +7,7 @@ import {
   GalleryVerticalEnd,
 } from "lucide-vue-next"
 import NavUser from "@/components/NavUser.vue"
-import TeamSwitcher from "@/components/TeamSwitcher.vue"
+import OrganizationSwitcher from "@/components/OrganizationSwitcher.vue"
 import { navigationSections } from '~/utils/navigation'
 
 import avatarImg from "~/assets/img/me.jpg"
@@ -28,25 +28,25 @@ const props = withDefaults(defineProps<SidebarProps>(), {
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Steve C",
+    email: "steve@steve.com",
     avatar: avatarImg,
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Homecoming Tour 2.0",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "2025",
     },
     {
-      name: "Acme Corp.",
+      name: "HomeComing Tour",
       logo: AudioWaveform,
-      plan: "Startup",
+      plan: "2023",
     },
     {
-      name: "Evil Corp.",
+      name: "2022 Tour",
       logo: Command,
-      plan: "Free",
+      plan: "2022",
     },
   ],
 //   navMain: [
@@ -159,7 +159,7 @@ const data = {
 <template>
   <Sidebar v-bind="props">
     <SidebarHeader>
-      <TeamSwitcher :teams="data.teams" />
+      <OrganizationSwitcher :teams="data.teams" />
     </SidebarHeader>
     <SidebarContent>
       <NavMain :items="navigationSections" />

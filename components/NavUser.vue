@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import {
-  BadgeCheck,
+  Building2,
   Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
+  Settings,
 } from "lucide-vue-next"
 
 import {
@@ -85,19 +84,15 @@ const { isMobile } = useSidebar()
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <Sparkles />
-              Upgrade to Pro
+              <Settings />
+              Account Settings
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <BadgeCheck />
-              Account
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <CreditCard />
-              Billing
+              <Building2 />
+              Organization Settings
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Bell />

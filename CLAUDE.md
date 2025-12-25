@@ -40,7 +40,7 @@ components/
 ├── AppSidebar.vue          # Main app sidebar (used in default layout)
 ├── NavMain.vue             # Navigation menu renderer
 ├── NavUser.vue             # User profile dropdown
-├── TeamSwitcher.vue        # Tour/organization switcher
+├── OrganizationSwitcher.vue        # Tour/organization switcher
 ├── common/                 # Reusable app components
 └── ui/                     # shadcn-vue components
 ```
