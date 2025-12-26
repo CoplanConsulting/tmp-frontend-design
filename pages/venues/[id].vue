@@ -12,8 +12,8 @@ import {
   FileEdit,
   Building2
 } from 'lucide-vue-next'
-import { venues } from '@/utils/mockVenues'
-import type { Venue } from '@/utils/mockVenues'
+import { venues, getVenueById } from '@/utils/mockData'
+import type { Venue } from '@/utils/mockData'
 
 definePageMeta({
   layout: 'default'
@@ -25,7 +25,7 @@ const venueId = computed(() => route.params.id as string)
 
 // Find selected venue or default to first venue
 const selectedVenue = computed(() => {
-  const venue = venues.find(v => v.id === venueId.value)
+  const venue = getVenueById(venueId.value)
   return venue || venues[0]
 })
 
@@ -122,35 +122,29 @@ const selectVenue = (id: string) => {
               <div>
                 <p class="text-xs font-semibold text-gray-500 uppercase">Address</p>
                 <p class="text-sm text-gray-900 mt-1">
-                  {{ selectedVenue.street }}<br />
+                  {{ selectedVenue.address }}<br />
                   {{ selectedVenue.city }}, {{ selectedVenue.state }} {{ selectedVenue.postalCode }}
                 </p>
               </div>
               <Separator class="bg-slate-200" />
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <p class="text-xs font-semibold text-gray-500 uppercase">Type</p>
-                  <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.type }}</p>
-                </div>
-                <div>
-                  <p class="text-xs font-semibold text-gray-500 uppercase">Shows</p>
-                  <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.shows }}</p>
-                </div>
+              <div>
+                <p class="text-xs font-semibold text-gray-500 uppercase">Contact Name</p>
+                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.venueContactName }}</p>
               </div>
               <Separator class="bg-slate-200" />
               <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase">Venue Contact</p>
-                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.venueContact }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase">Production Contact</p>
+                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.productionContactName }}</p>
               </div>
             </CardContent>
           </Card>
 
-          <!-- Technical Specifications -->
+          <!-- Technical Specs -->
           <Card class="border border-gray-200 bg-white">
             <CardHeader class="pb-3">
               <div class="flex items-center gap-2">
                 <Ruler class="h-5 w-5 text-gray-600" />
-                <CardTitle class="text-base font-bold text-gray-900">Technical Specifications</CardTitle>
+                <CardTitle class="text-base font-bold text-gray-900">Technical Specs</CardTitle>
               </div>
             </CardHeader>
             <CardContent class="space-y-3">
@@ -160,13 +154,13 @@ const selectVenue = (id: string) => {
               </div>
               <Separator class="bg-slate-200" />
               <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase">Loading Dock</p>
-                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.loadingDockInfo }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase">Load In Info</p>
+                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.loadInInfo }}</p>
               </div>
               <Separator class="bg-slate-200" />
               <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase">Shore Power</p>
-                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.shorePower }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase">Power Info</p>
+                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.powerInfo }}</p>
               </div>
             </CardContent>
           </Card>
@@ -213,7 +207,7 @@ const selectVenue = (id: string) => {
               <Separator class="bg-slate-200" />
               <div>
                 <p class="text-xs font-semibold text-gray-500 uppercase">Merch Split</p>
-                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.merchPercent }}</p>
+                <p class="text-sm text-gray-900 mt-1">{{ selectedVenue.merchSplit }}</p>
               </div>
               <Separator class="bg-slate-200" />
               <div>

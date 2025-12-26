@@ -9,7 +9,8 @@ import {
   Users,
   CalendarDays,
   Contact,
-  UserCog
+  UserCog,
+  Building2
 } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
@@ -39,6 +40,7 @@ export const navigationSections: NavigationSection[] = [
       { title: 'Personnel', icon: UserCog, url: '/personnel' },
       { title: 'Guest List', icon: Users, url: '/guest-list/1' },
       { title: 'Venues', icon: MapPin, url: '/venues/1' },
+      { title: 'Companies', icon: Building2, url: '/companies' },
       { title: 'Contacts', icon: Contact, url: '/contacts' }
     ]
   },

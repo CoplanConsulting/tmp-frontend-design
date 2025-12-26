@@ -4,6 +4,8 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { format } from 'date-fns'
+import { venues, hotels, contacts, getLocation } from '~/utils/mockData'
+import type { DayType } from '~/utils/mockData'
 
 definePageMeta({
   layout: 'default'
@@ -13,8 +15,11 @@ definePageMeta({
 const formSchema = toTypedSchema(z.object({
   eventName: z.string().min(1, 'Event name is required').max(100),
   eventType: z.string().min(1, 'Event type is required'),
-  venue: z.string().min(1, 'Venue is required').max(200),
+  venue: z.string().min(1, 'Venue is required'),
   location: z.string().min(1, 'Location is required').max(200),
+  hotel: z.string().optional(),
+  dayOfShowContact: z.string().optional(),
+  promoter: z.string().optional(),
   startDate: z.date({
     required_error: 'Start date is required',
   }),
@@ -29,20 +34,51 @@ const formSchema = toTypedSchema(z.object({
 
 const { handleSubmit } = useForm({
   validationSchema: formSchema,
+  initialValues: {
+    showTime: '20:00', // Default to 8:00 PM
+    eventType: 'Show Day',
+  }
 })
 
 const onSubmit = handleSubmit((values) => {
   console.log('Form submitted:', values)
-  // Handle form submission
+  // Handle form submission - would create Day + Event entities
+  // const newDay = { tourIds, date, dayType, city, state, ... }
+  // const newEvent = { dayId, venueId, showTime, advanceStatus: 'not-started', ... }
 })
 
-const eventTypes = [
-  { value: 'concert', label: 'Concert' },
-  { value: 'travel', label: 'Travel Day' },
-  { value: 'rehearsal', label: 'Rehearsal' },
-  { value: 'meet-greet', label: 'Meet & Greet' },
-  { value: 'press', label: 'Press Event' },
+// Event/Day types from centralized data
+const eventTypes: { value: DayType; label: string }[] = [
+  { value: 'Show Day', label: 'Show Day' },
+  { value: 'Travel Day', label: 'Travel Day' },
+  { value: 'Rehearsal', label: 'Rehearsal' },
+  { value: 'Press Day', label: 'Press Day' },
+  { value: 'Day Off', label: 'Day Off' },
+  { value: 'On Hold', label: 'On Hold' },
 ]
+
+// Venues from mockData
+const venueOptions = venues.map(v => ({
+  value: v.id,
+  label: v.name,
+  city: getLocation(v.city, v.state)
+}))
+
+// Hotels from mockData
+const hotelOptions = hotels.map(h => ({
+  value: h.id,
+  label: h.name,
+  city: getLocation(h.city, h.state)
+}))
+
+// Contacts for day of show contact and promoter
+const contactOptions = contacts
+  .filter(c => c.isActive)
+  .map(c => ({
+    value: c.id,
+    label: `${c.firstName} ${c.lastName}`,
+    company: c.companyName
+  }))
 </script>
 
 <template>
@@ -122,15 +158,23 @@ const eventTypes = [
                 <div class="grid grid-cols-2 gap-6">
                   <FormField v-slot="{ componentField }" name="venue">
                     <FormItem>
-                      <FormLabel class="text-sm font-medium text-gray-900">Venue Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="e.g., Madison Square Garden"
-                          v-bind="componentField"
-                          class="border-gray-300"
-                        />
-                      </FormControl>
+                      <FormLabel class="text-sm font-medium text-gray-900">Venue</FormLabel>
+                      <Select v-bind="componentField">
+                        <FormControl>
+                          <SelectTrigger class="border-gray-300">
+                            <SelectValue placeholder="Select venue" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem
+                            v-for="venue in venueOptions"
+                            :key="venue.value"
+                            :value="venue.value"
+                          >
+                            {{ venue.label }} - {{ venue.city }}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   </FormField>
@@ -146,6 +190,89 @@ const eventTypes = [
                           class="border-gray-300"
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </FormField>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                  <FormField v-slot="{ componentField }" name="hotel">
+                    <FormItem>
+                      <FormLabel class="text-sm font-medium text-gray-900">Hotel (Optional)</FormLabel>
+                      <Select v-bind="componentField">
+                        <FormControl>
+                          <SelectTrigger class="border-gray-300">
+                            <SelectValue placeholder="Select hotel" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem
+                            v-for="hotel in hotelOptions"
+                            :key="hotel.value"
+                            :value="hotel.value"
+                          >
+                            {{ hotel.label }} - {{ hotel.city }}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  </FormField>
+                </div>
+              </div>
+
+              <!-- Contacts Section -->
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">Contacts</h3>
+                  <p class="text-sm text-gray-500">Key contacts for this event</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                  <FormField v-slot="{ componentField }" name="dayOfShowContact">
+                    <FormItem>
+                      <FormLabel class="text-sm font-medium text-gray-900">Day of Show Contact (Optional)</FormLabel>
+                      <Select v-bind="componentField">
+                        <FormControl>
+                          <SelectTrigger class="border-gray-300">
+                            <SelectValue placeholder="Select contact" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem
+                            v-for="contact in contactOptions"
+                            :key="contact.value"
+                            :value="contact.value"
+                          >
+                            {{ contact.label }}
+                            <span v-if="contact.company" class="text-gray-500 text-xs ml-1">({{ contact.company }})</span>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  </FormField>
+
+                  <FormField v-slot="{ componentField }" name="promoter">
+                    <FormItem>
+                      <FormLabel class="text-sm font-medium text-gray-900">Promoter (Optional)</FormLabel>
+                      <Select v-bind="componentField">
+                        <FormControl>
+                          <SelectTrigger class="border-gray-300">
+                            <SelectValue placeholder="Select promoter" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem
+                            v-for="contact in contactOptions"
+                            :key="contact.value"
+                            :value="contact.value"
+                          >
+                            {{ contact.label }}
+                            <span v-if="contact.company" class="text-gray-500 text-xs ml-1">({{ contact.company }})</span>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   </FormField>

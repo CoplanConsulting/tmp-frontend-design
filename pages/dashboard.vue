@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { Calendar, Mic, Users, MapPin } from 'lucide-vue-next'
-import { statsCards, tourSchedule } from '~/utils/mockDashboard'
+import { getDashboardData } from '~/utils/mockData'
+
+const { stats, upcomingDays } = getDashboardData()
+
+const statsCards = [
+  { title: 'Dates', value: stats.dateRange, subtitle: `${stats.totalDays} Total Days`, icon: 'calendar' },
+  { title: 'Show Count', value: stats.totalShows, subtitle: `${stats.completedShows} Completed - ${stats.remainingShows} Remain`, icon: 'mic' },
+  { title: 'Tour Personnel', value: stats.totalCrew, subtitle: 'Active team members on tour', icon: 'users' },
+  { title: 'Next Show Day', value: stats.nextShowDate?.slice(5) || 'TBD', subtitle: stats.nextShowCity || '', icon: 'map-pin' },
+]
 
 const getIconComponent = (iconName: string) => {
   const icons: Record<string, any> = {
@@ -44,28 +53,28 @@ const getIconComponent = (iconName: string) => {
           </div>
 
           <div class="space-y-3">
-            <Card v-for="event in tourSchedule" :key="event.id" class="bg-white border border-gray-200">
+            <Card v-for="day in upcomingDays" :key="day.id" class="bg-white border border-gray-200">
               <CardContent class="flex items-center gap-6 p-6">
                 <div class="flex items-center justify-center w-16 h-16 rounded-lg bg-gray-100 shrink-0">
-                  <span class="text-sm font-semibold text-gray-700 uppercase">{{ event.day }}</span>
+                  <span class="text-sm font-semibold text-gray-700 uppercase">{{ day.dayOfWeek }}</span>
                 </div>
 
                 <div class="flex-1 min-w-0">
-                  <h3 class="text-base font-semibold text-gray-900">
-                    {{ event.date }} - {{ event.eventType }}
-                  </h3>
-                  <p class="text-sm text-gray-500 mt-1">
-                    <template v-if="event.location">
-                      {{ event.venue }} • {{ event.location }}
-                    </template>
-                    <template v-else>
-                      {{ event.venue }}
-                    </template>
-                  </p>
+                    <h3 class="text-base font-semibold text-gray-900">
+                        {{ day.dateShort }} - {{ day.dayType }}
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                        <template v-if="day.venue">
+                            {{ day.venue.name }} • {{ day.location }}
+                        </template>
+                        <template v-else>
+                            {{ day.location }}
+                        </template>
+                    </p>
                 </div>
 
                 <Button variant="outline" size="sm" class="shrink-0" as-child>
-                  <a href="/days/day">View Details</a>
+                  <NuxtLink :to="`/days/${day.id}`">View Details</NuxtLink>
                 </Button>
               </CardContent>
             </Card>

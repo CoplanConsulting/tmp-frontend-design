@@ -14,20 +14,45 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { format } from 'date-fns'
-import { daysEvents, type DayEvent } from '~/utils/mockDays'
-import { eventDetailsMap, type EventDetail } from '~/utils/mockEventDetails'
-import { useSelectedEvent } from '~/composables/useSelectedEvent'
-const { setEvent, clearEvent } = useSelectedEvent()
+import {
+  getDaysWithEvents,
+  type DayWithDetails,
+  getDayOfWeek,
+  getDateShort,
+  getLocation,
+  formatDisplayDate
+} from '~/utils/mockData'
 
 definePageMeta({
   layout: 'default'
+})
+
+// Get days with events for tour-1
+const rawDays = getDaysWithEvents('tour-1')
+
+// Enrich days with derived UI fields
+interface EnrichedDay extends DayWithDetails {
+  dayOfWeek: string
+  dateShort: string
+  location: string
+  isEmpty: boolean
+}
+
+const daysEvents = computed<EnrichedDay[]>(() => {
+  return rawDays.map(day => ({
+    ...day,
+    dayOfWeek: getDayOfWeek(day.date),
+    dateShort: getDateShort(day.date),
+    location: getLocation(day.city, day.state),
+    isEmpty: !day.event, // No event = empty day
+  }))
 })
 
 // Right panel state management
 type PanelView = 'placeholder' | 'add-event' | 'event-detail'
 
 const currentView = ref<PanelView>('placeholder')
-const selectedEvent = ref<DayEvent | null>(null)
+const selectedDay = ref<EnrichedDay | null>(null)
 const selectedDate = ref<string | null>(null)
 
 // Form validation schema for Add Event
@@ -71,30 +96,84 @@ const eventTypes = [
 const showAddEvent = (date: string) => {
   currentView.value = 'add-event'
   selectedDate.value = date
-  selectedEvent.value = null
+  selectedDay.value = null
 }
 
-const showEventDetail = (event: DayEvent) => {
-  if (!event.isEmpty) {
+const showEventDetail = (day: EnrichedDay) => {
+  if (!day.isEmpty && day.event) {
     currentView.value = 'event-detail'
-    selectedEvent.value = event
+    selectedDay.value = day
     selectedDate.value = null
-    setEvent(event.id, event.location)
   }
 }
 
 const closePanelView = () => {
   currentView.value = 'placeholder'
-  selectedEvent.value = null
+  selectedDay.value = null
   selectedDate.value = null
   resetForm()
-  clearEvent()
 }
 
-// Get full event details
-const selectedEventDetails = computed<EventDetail | null>(() => {
-  if (!selectedEvent.value || selectedEvent.value.isEmpty) return null
-  return eventDetailsMap[selectedEvent.value.id] || null
+// Computed properties for event details
+const selectedEventDetails = computed(() => {
+  if (!selectedDay.value || selectedDay.value.isEmpty || !selectedDay.value.event) {
+    return null
+  }
+
+  const day = selectedDay.value
+  const event = day.event!
+  const venue = day.venue
+  const hotel = day.hotel
+
+  // Build a schedule from event data
+  const schedule: Array<{ time: string; activity: string }> = []
+
+  if (event.loadIn) schedule.push({ time: event.loadIn, activity: 'Load-In' })
+  if (event.lunch) schedule.push({ time: event.lunch, activity: `Lunch at venue (${event.lunchCount || 0} people)` })
+  if (event.soundCheck) schedule.push({ time: event.soundCheck, activity: 'Sound Check' })
+  if (event.dinner) schedule.push({ time: event.dinner, activity: `Dinner at venue (${event.dinnerCount || 0} people)` })
+  if (event.doors) schedule.push({ time: event.doors, activity: 'Doors open' })
+  if (event.showTime) schedule.push({ time: event.showTime, activity: 'Show begins' })
+  if (event.curfew) schedule.push({ time: event.curfew, activity: 'Curfew' })
+
+  return {
+    id: day.id,
+    fullDate: formatDisplayDate(day.date),
+    dayType: day.dayType.toUpperCase(),
+    location: `${day.location} • ${day.timezone}`,
+    showTime: event.showTime || 'TBD',
+    showLength: event.setLength ? `${event.setLength} mins` : 'TBD',
+    schedule,
+    returnInfo: (event.returnToHotelAfterSoundcheck || event.returnToHotelAfterShow) ? {
+      afterSoundcheck: event.returnToHotelAfterSoundcheck ? 'Yes' : 'No',
+      afterShow: event.returnToHotelAfterShow ? 'Yes' : 'No',
+    } : undefined,
+    venue: venue ? {
+      name: venue.name,
+      address: venue.address || 'N/A',
+      city: `${venue.city}, ${venue.state} ${venue.postalCode || ''}`,
+      phone: venue.phone || 'N/A',
+      capacity: venue.capacity || 0,
+      type: venue.type || 'N/A',
+    } : {
+      name: 'N/A',
+      address: 'N/A',
+      city: 'N/A',
+      phone: 'N/A',
+      capacity: 0,
+      type: 'N/A',
+    },
+    hotel: hotel ? {
+      name: hotel.name,
+      address: hotel.address || 'N/A',
+      city: `${hotel.city}, ${hotel.state} ${hotel.postalCode || ''}`,
+      phone: hotel.phone || 'N/A',
+      contact: 'TBD', // Not in new schema
+      distanceToVenue: 'N/A', // Not in new schema
+      amenities: hotel.amenities || [],
+    } : undefined,
+    notes: event.notes || day.notes,
+  }
 })
 </script>
 
@@ -148,7 +227,7 @@ const selectedEventDetails = computed<EventDetail | null>(() => {
                       {{ day.location }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1">
-                      {{ day.venue }}
+                      {{ day.venue?.name || 'Venue TBD' }}
                     </p>
                   </div>
                 </div>
@@ -486,7 +565,7 @@ const selectedEventDetails = computed<EventDetail | null>(() => {
                   <CardContent class="p-6">
                     <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 mb-6">Show Info</h2>
 
-                    <div v-if="selectedEventDetails.showTime" class="mb-8">
+                    <div v-if="selectedEventDetails.showTime !== 'TBD'" class="mb-8">
                       <div class="flex items-baseline gap-2 mb-2">
                         <span class="text-xs font-medium uppercase text-gray-600">Showtime</span>
                       </div>
@@ -497,7 +576,7 @@ const selectedEventDetails = computed<EventDetail | null>(() => {
                     </div>
 
                     <!-- Schedule -->
-                    <div class="border-t border-gray-200 pt-6 space-y-3">
+                    <div v-if="selectedEventDetails.schedule.length > 0" class="border-t border-gray-200 pt-6 space-y-3">
                       <div
                         v-for="(item, index) in selectedEventDetails.schedule"
                         :key="index"
@@ -507,22 +586,8 @@ const selectedEventDetails = computed<EventDetail | null>(() => {
                         <span class="text-sm text-gray-700">{{ item.activity }}</span>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-
-                <!-- Opening Act Card -->
-                <Card v-if="selectedEventDetails.openingAct" class="border border-gray-200 bg-white">
-                  <CardContent class="p-6">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 mb-6">Opening Act</h2>
-                    <div class="space-y-3">
-                      <div
-                        v-for="(item, index) in selectedEventDetails.openingAct.schedule"
-                        :key="index"
-                        class="flex items-center gap-4"
-                      >
-                        <span class="text-sm font-semibold text-gray-900 w-24">{{ item.time }}</span>
-                        <span class="text-sm text-gray-700">{{ item.activity }}</span>
-                      </div>
+                    <div v-else class="border-t border-gray-200 pt-6">
+                      <p class="text-sm text-gray-400 italic">No schedule details available</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -594,17 +659,7 @@ const selectedEventDetails = computed<EventDetail | null>(() => {
                         <p class="text-sm text-gray-600">{{ selectedEventDetails.hotel.city }}</p>
                         <p class="text-sm text-gray-600 mt-2">{{ selectedEventDetails.hotel.phone }}</p>
                       </div>
-                      <div class="pt-4 border-t border-gray-200 space-y-2">
-                        <div class="flex items-center justify-between">
-                          <span class="text-xs font-medium uppercase text-gray-600">Contact</span>
-                          <span class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.hotel.contact }}</span>
-                        </div>
-                        <div v-if="selectedEventDetails.hotel.distanceToVenue !== 'N/A'" class="flex items-center justify-between">
-                          <span class="text-xs font-medium uppercase text-gray-600">Distance to Venue</span>
-                          <span class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.hotel.distanceToVenue }}</span>
-                        </div>
-                      </div>
-                      <div class="pt-4 border-t border-gray-200">
+                      <div v-if="selectedEventDetails.hotel.amenities && selectedEventDetails.hotel.amenities.length > 0" class="pt-4 border-t border-gray-200">
                         <div class="flex flex-wrap gap-2">
                           <Badge
                             v-for="amenity in selectedEventDetails.hotel.amenities"
@@ -615,47 +670,6 @@ const selectedEventDetails = computed<EventDetail | null>(() => {
                             {{ amenity }}
                           </Badge>
                         </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <!-- Travel Info Card -->
-                <Card v-if="selectedEventDetails.travel" class="border border-gray-200 bg-white">
-                  <CardContent class="p-6">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 mb-4">Travel Info</h2>
-                    <div class="space-y-3">
-                      <div>
-                        <p class="text-xs font-medium uppercase text-gray-600">Depart</p>
-                        <p class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.travel.depart }}</p>
-                      </div>
-                      <div>
-                        <p class="text-xs font-medium uppercase text-gray-600">Arrive</p>
-                        <p class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.travel.arrive }}</p>
-                      </div>
-                      <div class="pt-3 border-t border-gray-200">
-                        <p class="text-xs font-medium uppercase text-gray-600">Depart from</p>
-                        <p class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.travel.departFrom }}</p>
-                      </div>
-                      <div>
-                        <p class="text-xs font-medium uppercase text-gray-600">Travel By</p>
-                        <p class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.travel.travelBy }}</p>
-                      </div>
-                      <div class="pt-3 border-t border-gray-200">
-                        <p class="text-xs font-medium uppercase text-gray-600">ETD</p>
-                        <p class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.travel.etd }}</p>
-                      </div>
-                      <div>
-                        <p class="text-xs font-medium uppercase text-gray-600">ETA</p>
-                        <p class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.travel.eta }}</p>
-                      </div>
-                      <div class="pt-3 border-t border-gray-200">
-                        <p class="text-xs font-medium uppercase text-gray-600">Travel Time</p>
-                        <p class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.travel.travelTime }}</p>
-                      </div>
-                      <div>
-                        <p class="text-xs font-medium uppercase text-gray-600">Miles</p>
-                        <p class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.travel.miles }}</p>
                       </div>
                     </div>
                   </CardContent>

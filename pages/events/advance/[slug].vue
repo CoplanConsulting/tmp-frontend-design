@@ -8,20 +8,42 @@ import {
   Edit,
   Map
 } from 'lucide-vue-next'
-import { getAllAdvanceDetails, getAdvanceDetailBySlug } from '~/utils/mockAdvanceDetails'
+import {
+  getEventWithDetails,
+  getEventListItems,
+  getDayOfWeek,
+  formatDisplayDate,
+  getLocation,
+  getFullName
+} from '~/utils/mockData'
+import type { EventWithDetails } from '~/utils/mockData'
 
 definePageMeta({
   layout: 'default'
 })
 
 const route = useRoute()
-const slug = computed(() => route.params.slug as string)
+const eventId = computed(() => route.params.slug as string)
 
-// Get all events for timeline
-const timelineEvents = getAllAdvanceDetails()
+// Get all events for timeline sidebar
+const timelineEvents = getEventListItems()
 
-// Get current event details
-const currentEvent = computed(() => getAdvanceDetailBySlug(slug.value))
+// Get current event details with all related data
+const currentEvent = computed(() => {
+  const event = getEventWithDetails(eventId.value)
+  if (!event) return null
+
+  return event
+})
+
+// Helper to format date for header display
+const headerDate = computed(() => {
+  if (!currentEvent.value?.day) return { dayOfWeek: '', dateShort: '' }
+  return {
+    dayOfWeek: getDayOfWeek(currentEvent.value.day.date),
+    dateShort: currentEvent.value.day.date.slice(5).replace('-', '/')
+  }
+})
 
 // Active tab
 const activeTab = ref('Production')
@@ -50,20 +72,20 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
               <NuxtLink
                 v-for="event in timelineEvents"
                 :key="event.id"
-                :to="`/events/advance/${event.slug}`"
+                :to="`/events/advance/${event.id}`"
                 class="flex items-start gap-4 cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-2 rounded-md transition-colors"
-                :class="{ 'bg-gray-100': event.slug === slug }"
+                :class="{ 'bg-gray-100': event.id === eventId }"
               >
                 <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-300 bg-white flex-shrink-0">
                   <span class="text-xs font-semibold text-gray-900 leading-none">{{ event.dayOfWeek }}</span>
-                  <span class="text-xs text-gray-600 leading-none mt-1">{{ event.dateNumber }}</span>
+                  <span class="text-xs text-gray-600 leading-none mt-1">{{ event.dateShort }}</span>
                 </div>
                 <div class="flex-1 pt-1">
                   <h3 class="text-lg font-semibold text-gray-900 leading-tight">
-                    {{ event.title }}
+                    {{ event.location }}
                   </h3>
                   <p class="text-sm text-gray-500 mt-1">
-                    {{ event.subtitle }}
+                    {{ event.venueName }}
                   </p>
                 </div>
               </NuxtLink>
@@ -76,12 +98,14 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
           <header class="flex h-16 items-center gap-4 border-b border-gray-200 bg-white px-6">
             <div class="flex items-center gap-3">
               <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-300 bg-white flex-shrink-0">
-                <span class="text-xs font-semibold text-gray-900 leading-none">{{ currentEvent?.dayOfWeek }}</span>
-                <span class="text-xs text-gray-600 leading-none mt-1">{{ currentEvent?.dateNumber }}</span>
+                <span class="text-xs font-semibold text-gray-900 leading-none">{{ headerDate.dayOfWeek }}</span>
+                <span class="text-xs text-gray-600 leading-none mt-1">{{ headerDate.dateShort }}</span>
               </div>
               <div>
-                <h1 class="text-xl font-semibold text-gray-900">{{ currentEvent?.title }}</h1>
-                <p class="text-sm text-gray-500">{{ currentEvent?.subtitle }}</p>
+                <h1 class="text-xl font-semibold text-gray-900">
+                  {{ currentEvent?.day ? getLocation(currentEvent.day.city, currentEvent.day.state) : 'Event' }}
+                </h1>
+                <p class="text-sm text-gray-500">{{ currentEvent?.venue?.name ?? 'TBD' }}</p>
               </div>
             </div>
             <div class="ml-auto">
@@ -105,10 +129,10 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ currentEvent.venue.name }}</h3>
-                    <p class="text-sm text-gray-600">{{ currentEvent.venue.address }}</p>
-                    <p class="text-sm text-gray-600">{{ currentEvent.venue.city }}</p>
-                    <p class="text-sm text-gray-600 mt-2">{{ currentEvent.venue.phone }}</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ currentEvent.venue?.name ?? 'TBD' }}</h3>
+                    <p v-if="currentEvent.venue?.address" class="text-sm text-gray-600">{{ currentEvent.venue.address }}</p>
+                    <p v-if="currentEvent.venue?.city" class="text-sm text-gray-600">{{ currentEvent.venue.city }}, {{ currentEvent.venue.state }} {{ currentEvent.venue.postalCode }}</p>
+                    <p v-if="currentEvent.venue?.phone" class="text-sm text-gray-600 mt-2">{{ currentEvent.venue.phone }}</p>
                   </CardContent>
                 </Card>
 
@@ -121,10 +145,12 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ currentEvent.promoter.name }}</h3>
-                    <p class="text-sm text-gray-600 mb-3">{{ currentEvent.promoter.company }}</p>
-                    <p class="text-sm text-gray-600">{{ currentEvent.promoter.phone }}</p>
-                    <p class="text-sm text-gray-600">{{ currentEvent.promoter.email }}</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                      {{ currentEvent.promoter ? getFullName(currentEvent.promoter) : 'TBD' }}
+                    </h3>
+                    <p v-if="currentEvent.promoter?.companyName" class="text-sm text-gray-600 mb-3">{{ currentEvent.promoter.companyName }}</p>
+                    <p v-if="currentEvent.promoter?.phone" class="text-sm text-gray-600">{{ currentEvent.promoter.phone }}</p>
+                    <p v-if="currentEvent.promoter?.email" class="text-sm text-gray-600">{{ currentEvent.promoter.email }}</p>
                   </CardContent>
                 </Card>
 
@@ -137,10 +163,13 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ currentEvent.hotel.name }}</h3>
-                    <p class="text-sm text-gray-600">{{ currentEvent.hotel.address }}</p>
-                    <p class="text-sm text-gray-600">{{ currentEvent.hotel.city }}</p>
-                    <p class="text-sm text-gray-600 mt-2">{{ currentEvent.hotel.phone }}</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ currentEvent.hotel?.name ?? 'TBD' }}</h3>
+                    <p v-if="currentEvent.hotel?.address" class="text-sm text-gray-600">{{ currentEvent.hotel.address }}</p>
+                    <p v-if="currentEvent.hotel?.city" class="text-sm text-gray-600">{{ currentEvent.hotel.city }}, {{ currentEvent.hotel.state }} {{ currentEvent.hotel.postalCode }}</p>
+                    <p v-if="currentEvent.hotel?.phone" class="text-sm text-gray-600 mt-2">{{ currentEvent.hotel.phone }}</p>
+                    <p v-if="currentEvent.hotel?.confirmationNumber" class="text-sm text-gray-600 mt-2">
+                      Confirmation: {{ currentEvent.hotel.confirmationNumber }}
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -153,10 +182,12 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ currentEvent.dayOfShowContact.name }}</h3>
-                    <p class="text-sm text-gray-600 mb-3">{{ currentEvent.dayOfShowContact.company }}</p>
-                    <p class="text-sm text-gray-600">{{ currentEvent.dayOfShowContact.phone }}</p>
-                    <p class="text-sm text-gray-600">{{ currentEvent.dayOfShowContact.email }}</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                      {{ currentEvent.dayOfShowContact ? getFullName(currentEvent.dayOfShowContact) : 'TBD' }}
+                    </h3>
+                    <p v-if="currentEvent.dayOfShowContact?.companyName" class="text-sm text-gray-600 mb-3">{{ currentEvent.dayOfShowContact.companyName }}</p>
+                    <p v-if="currentEvent.dayOfShowContact?.phone" class="text-sm text-gray-600">{{ currentEvent.dayOfShowContact.phone }}</p>
+                    <p v-if="currentEvent.dayOfShowContact?.email" class="text-sm text-gray-600">{{ currentEvent.dayOfShowContact.email }}</p>
                   </CardContent>
                 </Card>
               </div>
@@ -184,130 +215,131 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
                 </TabsContent>
 
                 <TabsContent value="Production">
-                  <div v-if="currentEvent.staging || currentEvent.loading || currentEvent.rigging" class="space-y-8">
-                    <!-- Staging Section -->
-                    <div v-if="currentEvent.staging">
-                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Staging</h2>
+                  <div class="space-y-8">
+                    <!-- Venue Technical Info -->
+                    <div v-if="currentEvent.venue">
+                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Venue Technical Information</h2>
                       <div class="space-y-3">
-                        <div v-if="currentEvent.staging.dimensions" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DIMENSIONS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.dimensions }}</div>
+                        <div v-if="currentEvent.venue.stageDimensions" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">STAGE DIMENSIONS</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.venue.stageDimensions }}</div>
                         </div>
-                        <div v-if="currentEvent.staging.stageWings" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">STAGE WINGS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.stageWings }}</div>
+                        <div v-if="currentEvent.venue.capacity" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">CAPACITY</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.venue.capacity }}</div>
                         </div>
-                        <div v-if="currentEvent.staging.paBays" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">PA BAYS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.paBays }}</div>
+                        <div v-if="currentEvent.venue.loadInInfo" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LOAD IN INFO</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.loadInInfo }}</div>
                         </div>
-                        <div v-if="currentEvent.staging.orchestraPit" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">ORCHESTRA PIT</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.orchestraPit }}</div>
+                        <div v-if="currentEvent.venue.powerInfo" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">POWER</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.venue.powerInfo }}</div>
                         </div>
-                        <div v-if="currentEvent.staging.curtain" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">CURTAIN</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.curtain }}</div>
+                        <div v-if="currentEvent.venue.dressingRoomInfo" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DRESSING ROOMS</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.dressingRoomInfo }}</div>
                         </div>
-                        <div v-if="currentEvent.staging.fireCurtain" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">FIRE CURTAIN</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.fireCurtain }}</div>
-                        </div>
-                        <div v-if="currentEvent.staging.steps" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">STEPS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.steps }}</div>
-                        </div>
-                        <div v-if="currentEvent.staging.trimHeight" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">TRIM HEIGHT</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.trimHeight }}</div>
-                        </div>
-                        <div v-if="currentEvent.staging.apron" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">APRON</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.apron }}</div>
-                        </div>
-                        <div v-if="currentEvent.staging.deckToGrid" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DECK TO GRID</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.deckToGrid }}</div>
-                        </div>
-                        <div v-if="currentEvent.staging.legs" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LEGS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.legs }}</div>
-                        </div>
-                        <div v-if="currentEvent.staging.risers" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">RISERS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.risers }}</div>
-                        </div>
-                        <div v-if="currentEvent.staging.stage" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">STAGE</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.stage }}</div>
-                        </div>
-                        <div v-if="currentEvent.staging.borders" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">BORDERS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.staging.borders }}</div>
+                        <div v-if="currentEvent.venue.greenRoomInfo" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">GREEN ROOM</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.greenRoomInfo }}</div>
                         </div>
                       </div>
                     </div>
 
-                    <!-- Loading Section -->
-                    <div v-if="currentEvent.loading">
-                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Loading</h2>
+                    <!-- Event Production Details -->
+                    <div v-if="currentEvent.loadInDetails || currentEvent.soundDetails || currentEvent.lightDetails || currentEvent.securityDetails">
+                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Event Production Details</h2>
                       <div class="space-y-3">
-                        <div v-if="currentEvent.loading.access" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">ACCESS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.loading.access }}</div>
+                        <div v-if="currentEvent.loadInDetails" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LOAD IN</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.loadInDetails }}</div>
                         </div>
-                        <div v-if="currentEvent.loading.dockType" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DOCK TYPE</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.loading.dockType }}</div>
+                        <div v-if="currentEvent.soundDetails" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SOUND</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.soundDetails }}</div>
                         </div>
-                        <div v-if="currentEvent.loading.deadCase" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DEAD CASE</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.loading.deadCase }}</div>
+                        <div v-if="currentEvent.lightDetails" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LIGHTING</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.lightDetails }}</div>
                         </div>
-                        <div v-if="currentEvent.loading.forklifts" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">FORKLIFTS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.loading.forklifts }}</div>
+                        <div v-if="currentEvent.securityDetails" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SECURITY</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.securityDetails }}</div>
                         </div>
-                        <div v-if="currentEvent.loading.loadComments && currentEvent.loading.loadComments.length > 0" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LOAD COMMENTS</div>
-                          <div class="flex-1">
-                            <ul class="list-disc list-inside space-y-1">
-                              <li v-for="(comment, idx) in currentEvent.loading.loadComments" :key="idx" class="text-sm font-medium text-gray-900">
-                                {{ comment }}
-                              </li>
-                            </ul>
+                        <div v-if="currentEvent.cateringDetails" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">CATERING</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.cateringDetails }}</div>
+                        </div>
+                        <div v-if="currentEvent.meetAndGreet" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">MEET & GREET</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.meetAndGreet }}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Schedule -->
+                    <div v-if="currentEvent.loadIn || currentEvent.soundCheck || currentEvent.doors || currentEvent.showTime || currentEvent.curfew">
+                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Show Schedule</h2>
+                      <div class="space-y-3">
+                        <div v-if="currentEvent.loadIn" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LOAD IN</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.loadIn }}</div>
+                        </div>
+                        <div v-if="currentEvent.soundCheck" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SOUND CHECK</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.soundCheck }}</div>
+                        </div>
+                        <div v-if="currentEvent.doors" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DOORS</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.doors }}</div>
+                        </div>
+                        <div v-if="currentEvent.showTime" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SHOW TIME</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.showTime }}</div>
+                        </div>
+                        <div v-if="currentEvent.curfew" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">CURFEW</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.curfew }}</div>
+                        </div>
+                        <div v-if="currentEvent.setLength" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SET LENGTH</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.setLength }} minutes</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Meals -->
+                    <div v-if="currentEvent.lunch || currentEvent.dinner">
+                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Meals</h2>
+                      <div class="space-y-3">
+                        <div v-if="currentEvent.lunch" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LUNCH</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">
+                            {{ currentEvent.lunch }}
+                            <span v-if="currentEvent.lunchCount" class="text-gray-600 ml-2">({{ currentEvent.lunchCount }} people)</span>
+                          </div>
+                        </div>
+                        <div v-if="currentEvent.dinner" class="flex">
+                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DINNER</div>
+                          <div class="flex-1 text-sm font-medium text-gray-900">
+                            {{ currentEvent.dinner }}
+                            <span v-if="currentEvent.dinnerCount" class="text-gray-600 ml-2">({{ currentEvent.dinnerCount }} people)</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <!-- Rigging Section -->
-                    <div v-if="currentEvent.rigging">
-                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Rigging</h2>
-                      <div class="space-y-3">
-                        <div v-if="currentEvent.rigging.flySystem" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">FLY SYSTEM</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.rigging.flySystem }}</div>
-                        </div>
-                        <div v-if="currentEvent.rigging.lineSets" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LINE SETS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.rigging.lineSets }}</div>
-                        </div>
-                        <div v-if="currentEvent.rigging.riggingComments && currentEvent.rigging.riggingComments.length > 0" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">RIGGING COMMENTS</div>
-                          <div class="flex-1">
-                            <ul class="list-disc list-inside space-y-1">
-                              <li v-for="(comment, idx) in currentEvent.rigging.riggingComments" :key="idx" class="text-sm font-medium text-gray-900">
-                                {{ comment }}
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+                    <!-- Notes -->
+                    <div v-if="currentEvent.notes">
+                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Notes</h2>
+                      <div class="text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.notes }}</div>
                     </div>
-                  </div>
-                  <div v-else class="text-center py-12 text-gray-500">
-                    No production information available for this event.
+
+                    <!-- Empty State -->
+                    <div v-if="!currentEvent.venue && !currentEvent.loadInDetails && !currentEvent.soundDetails && !currentEvent.loadIn && !currentEvent.lunch && !currentEvent.notes" class="text-center py-12 text-gray-500">
+                      No production information available for this event.
+                    </div>
                   </div>
                 </TabsContent>
 

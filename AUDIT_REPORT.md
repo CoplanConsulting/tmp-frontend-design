@@ -104,7 +104,7 @@ project/
   ```ts
   // pages/people/index.vue:11-14
   const searchQuery = ref('')
-  const selectedTourId = ref<string>('all')
+  const selectedtourIds = ref<string>('all')
   const selectedPerson = ref<Person | null>(null)
   ```
 - **Computed properties** used correctly (pages/people/index.vue:18-21, 24-48)
@@ -195,8 +195,8 @@ project/
 
 3. **Good example** (pages/people/index.vue:51-54):
    ```ts
-   const getTourName = (tourId: string): string => {  // Explicit return type ✅
-     const tour = tours.find(t => t.id === tourId)
+   const getTourName = (tourIds: string): string => {  // Explicit return type ✅
+     const tour = tours.find(t => t.id === tourIds)
      return tour ? tour.name : 'Unknown Tour'
    }
    ```
@@ -508,7 +508,7 @@ switch_to_blog($blog_id);
 
 // Your Nuxt app should work similarly
 const tourStore = useTourStore()
-tourStore.switchTour(tourId)
+tourStore.switchTour(tourIds)
 // All components react to the new tour context
 ```
 

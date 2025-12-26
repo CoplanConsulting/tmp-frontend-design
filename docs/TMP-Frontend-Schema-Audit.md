@@ -136,7 +136,7 @@ interface CalendarEvent {
 ### 1.5 People/Personnel (`/people`)
 | Route | Purpose | Data Fields Used |
 |-------|---------|------------------|
-| `/people` | Crew directory | firstName, lastName, fullName, role, department, email, phone, tourId, shirtSize, jacketSize, passport info, emergency contacts |
+| `/people` | Crew directory | firstName, lastName, fullName, role, department, email, phone, tourIds, shirtSize, jacketSize, passport info, emergency contacts |
 
 **Mock Data Source:** `utils/mockPeople.ts`
 
@@ -155,7 +155,7 @@ interface Person {
   address?: string
   dob?: string                    // ❌ NOT IN SCHEMA (different from profiles)
   company?: string                // ❌ NOT IN SCHEMA (should be companyId reference)
-  tourId: string                  // ❌ NOT IN SCHEMA for people table
+  tourIds: string                  // ❌ NOT IN SCHEMA for people table
   tourName?: string               // ❌ NOT IN SCHEMA (derived)
   passportNumber?: string
   passportExpiration?: string
@@ -350,7 +350,7 @@ interface Tour {
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid | PK |
-| tourId | uuid | FK, required |
+| tourIds | uuid | FK, required |
 | name | text | |
 | date | date | Required |
 | dayType | enum | Show Day, Travel Day, Day Off, Rehearsal, Press |
@@ -494,7 +494,7 @@ day_of_confirmed, cancelled, on_hold
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid | PK |
-| tourId | uuid | FK, required |
+| tourIds | uuid | FK, required |
 | profileId | uuid | FK, required |
 | roleOnTour | text | Required |
 | department | text | Required |
@@ -572,7 +572,7 @@ day_of_confirmed, cancelled, on_hold
 |-------|------|-------|
 | id | uuid | PK |
 | organizationId | uuid | FK, required |
-| tourId | uuid | FK, required |
+| tourIds | uuid | FK, required |
 | dayId | uuid | FK |
 | eventId | uuid | FK |
 | departureCity | text | |
@@ -723,7 +723,7 @@ The `people` table is for **external contacts** (promoters, venue staff, vendors
 | address | profiles.currentAddress | ⚠️ Name mismatch | |
 | dob | profiles.dateOfBirth | ⚠️ Name mismatch | |
 | company | - | ❌ Missing | Not in profiles |
-| tourId | tourMembers.tourId | ✅ Aligned | |
+| tourIds | tourMembers.tourIds | ✅ Aligned | |
 | tourName | (via tour.name) | ⚠️ Indirect | Needs join |
 | passportNumber | profiles.passportNumber | ✅ Aligned | |
 | passportExpiration | profiles.passportExpDate | ⚠️ Name mismatch | |
@@ -1053,7 +1053,7 @@ The UI "Personnel" page should query:
 SELECT p.*, tm.roleOnTour, tm.department 
 FROM profiles p
 JOIN tour_members tm ON tm.profileId = p.id
-WHERE tm.tourId = :currentTourId
+WHERE tm.tourIds = :currenttourIds
 ```
 
 ---

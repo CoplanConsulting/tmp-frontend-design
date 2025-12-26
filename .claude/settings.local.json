@@ -14,7 +14,11 @@
       "Bash(wc:*)",
       "Bash(head:*)",
       "Bash(grep:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npx vue-tsc:*)",
+      "Bash(curl:*)",
+      "Bash(timeout 15 npx nuxi:*)",
+      "Bash(timeout 30 npx nuxi typecheck:*)"
     ]
   }
 }

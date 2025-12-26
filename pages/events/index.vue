@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Filter, Search, Plus, Clock, Users } from 'lucide-vue-next'
-import { events } from '~/utils/mockEvents'
+import { events, getEventWithDetails, formatDisplayDate, getLocation } from '~/utils/mockData'
+import type { EventWithDetails } from '~/utils/mockData'
 
 definePageMeta({
   layout: 'default'
@@ -9,11 +10,17 @@ definePageMeta({
 const activeTab = ref('all')
 const searchQuery = ref('')
 
+// Get all events with full details (day, venue, hotel, etc.)
+const eventList = computed(() => {
+  return events.map(event => getEventWithDetails(event.id)!)
+})
+
 const getStatusColor = (status: string) => {
   const colors = {
     'confirmed': 'bg-green-500',
     'pending': 'bg-yellow-500',
-    'cancelled': 'bg-red-500'
+    'cancelled': 'bg-red-500',
+    'rescheduled': 'bg-orange-500'
   }
   return colors[status as keyof typeof colors] || 'bg-gray-400'
 }
@@ -76,28 +83,28 @@ const getAdvanceStatusText = (status: string) => {
           </TabsList>
 
           <TabsContent value="all" class="space-y-4 mt-6">
-            <Card v-for="event in events" :key="event.id" class="border border-gray-200 bg-white">
+            <Card v-for="event in eventList" :key="event.id" class="border border-gray-200 bg-white">
               <CardContent class="p-6">
                 <!-- Header Row -->
                 <div class="flex items-start justify-between mb-6">
                   <div>
                     <h3 class="text-2xl font-bold text-gray-900 leading-tight">
-                      {{ event.date }} - {{ event.location }}
+                      {{ event.day ? formatDisplayDate(event.day.date) : 'TBD' }} - {{ event.day ? getLocation(event.day.city, event.day.state) : 'TBD' }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1.5">
-                      {{ event.venue }}
+                      {{ event.venue?.name ?? 'TBD' }}
                     </p>
                   </div>
 
                   <div class="flex items-center gap-3 flex-shrink-0">
                     <Button variant="outline" class="border-gray-300 text-gray-900 hover:bg-gray-50" as-child>
-                      <a :href="`/events/advance/${event.id}`">Advance</a>
+                      <NuxtLink :to="`/events/advance/${event.id}`">Advance</NuxtLink>
                     </Button>
                     <Button variant="outline" class="border-gray-300 text-gray-900 hover:bg-gray-50" as-child>
-                      <a :href="`/guest-list/${event.id}`">Guest List</a>
+                      <NuxtLink :to="`/guest-list/${event.id}`">Guest List</NuxtLink>
                     </Button>
                     <Button class="bg-black text-white hover:bg-gray-800" as-child>
-                      <a href="/days/day">View Details</a>
+                      <NuxtLink :to="event.day ? `/days/${event.day.date}` : '#'">View Details</NuxtLink>
                     </Button>
                   </div>
                 </div>
@@ -108,9 +115,9 @@ const getAdvanceStatusText = (status: string) => {
                   <div>
                     <p class="text-xs text-gray-600 mb-2 font-medium">Status</p>
                     <div class="flex items-center gap-2">
-                      <div :class="[getStatusColor(event.status), 'h-2.5 w-2.5 rounded-full']"></div>
+                      <div :class="[getStatusColor(event.day?.status ?? 'pending'), 'h-2.5 w-2.5 rounded-full']"></div>
                       <span class="text-base font-semibold text-gray-900 capitalize">
-                        {{ event.status }}
+                        {{ event.day?.status ?? 'Pending' }}
                       </span>
                     </div>
                   </div>
@@ -121,7 +128,7 @@ const getAdvanceStatusText = (status: string) => {
                     <div class="flex items-center gap-2">
                       <Users class="h-4 w-4 text-gray-600" />
                       <span class="text-base font-semibold text-gray-900">
-                        {{ event.capacity }}
+                        {{ event.capacity ?? event.venue?.capacity ?? 'TBD' }}
                       </span>
                     </div>
                   </div>
@@ -132,7 +139,7 @@ const getAdvanceStatusText = (status: string) => {
                     <div class="flex items-center gap-2">
                       <Clock class="h-4 w-4 text-gray-600" />
                       <span class="text-base font-semibold text-gray-900">
-                        {{ event.showTime }}
+                        {{ event.showTime ?? 'TBD' }}
                       </span>
                     </div>
                   </div>

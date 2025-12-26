@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MoreVertical } from 'lucide-vue-next'
-import type { Guest } from '~/utils/mockGuestList'
+import type { Guest } from '~/utils/mockData'
 
 defineProps<{
   guests: Guest[]
@@ -53,7 +53,7 @@ const navigateToGuest = (guestId: string) => {
           <TableCell class="font-medium text-gray-900 py-4">{{ guest.name }}</TableCell>
           <TableCell class="text-center text-gray-900 py-4">{{ guest.tickets }}</TableCell>
           <TableCell class="text-center text-gray-900 py-4">{{ guest.passes }}</TableCell>
-          <TableCell class="text-center text-gray-900 py-4">{{ guest.type }}</TableCell>
+          <TableCell class="text-center text-gray-900 py-4">{{ guest.guestType }}</TableCell>
           <TableCell class="py-4">
             <Badge
               :class="getStatusClass(guest.status)"
@@ -62,8 +62,8 @@ const navigateToGuest = (guestId: string) => {
               {{ getStatusText(guest.status) }}
             </Badge>
           </TableCell>
-          <TableCell class="text-gray-900 py-4">{{ guest.affiliation }}</TableCell>
-          <TableCell class="text-gray-900 py-4">{{ guest.pickup }}</TableCell>
+          <TableCell class="text-gray-900 py-4">{{ guest.affiliation ?? '-' }}</TableCell>
+          <TableCell class="text-gray-900 py-4">{{ guest.pickupMethod ?? '-' }}</TableCell>
           <TableCell class="py-4" @click.stop>
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
