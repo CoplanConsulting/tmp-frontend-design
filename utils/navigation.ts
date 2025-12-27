@@ -60,13 +60,13 @@ export const navigationSections: NavigationSection[] = [
     title: 'Organization',
     items: [
       { title: 'Dashboard', icon: Truck, url: '#' },
-      { title: 'Users', icon: Hotel, url: '#' },
-      { title: 'User Groups', icon: FileText, url: '#' },
+      { title: 'Users', icon: Users, url: '/organization/users' },
+      { title: 'User Groups', icon: FileText, url: '/organization/groups' },
       { title: 'Schedules', icon: FileText, url: '#' },
       { title: 'Guest List', icon: FileText, url: '#' },
       { title: 'Set List', icon: FileText, url: '#' },
       { title: 'Attachments', icon: FileText, url: '#' },
-      { title: 'Settings', icon: FileText, url: '#' }
+      { title: 'Settings', icon: FileText, url: '/organization/settings' }
     ]
   }
 ]

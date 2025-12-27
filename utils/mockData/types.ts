@@ -17,6 +17,8 @@ export type TourStatus = 'Confirmed' | 'In-Progress' | 'Completed' | 'Cancelled'
 export type AdvanceStatus = 'not-started' | 'in-progress' | 'completed'
 export type GuestStatus = 'approved' | 'pending' | 'declined'
 export type GuestType = 'VIP' | 'M&G' | 'Photo' | 'Comp' | '-'
+export type UserRole = 'admin' | 'manager' | 'editor' | 'viewer'
+export type UserStatus = 'active' | 'inactive' | 'pending'
 
 export const DAY_TYPE_CONFIG = {
   'Show Day': { color: 'bg-green-500', label: 'Show' },
@@ -262,6 +264,20 @@ export interface Person {
   jacketSize?: string
   
   notes?: string
+
+  // Privacy settings — per-section toggle
+  privacySettings?: {
+    contactInfo?: 'private' | 'organization' | 'tourTeam'
+    emergencyContact?: 'private' | 'organization' | 'tourTeam'
+    medicalInfo?: 'private' | 'organization' | 'tourTeam'
+    travelDocuments?: 'private' | 'organization' | 'tourTeam'
+    personalDetails?: 'private' | 'organization' | 'tourTeam'
+    sizing?: 'private' | 'organization' | 'tourTeam'
+    professional?: 'private' | 'organization' | 'tourTeam'
+  }
+
+  // Org-required flags (set by admin, read-only for user)
+  orgRequiredSections?: string[]  // e.g., ['contactInfo', 'emergencyContact']
 }
 
 /**
@@ -357,6 +373,60 @@ export interface TicketAllocation {
   ticketType: 'comp' | 'vip' | 'guest'
   allowed: number
   used: number
+}
+
+/**
+ * User - Application user with authentication and permissions
+ */
+export interface User {
+  id: string
+  organizationId: string
+
+  // Basic info
+  firstName: string
+  lastName: string
+  email: string
+  phone?: string
+  title?: string
+
+  // Authentication
+  role: UserRole
+  status: UserStatus
+
+  // User groups (for permission management)
+  userGroupIds?: string[]
+
+  // Metadata
+  lastLoginAt?: string
+  createdAt: string
+  invitedAt?: string
+  invitedBy?: string
+}
+
+/**
+ * UserGroup - Permission groups for organizing users
+ */
+export interface UserGroup {
+  id: string
+  organizationId: string
+
+  name: string
+  description?: string
+
+  // Permissions (simplified for now)
+  permissions: {
+    tours: { view: boolean; edit: boolean; delete: boolean }
+    events: { view: boolean; edit: boolean; delete: boolean }
+    personnel: { view: boolean; edit: boolean; delete: boolean }
+    guests: { view: boolean; edit: boolean; delete: boolean }
+    venues: { view: boolean; edit: boolean; delete: boolean }
+    settings: { view: boolean; edit: boolean }
+  }
+
+  // Metadata
+  userCount?: number
+  createdAt: string
+  updatedAt: string
 }
 
 // =============================================================================
