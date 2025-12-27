@@ -6,7 +6,7 @@
  * 2. Contacts (Contact) - External people (promoters, venue staff, vendors)
  */
 
-import type { Person, Contact, Company } from './types'
+import type { Organization, Person, Contact, Company } from './types'
 
 // =============================================================================
 // TOUR PERSONNEL (Internal Team)
@@ -16,6 +16,7 @@ export const personnel: Person[] = [
   // Management
   {
     id: 'person-1',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1', 'tour-2', 'tour-3'],
     firstName: 'Steve',
     lastName: 'Coplan',
@@ -36,6 +37,7 @@ export const personnel: Person[] = [
   },
   {
     id: 'person-2',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1', 'tour-2'],
     firstName: 'Elena',
     lastName: 'Sherertz',
@@ -57,6 +59,7 @@ export const personnel: Person[] = [
   // Audio
   {
     id: 'person-3',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1', 'tour-3'],
     firstName: 'Sarah',
     lastName: 'Jennings',
@@ -71,6 +74,7 @@ export const personnel: Person[] = [
   },
   {
     id: 'person-4',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1', 'tour-2'],
     firstName: 'Kevin',
     lastName: 'Watts',
@@ -86,6 +90,7 @@ export const personnel: Person[] = [
   // Backline
   {
     id: 'person-5',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1', 'tour-3'],
     firstName: 'David',
     lastName: 'Lee',
@@ -98,6 +103,7 @@ export const personnel: Person[] = [
   },
   {
     id: 'person-6',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1', 'tour-2'],
     firstName: 'Marcus',
     lastName: 'Chen',
@@ -112,6 +118,7 @@ export const personnel: Person[] = [
   // Lighting
   {
     id: 'person-7',
+    organizationIds: ['org-1'],
     tourIds: ['tour-2', 'tour-1'],
     firstName: 'Rachel',
     lastName: 'Green',
@@ -126,6 +133,7 @@ export const personnel: Person[] = [
   // Transportation
   {
     id: 'person-8',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1'],
     firstName: 'Tommy',
     lastName: 'Rodriguez',
@@ -138,6 +146,7 @@ export const personnel: Person[] = [
   },
   {
     id: 'person-9',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1'],
     firstName: 'Jerry',
     lastName: 'Riggs',
@@ -150,6 +159,7 @@ export const personnel: Person[] = [
   },
   {
     id: 'person-10',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1'],
     firstName: 'Lars',
     lastName: 'Ulrich',
@@ -164,6 +174,7 @@ export const personnel: Person[] = [
   // Band (Artists)
   {
     id: 'person-11',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1'],
     firstName: 'Terri',
     lastName: 'Clark',
@@ -174,6 +185,7 @@ export const personnel: Person[] = [
   },
   {
     id: 'person-12',
+    organizationIds: ['org-1'],
     tourIds: ['tour-1'],
     firstName: 'Paul',
     lastName: 'Brandt',

@@ -15,8 +15,15 @@
 // Types
 export * from './types'
 
+
+export {
+  organizations,
+  currentOrganization,
+  getOrganizationById,
+} from './organizations'
+
 // Data
-export { organization, tours, currentTour, tourStats, getTourById, getToursByStatus } from './tours'
+export { tours, currentTour, tourStats, getTourById, getToursByStatus } from './tours'
 export { days, getDayById, getDaysBytourIds, getDaysByType, getShowDays, getDayByDate, getUpcomingDays } from './days'
 export { events, getEventById, getEventByDayId, getEventsByVenueId, getEventsByAdvanceStatus, getUpcomingEvents } from './events'
 export { venues, getVenueById, getVenuesByCity, searchVenues } from './venues'

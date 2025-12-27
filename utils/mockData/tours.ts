@@ -11,15 +11,15 @@ import type { Tour, Organization, TourStats } from './types'
 // ORGANIZATION
 // =============================================================================
 
-export const organization: Organization = {
-  id: 'org-1',
-  name: 'Coplan Music Management',
-  slug: 'coplan-music',
-  type: 'Music',
-  contactEmail: 'info@coplanmusic.com',
-  currency: 'CAD',
-  isActive: true,
-}
+// export const organization: Organization = {
+//   id: 'org-1',
+//   name: 'Coplan Music Management',
+//   slug: 'coplan-music',
+//   type: 'Music',
+//   contactEmail: 'info@coplanmusic.com',
+//   currency: 'CAD',
+//   isActive: true,
+// }
 
 // =============================================================================
 // TOURS

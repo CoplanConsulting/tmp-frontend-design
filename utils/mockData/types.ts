@@ -10,6 +10,7 @@
 // ENUMS & CONSTANTS
 // =============================================================================
 
+export type OrgType = 'Music' | 'Sports/Athletics' | 'Theatre' | 'Festival' | 'Other'
 export type DayType = 'Show Day' | 'Travel Day' | 'Day Off' | 'Rehearsal' | 'Press Day' | 'On Hold'
 export type DayStatus = 'confirmed' | 'pending' | 'cancelled' | 'rescheduled'
 export type TourStatus = 'Confirmed' | 'In-Progress' | 'Completed' | 'Cancelled'
@@ -37,10 +38,16 @@ export interface Organization {
   id: string
   name: string
   slug: string
-  type: 'Music' | 'Sports' | 'Theatre' | 'Festival' | 'Other'
-  contactEmail?: string
+  orgType: OrgType
+  contactEmail?: string | null
+  taxId?: string | null
   currency: string
+  wireInfo?: string | null
+  notes?: string | null
   isActive: boolean
+  createdBy?: string | null  // user/profile ID — can be null for now
+  createdAt: string  // ISO string
+  updatedAt: string  // ISO string
 }
 
 /**
@@ -89,6 +96,7 @@ export interface Day {
  */
 export interface Event {
   id: string
+  organizationId?: string
   dayId: string
   venueId: string | null
   
@@ -220,6 +228,7 @@ export interface Hotel {
  */
 export interface Person {
   id: string
+  organizationIds?: string[]
   
   // Basic info
   firstName: string
