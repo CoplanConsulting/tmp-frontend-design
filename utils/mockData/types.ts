@@ -103,10 +103,13 @@ export interface Event {
   venueId: string | null
   
   // Schedule
+  crewDepartHotel?: string   // Time string "11:30 AM"
   loadIn?: string            // Time string "10:00 AM"
   soundCheck?: string
   doors?: string
   showTime?: string
+  showEnds?: string
+  loadOut?: string
   curfew?: string
   setLength?: number         // Minutes
   

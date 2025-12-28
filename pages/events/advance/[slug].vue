@@ -95,14 +95,14 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden bg-gray-50">
-          <header class="flex h-16 items-center gap-4 border-b border-gray-200 bg-white px-6">
+          <header class="flex items-center gap-4 border-b border-gray-200 bg-white py-3 px-6">
             <div class="flex items-center gap-3">
               <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-300 bg-white flex-shrink-0">
                 <span class="text-xs font-semibold text-gray-900 leading-none">{{ headerDate.dayOfWeek }}</span>
                 <span class="text-xs text-gray-600 leading-none mt-1">{{ headerDate.dateShort }}</span>
               </div>
               <div>
-                <h1 class="text-xl font-semibold text-gray-900">
+                <h1 class="text-4xl font-semibold text-gray-900">
                   {{ currentEvent?.day ? getLocation(currentEvent.day.city, currentEvent.day.state) : 'Event' }}
                 </h1>
                 <p class="text-sm text-gray-500">{{ currentEvent?.venue?.name ?? 'TBD' }}</p>
@@ -120,28 +120,31 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
             <div v-if="currentEvent">
               <!-- Info Cards Grid -->
               <div class="grid grid-cols-2 gap-4 mb-6">
-                <!-- Venue Card -->
+                
+                <!-- Day of Show Contact Card -->
                 <Card class="border border-gray-200 bg-white">
                   <CardHeader class="pb-3">
-                    <div class="flex items-center justify-between">
-                      <CardTitle class="text-sm font-medium text-gray-600">Venue</CardTitle>
-                      <MapPin class="h-4 w-4 text-gray-600" />
+                    <div class="flex items-center justify-between relative">
+                      <CardTitle class="text-sm font-medium text-gray-600">Day of Show Contact</CardTitle>
+                     <div class="absolute right-2 top-2 size-20 opacity-10"> <Contact class="h-24 w-24 text-gray-600" /></div>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ currentEvent.venue?.name ?? 'TBD' }}</h3>
-                    <p v-if="currentEvent.venue?.address" class="text-sm text-gray-600">{{ currentEvent.venue.address }}</p>
-                    <p v-if="currentEvent.venue?.city" class="text-sm text-gray-600">{{ currentEvent.venue.city }}, {{ currentEvent.venue.state }} {{ currentEvent.venue.postalCode }}</p>
-                    <p v-if="currentEvent.venue?.phone" class="text-sm text-gray-600 mt-2">{{ currentEvent.venue.phone }}</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                      {{ currentEvent.dayOfShowContact ? getFullName(currentEvent.dayOfShowContact) : 'TBD' }}
+                    </h3>
+                    <p v-if="currentEvent.dayOfShowContact?.companyName" class="text-sm text-gray-600 mb-3">{{ currentEvent.dayOfShowContact.companyName }}</p>
+                    <p v-if="currentEvent.dayOfShowContact?.phone" class="text-sm text-gray-600">{{ currentEvent.dayOfShowContact.phone }}</p>
+                    <p v-if="currentEvent.dayOfShowContact?.email" class="text-sm text-gray-600">{{ currentEvent.dayOfShowContact.email }}</p>
                   </CardContent>
                 </Card>
 
                 <!-- Promoter Card -->
                 <Card class="border border-gray-200 bg-white">
                   <CardHeader class="pb-3">
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between relative">
                       <CardTitle class="text-sm font-medium text-gray-600">Promoter</CardTitle>
-                      <Users class="h-4 w-4 text-gray-600" />
+                      <div class="absolute right-2 top-2 size-20 opacity-10"><Users class="h-24 w-24 text-gray-600" /></div>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -154,12 +157,29 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
                   </CardContent>
                 </Card>
 
+                <!-- Venue Card -->
+                <Card class="border border-gray-200 bg-white">
+                  <CardHeader class="pb-3">
+                    <div class="flex items-center justify-between relative">
+                      <CardTitle class="text-sm font-medium text-gray-600">Venue</CardTitle>
+                      
+                       <div class="absolute right-2 top-2 size-20 opacity-10"><MapPin class="h-24 w-24 text-gray-600" /></div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ currentEvent.venue?.name ?? 'TBD' }}</h3>
+                    <p v-if="currentEvent.venue?.address" class="text-sm text-gray-600">{{ currentEvent.venue.address }}</p>
+                    <p v-if="currentEvent.venue?.city" class="text-sm text-gray-600">{{ currentEvent.venue.city }}, {{ currentEvent.venue.state }} {{ currentEvent.venue.postalCode }}</p>
+                    <p v-if="currentEvent.venue?.phone" class="text-sm text-gray-600 mt-2">{{ currentEvent.venue.phone }}</p>
+                  </CardContent>
+                </Card>
+
                 <!-- Hotel Card -->
                 <Card class="border border-gray-200 bg-white">
                   <CardHeader class="pb-3">
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between relative">
                       <CardTitle class="text-sm font-medium text-gray-600">Hotel</CardTitle>
-                      <Hotel class="h-4 w-4 text-gray-600" />
+                      <div class="absolute right-2 top-2 size-20 opacity-10"><Hotel class="h-24 w-24 text-gray-600" /></div>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -173,200 +193,263 @@ const tabs = ['Schedule', 'Facilities', 'Production', 'Equipment', 'Logistics', 
                   </CardContent>
                 </Card>
 
-                <!-- Day of Show Contact Card -->
-                <Card class="border border-gray-200 bg-white">
-                  <CardHeader class="pb-3">
-                    <div class="flex items-center justify-between">
-                      <CardTitle class="text-sm font-medium text-gray-600">Day of Show Contact</CardTitle>
-                      <Contact class="h-4 w-4 text-gray-600" />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                      {{ currentEvent.dayOfShowContact ? getFullName(currentEvent.dayOfShowContact) : 'TBD' }}
-                    </h3>
-                    <p v-if="currentEvent.dayOfShowContact?.companyName" class="text-sm text-gray-600 mb-3">{{ currentEvent.dayOfShowContact.companyName }}</p>
-                    <p v-if="currentEvent.dayOfShowContact?.phone" class="text-sm text-gray-600">{{ currentEvent.dayOfShowContact.phone }}</p>
-                    <p v-if="currentEvent.dayOfShowContact?.email" class="text-sm text-gray-600">{{ currentEvent.dayOfShowContact.email }}</p>
-                  </CardContent>
-                </Card>
+                
               </div>
 
-              <!-- Tabs -->
-              <Tabs v-model="activeTab" class="w-full">
-                <TabsList class="mb-6">
-                  <TabsTrigger v-for="tab in tabs" :key="tab" :value="tab">
-                    {{ tab }}
-                  </TabsTrigger>
-                </TabsList>
-
-                <!-- Schedule Tab -->
-                <TabsContent value="Schedule">
-                  <div class="text-center py-12 text-gray-500">
-                    Schedule information will be displayed here.
-                  </div>
-                </TabsContent>
-
-                <!-- Placeholder Tabs -->
-                <TabsContent value="Facilities">
-                  <div class="text-center py-12 text-gray-500">
-                    Facilities information will be displayed here.
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="Production">
-                  <div class="space-y-8">
-                    <!-- Venue Technical Info -->
-                    <div v-if="currentEvent.venue">
-                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Venue Technical Information</h2>
-                      <div class="space-y-3">
-                        <div v-if="currentEvent.venue.stageDimensions" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">STAGE DIMENSIONS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.venue.stageDimensions }}</div>
-                        </div>
-                        <div v-if="currentEvent.venue.capacity" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">CAPACITY</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.venue.capacity }}</div>
-                        </div>
-                        <div v-if="currentEvent.venue.loadInInfo" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LOAD IN INFO</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.loadInInfo }}</div>
-                        </div>
-                        <div v-if="currentEvent.venue.powerInfo" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">POWER</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.venue.powerInfo }}</div>
-                        </div>
-                        <div v-if="currentEvent.venue.dressingRoomInfo" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DRESSING ROOMS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.dressingRoomInfo }}</div>
-                        </div>
-                        <div v-if="currentEvent.venue.greenRoomInfo" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">GREEN ROOM</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.greenRoomInfo }}</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Event Production Details -->
-                    <div v-if="currentEvent.loadInDetails || currentEvent.soundDetails || currentEvent.lightDetails || currentEvent.securityDetails">
-                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Event Production Details</h2>
-                      <div class="space-y-3">
-                        <div v-if="currentEvent.loadInDetails" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LOAD IN</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.loadInDetails }}</div>
-                        </div>
-                        <div v-if="currentEvent.soundDetails" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SOUND</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.soundDetails }}</div>
-                        </div>
-                        <div v-if="currentEvent.lightDetails" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LIGHTING</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.lightDetails }}</div>
-                        </div>
-                        <div v-if="currentEvent.securityDetails" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SECURITY</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.securityDetails }}</div>
-                        </div>
-                        <div v-if="currentEvent.cateringDetails" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">CATERING</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.cateringDetails }}</div>
-                        </div>
-                        <div v-if="currentEvent.meetAndGreet" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">MEET & GREET</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.meetAndGreet }}</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Schedule -->
-                    <div v-if="currentEvent.loadIn || currentEvent.soundCheck || currentEvent.doors || currentEvent.showTime || currentEvent.curfew">
-                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Show Schedule</h2>
-                      <div class="space-y-3">
-                        <div v-if="currentEvent.loadIn" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LOAD IN</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.loadIn }}</div>
-                        </div>
-                        <div v-if="currentEvent.soundCheck" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SOUND CHECK</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.soundCheck }}</div>
-                        </div>
-                        <div v-if="currentEvent.doors" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DOORS</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.doors }}</div>
-                        </div>
-                        <div v-if="currentEvent.showTime" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SHOW TIME</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.showTime }}</div>
-                        </div>
-                        <div v-if="currentEvent.curfew" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">CURFEW</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.curfew }}</div>
-                        </div>
-                        <div v-if="currentEvent.setLength" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">SET LENGTH</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">{{ currentEvent.setLength }} minutes</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Meals -->
-                    <div v-if="currentEvent.lunch || currentEvent.dinner">
-                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Meals</h2>
-                      <div class="space-y-3">
-                        <div v-if="currentEvent.lunch" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">LUNCH</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">
-                            {{ currentEvent.lunch }}
-                            <span v-if="currentEvent.lunchCount" class="text-gray-600 ml-2">({{ currentEvent.lunchCount }} people)</span>
+              <!-- Event Details Accordions -->
+              <div class="space-y-3 mb-8">
+                <Accordion type="single" collapsible default-value="schedule" class="w-full">
+                  <!-- Schedule Accordion -->
+                  <AccordionItem value="schedule" class="border border-gray-200 bg-white rounded-lg mb-3 px-6 data-[state=open]:pb-6">
+                    <AccordionTrigger class="py-4 text-base font-semibold text-gray-900 hover:no-underline">
+                      Schedule
+                    </AccordionTrigger>
+                    <AccordionContent class="pt-4">
+                      <div v-if="currentEvent.showTime || currentEvent.loadIn || currentEvent.soundCheck || currentEvent.doors">
+                        <!-- Showtime Section -->
+                        <div v-if="currentEvent.showTime" class=" pb-6 mb-6 border-b border-dashed border-gray-300">
+                          <div class="text-xs font-medium text-gray-600 uppercase tracking-wide mb-2">Showtime</div>
+                          <div class="text-4xl font-bold text-gray-900 mb-1">{{ currentEvent.showTime }}</div>
+                          <div v-if="currentEvent.setLength" class="text-sm text-gray-600">
+                            Length: {{ currentEvent.setLength }}mins
                           </div>
                         </div>
-                        <div v-if="currentEvent.dinner" class="flex">
-                          <div class="w-48 text-sm text-gray-600 text-right pr-6">DINNER</div>
-                          <div class="flex-1 text-sm font-medium text-gray-900">
-                            {{ currentEvent.dinner }}
-                            <span v-if="currentEvent.dinnerCount" class="text-gray-600 ml-2">({{ currentEvent.dinnerCount }} people)</span>
-                          </div>
+
+                        <!-- Timeline Section -->
+                        <div class="grid gap-y-3" style="grid-template-columns: auto 1fr; column-gap: 1.5rem; align-items: baseline;">
+                          <template v-if="currentEvent.crewDepartHotel">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.crewDepartHotel }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">Crew departs hotel for venue</span>
+                            </div>
+                          </template>
+
+                          <template v-if="currentEvent.lunch">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.lunch }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">Lunch at venue</span>
+                            </div>
+                          </template>
+
+                          <template v-if="currentEvent.loadIn">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.loadIn }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">Load-In</span>
+                            </div>
+                          </template>
+
+                          <template v-if="currentEvent.soundCheck">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.soundCheck }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">Sound Check</span>
+                            </div>
+                          </template>
+
+                          <template v-if="currentEvent.dinner">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.dinner }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">Dinner at venue</span>
+                            </div>
+                          </template>
+
+                          <template v-if="currentEvent.doors">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.doors }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">Doors open</span>
+                            </div>
+                          </template>
+
+                          <template v-if="currentEvent.showTime">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.showTime }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">The Big Show begins</span>
+                            </div>
+                          </template>
+
+                          <template v-if="currentEvent.showEnds">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.showEnds }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">Show ends</span>
+                            </div>
+                          </template>
+
+                          <template v-if="currentEvent.loadOut">
+                            <div class="text-right">
+                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.loadOut }}</span>
+                            </div>
+                            <div>
+                              <span class="text-sm text-gray-700">Load Out begins</span>
+                            </div>
+                          </template>
                         </div>
                       </div>
-                    </div>
+                      <div v-else class="text-sm text-gray-500">
+                        No schedule information available.
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                    <!-- Notes -->
-                    <div v-if="currentEvent.notes">
-                      <h2 class="text-xl font-semibold text-gray-900 mb-4">Notes</h2>
-                      <div class="text-sm font-medium text-gray-900 whitespace-pre-wrap">{{ currentEvent.notes }}</div>
-                    </div>
+                  <!-- Production Accordion -->
+                  <AccordionItem value="production" class="border border-gray-200 bg-white rounded-lg mb-3 px-6 data-[state=open]:pb-6">
+                    <AccordionTrigger class="py-4 text-base font-semibold text-gray-900 hover:no-underline">
+                      Production
+                    </AccordionTrigger>
+                    <AccordionContent class="pt-4">
+                      <div class="space-y-6">
+                        <!-- Venue Technical Info -->
+                        <div v-if="currentEvent.venue">
+                          <h3 class="text-sm font-semibold text-gray-900 mb-3">Venue Technical Information</h3>
+                          <div class="space-y-3">
+                            <div v-if="currentEvent.venue.stageDimensions" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">STAGE DIMENSIONS</div>
+                              <div class="flex-1 text-sm text-gray-900">{{ currentEvent.venue.stageDimensions }}</div>
+                            </div>
+                            <div v-if="currentEvent.venue.capacity" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">CAPACITY</div>
+                              <div class="flex-1 text-sm text-gray-900">{{ currentEvent.venue.capacity }}</div>
+                            </div>
+                            <div v-if="currentEvent.venue.loadInInfo" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">LOAD IN INFO</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.loadInInfo }}</div>
+                            </div>
+                            <div v-if="currentEvent.venue.powerInfo" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">POWER</div>
+                              <div class="flex-1 text-sm text-gray-900">{{ currentEvent.venue.powerInfo }}</div>
+                            </div>
+                            <div v-if="currentEvent.venue.dressingRoomInfo" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">DRESSING ROOMS</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.dressingRoomInfo }}</div>
+                            </div>
+                            <div v-if="currentEvent.venue.greenRoomInfo" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">GREEN ROOM</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.venue.greenRoomInfo }}</div>
+                            </div>
+                          </div>
+                        </div>
 
-                    <!-- Empty State -->
-                    <div v-if="!currentEvent.venue && !currentEvent.loadInDetails && !currentEvent.soundDetails && !currentEvent.loadIn && !currentEvent.lunch && !currentEvent.notes" class="text-center py-12 text-gray-500">
-                      No production information available for this event.
-                    </div>
-                  </div>
-                </TabsContent>
+                        <!-- Event Production Details -->
+                        <div v-if="currentEvent.loadInDetails || currentEvent.soundDetails || currentEvent.lightDetails || currentEvent.securityDetails" class="pt-6 border-t border-gray-200">
+                          <h3 class="text-sm font-semibold text-gray-900 mb-3">Event Production Details</h3>
+                          <div class="space-y-3">
+                            <div v-if="currentEvent.loadInDetails" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">LOAD IN</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.loadInDetails }}</div>
+                            </div>
+                            <div v-if="currentEvent.soundDetails" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">SOUND</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.soundDetails }}</div>
+                            </div>
+                            <div v-if="currentEvent.lightDetails" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">LIGHTING</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.lightDetails }}</div>
+                            </div>
+                            <div v-if="currentEvent.securityDetails" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">SECURITY</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.securityDetails }}</div>
+                            </div>
+                            <div v-if="currentEvent.cateringDetails" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">CATERING</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.cateringDetails }}</div>
+                            </div>
+                            <div v-if="currentEvent.meetAndGreet" class="flex">
+                              <div class="w-40 text-sm text-gray-600 font-medium">MEET & GREET</div>
+                              <div class="flex-1 text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.meetAndGreet }}</div>
+                            </div>
+                          </div>
+                        </div>
 
-                <TabsContent value="Equipment">
-                  <div class="text-center py-12 text-gray-500">
-                    Equipment information will be displayed here.
-                  </div>
-                </TabsContent>
+                        <!-- Notes -->
+                        <div v-if="currentEvent.notes" class="pt-6 border-t border-gray-200">
+                          <h3 class="text-sm font-semibold text-gray-900 mb-3">Notes</h3>
+                          <div class="text-sm text-gray-900 whitespace-pre-wrap">{{ currentEvent.notes }}</div>
+                        </div>
 
-                <TabsContent value="Logistics">
-                  <div class="text-center py-12 text-gray-500">
-                    Logistics information will be displayed here.
-                  </div>
-                </TabsContent>
+                        <!-- Empty State -->
+                        <div v-if="!currentEvent.venue && !currentEvent.loadInDetails && !currentEvent.soundDetails && !currentEvent.notes" class="text-sm text-gray-500">
+                          No production information available.
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                <TabsContent value="Labor Call">
-                  <div class="text-center py-12 text-gray-500">
-                    Labor Call information will be displayed here.
-                  </div>
-                </TabsContent>
+                  <!-- Facilities Accordion -->
+                  <AccordionItem value="facilities" class="border border-gray-200 bg-white rounded-lg mb-3 px-6 data-[state=open]:pb-6">
+                    <AccordionTrigger class="py-4 text-base font-semibold text-gray-900 hover:no-underline">
+                      Facilities
+                    </AccordionTrigger>
+                    <AccordionContent class="pt-4">
+                      <div class="text-sm text-gray-500">
+                        Facilities information will be displayed here.
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                <TabsContent value="Local Crew">
-                  <div class="text-center py-12 text-gray-500">
-                    Local Crew information will be displayed here.
-                  </div>
-                </TabsContent>
-              </Tabs>
+                  <!-- Equipment Accordion -->
+                  <AccordionItem value="equipment" class="border border-gray-200 bg-white rounded-lg mb-3 px-6 data-[state=open]:pb-6">
+                    <AccordionTrigger class="py-4 text-base font-semibold text-gray-900 hover:no-underline">
+                      Equipment
+                    </AccordionTrigger>
+                    <AccordionContent class="pt-4">
+                      <div class="text-sm text-gray-500">
+                        Equipment information will be displayed here.
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <!-- Logistics Accordion -->
+                  <AccordionItem value="logistics" class="border border-gray-200 bg-white rounded-lg mb-3 px-6 data-[state=open]:pb-6">
+                    <AccordionTrigger class="py-4 text-base font-semibold text-gray-900 hover:no-underline">
+                      Logistics
+                    </AccordionTrigger>
+                    <AccordionContent class="pt-4">
+                      <div class="text-sm text-gray-500">
+                        Logistics information will be displayed here.
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <!-- Local Crew Accordion -->
+                  <AccordionItem value="local-crew" class="border border-gray-200 bg-white rounded-lg mb-3 px-6 data-[state=open]:pb-6">
+                    <AccordionTrigger class="py-4 text-base font-semibold text-gray-900 hover:no-underline">
+                      Local Crew
+                    </AccordionTrigger>
+                    <AccordionContent class="pt-4">
+                      <div class="text-sm text-gray-500">
+                        Local Crew information will be displayed here.
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <!-- Labor Call Accordion -->
+                  <AccordionItem value="labor-call" class="border border-gray-200 bg-white rounded-lg mb-3 px-6 data-[state=open]:pb-6">
+                    <AccordionTrigger class="py-4 text-base font-semibold text-gray-900 hover:no-underline">
+                      Labor Call
+                    </AccordionTrigger>
+                    <AccordionContent class="pt-4">
+                      <div class="text-sm text-gray-500">
+                        Labor Call information will be displayed here.
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+
             </div>
             <div v-else class="text-center py-12 text-gray-500">
               Event not found.
