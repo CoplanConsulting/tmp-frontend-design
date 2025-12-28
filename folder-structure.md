@@ -24,6 +24,7 @@
 │   ├── NavUser.vue
 │   ├── OrganizationSwitcher.vue
 │   └── ui
+│       ├── accordion
 │       ├── avatar
 │       ├── badge
 │       ├── breadcrumb
@@ -105,6 +106,10 @@
 │   ├── personnel
 │   │   ├── [id].vue
 │   │   └── index.vue
+│   ├── settings
+│   │   └── account
+│   │       ├── privacy.vue
+│   │       └── profile.vue
 │   └── venues
 │       ├── [id].vue
 │       └── index.vue
@@ -130,5 +135,5 @@
     │   └── venues.ts
     └── navigation.ts
 
-52 directories, 223 files
+55 directories, 230 files
 ```

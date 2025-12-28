@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-# Project: HomeComing 2.0 - Tour Management System
+# Project: Tour Management System
 
 A modern tour management application built with Nuxt 3, replacing Eventric's Master Tour system. Manages tour schedules, events, venues, personnel, guest lists, and daily logistics for touring productions.
 
