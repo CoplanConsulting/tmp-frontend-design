@@ -93,6 +93,86 @@ export interface Day {
 }
 
 /**
+ * Event-specific production details (what we're doing/bringing for this show)
+ */
+export interface EventProduction {
+  loadInDetails?: string       // "Using rear dock, 2 trucks"
+  soundDetails?: string         // "Bringing d&b J-Series"
+  lightDetails?: string         // "Full touring rig, 40 fixtures"
+  backlineDetails?: string      // "Artist backline + 2 keyboards"
+  videoDetails?: string         // "IMAG with 2 cameras"
+  stagingDetails?: string       // "8x8 drum riser"
+  securityDetails?: string      // "4 security for stage/backstage"
+  cateringDetails?: string      // "Hot meal for 20, vegetarian options"
+  meetAndGreet?: string         // "30 min M&G at 6:30pm"
+}
+
+/**
+ * Event-specific facilities (our arrangements for this show)
+ */
+export interface EventFacilities {
+  catering?: {
+    breakfast?: { time?: string; count?: number; notes?: string }
+    lunch?: { time?: string; count?: number; notes?: string }
+    dinner?: { time?: string; count?: number; notes?: string }
+    specialRequests?: string
+  }
+  parking?: {
+    trucks?: string             // "2 semis arriving 10am"
+    buses?: string              // "1 bus overnight parking"
+    notes?: string
+  }
+  it?: {
+    requirements?: string       // "Need hardline ethernet for merch"
+    notes?: string
+  }
+}
+
+/**
+ * Event-specific logistics (getting to/from this show)
+ */
+export interface EventLogistics {
+  airportNotes?: string         // "YYC 45min drive"
+  groundTransport?: string      // "Buses depart hotel 11am"
+  areaBusiness?: string         // "Guitar Center 2 blocks away"
+  areaRestaurants?: string      // "Italian place next door"
+  pointsOfInterest?: string     // "Banff 90min drive"
+  directions?: string           // "From hotel: East on Main..."
+}
+
+/**
+ * Local crew hired for this event
+ */
+export interface LocalCrew {
+  union?: string                // "IATSE Local 212"
+  minimumIn?: number            // 4 (loaders)
+  minimumOut?: number           // 6 (including riggers)
+  penalties?: string            // "Time and half after 12hrs"
+  notes?: string
+}
+
+/**
+ * Labor call schedule entry
+ */
+export interface LaborCallEntry {
+  time: string                  // "10:00 AM"
+  call: string                  // "Load In"
+  type: string                  // "Loaders" | "Audio" | "Lighting" etc
+  count?: number                // 4
+  notes?: string                // "Need forklift certified"
+}
+
+/**
+ * Labor call schedule for this event
+ */
+export interface LaborCall {
+  entries: LaborCallEntry[]
+  currency: string              // "CAD"
+  totalCost?: number            // 2500
+  notes?: string
+}
+
+/**
  * Event
  * This is THE core entity for tour management
  */
@@ -127,15 +207,23 @@ export interface Event {
   dayOfShowContactId?: string
   promoterId?: string
   primaryPromoterContactId?: string
-  
-  // Production details
+
+  // Production details (DEPRECATED - use production object instead)
+  // Keeping for backward compatibility until all events are migrated
   loadInDetails?: string
   soundDetails?: string
   lightDetails?: string
   securityDetails?: string
   cateringDetails?: string
   meetAndGreet?: string
-  
+
+  // NEW: Structured event data
+  production?: EventProduction
+  facilities?: EventFacilities
+  logistics?: EventLogistics
+  localCrew?: LocalCrew
+  laborCall?: LaborCall
+
   // Advance status
   advanceStatus: AdvanceStatus
   

@@ -40,20 +40,29 @@ export {
   getGuestCountByEvent, getTicketAllocationsByEventId, getTicketAllocationSummary,
   getTotalTicketsForGuest, getTotalTicketsByEvent
 } from './guests'
+export {
+  users,
+  getUserById, getUsersByOrganizationId, getUsersByRole, getUsersByStatus,
+  searchUsers, getUserCountByRole, getUserCountByStatus, getUserFullName
+} from './users'
+export {
+  userGroups,
+  getUserGroupById, getUserGroupsByOrganizationId, searchUserGroups
+} from './userGroups'
 
 // =============================================================================
 // RELATIONSHIP-AWARE QUERIES
 // These functions join data across entities
 // =============================================================================
 
-import type { Day, Event, Venue, Hotel, DayWithDetails, EventWithDetails, Contact, Guest } from './types'
+import type { Day, Event, Venue, DayWithDetails, EventWithDetails, Contact, Guest } from './types'
 import { days, getDayById } from './days'
 import { events, getEventByDayId } from './events'
 import { venues, getVenueById } from './venues'
-import { hotels, getHotelById } from './hotels'
+import { getHotelById } from './hotels'
 import { contacts, getContactById } from './people'
 import { guests, getGuestsByEventId, getTicketAllocationsByEventId } from './guests'
-import { formatDisplayDate, getDayOfWeek, getLocation } from './types'
+import { getDayOfWeek, getLocation } from './types'
 import { tours } from './tours'
 
 /**

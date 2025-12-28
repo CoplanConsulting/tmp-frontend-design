@@ -14,29 +14,112 @@ export const events: Event[] = [
   // Show 1: Moncton (Rehearsal - day-3)
   {
     id: 'event-1',
+    organizationId: 'org-1',
     dayId: 'day-3',
     venueId: 'venue-1',
     hotelId: 'hotel-1',
     advanceStatus: 'completed',
+
+    // Schedule
     crewDepartHotel: '11:30 am',
-    lunch: '12:00pm',
-    lunchCount: 15,
     loadIn: '1:00pm',
     soundCheck: '4:00pm',
-    dinner: '5:00pm',
-    dinnerCount: 15,
     doors: '6:00pm',
     showTime: '8:00pm',
     showEnds: '10:00pm',
     loadOut: '10:10pm',
+    curfew: '11:30pm',
     setLength: 75,
+
+    // Meals (legacy fields - keeping for now)
+    lunch: '12:00pm',
+    lunchCount: 15,
+    dinner: '5:00pm',
+    dinnerCount: 15,
+
+    // Logistics
+    returnToHotelAfterSoundcheck: false,
+    returnToHotelAfterShow: true,
+
+    // Contacts
     dayOfShowContactId: 'contact-1',
     promoterId: 'contact-2',
+    primaryPromoterContactId: 'contact-2',
+
+    // NEW: Structured Production Data
+    production: {
+      loadInDetails: 'Using rear dock, ground level access. 2 semis arriving at 1:00pm.',
+      soundDetails: 'Using venue house PA (d&b audiotechnik) supplemented with our digital console (Avid S6L). FOH position center floor.',
+      lightDetails: 'Full touring lighting rig - 40 LED moving fixtures, 12 par cans, 2 followspots. Rigging crew required for overhead points.',
+      backlineDetails: 'Complete artist backline provided: 2x Yamaha CP88 keyboards, Pearl drum kit with hardware, 4x guitar stands.',
+      videoDetails: 'IMAG system with 2 camera setup, 16x9 LED screens stage left and right.',
+      stagingDetails: '8x8 drum riser (center rear), 4x8 keyboard riser (stage right), black stage deck required.',
+      securityDetails: '4 security personnel required - 2 for stage barriers, 2 for backstage/dressing room access.',
+      cateringDetails: 'Hot dinner for 20 people at 5:00pm in catering area. Vegetarian and vegan options required. Coffee/tea service all day.',
+      meetAndGreet: '30 minute meet & greet scheduled for 7:15pm in green room. Max 20 guests. Photo op setup needed.',
+    },
+
+    // NEW: Facilities
+    facilities: {
+      catering: {
+        breakfast: { time: '10:00am', count: 12, notes: 'Continental breakfast setup' },
+        lunch: { time: '12:00pm', count: 15, notes: 'Sandwiches and salads' },
+        dinner: { time: '5:00pm', count: 15, notes: 'Hot meal, vegetarian and vegan options required' },
+        specialRequests: 'Gluten-free options needed for 2 crew members',
+      },
+      parking: {
+        trucks: '2 semis arriving 1:00pm, departing 11:30pm',
+        buses: '1 tour bus overnight parking, shore power required',
+        notes: 'Confirm bus parking location with venue day prior',
+      },
+      it: {
+        requirements: 'Hardline ethernet connection needed for merchandise POS system and live stream feed',
+        notes: 'Venue WiFi available but prefer wired connection for reliability',
+      },
+    },
+
+    // NEW: Logistics
+    logistics: {
+      airportNotes: 'Greater Moncton Roméo LeBlanc International Airport (YQM) - 15 minutes from venue, 20 minutes from hotel',
+      groundTransport: 'Buses depart hotel at 11:00am for venue. Return buses available immediately after load out.',
+      areaBusiness: 'Long & McQuade music store 10 minutes away for emergency gear needs. Canadian Tire for general supplies.',
+      areaRestaurants: 'Pump House Brewery next door (excellent for crew meals). St. James Gate (Irish pub) 5 min walk. Tim Hortons across street.',
+      pointsOfInterest: 'Hopewell Rocks (30min drive), Magnetic Hill (15min). Downtown Moncton has good shopping and restaurants.',
+      directions: 'From hotel: Take Main Street east for 2km, venue on right after casino entrance. Look for "Event Centre" signage.',
+    },
+
+    // NEW: Local Crew
+    localCrew: {
+      union: 'IATSE Local 849 (Moncton)',
+      minimumIn: 4,
+      minimumOut: 6,
+      penalties: 'Time and half after 12 hours, double time after 16 hours. Meal breaks required every 5 hours.',
+      notes: 'Rigging crew required for overhead points. Request same crew for load in/out if possible for efficiency.',
+    },
+
+    // NEW: Labor Call
+    laborCall: {
+      entries: [
+        { time: '1:00 PM', call: 'Load In', type: 'Loaders', count: 4, notes: 'General labor, no special skills required' },
+        { time: '2:00 PM', call: 'Rigging', type: 'Riggers', count: 2, notes: 'Certified riggers for overhead lighting points' },
+        { time: '2:30 PM', call: 'Audio Setup', type: 'Audio', count: 2, notes: 'Assist with PA setup and cable runs' },
+        { time: '2:30 PM', call: 'Lighting Hang', type: 'Lighting', count: 3, notes: 'Includes 1 rigger for overhead work' },
+        { time: '3:30 PM', call: 'Staging Setup', type: 'Stage Hands', count: 2, notes: 'Risers, deck, barriers' },
+        { time: '10:10 PM', call: 'Load Out', type: 'Loaders', count: 6, notes: 'All hands for strike and pack' },
+      ],
+      currency: 'CAD',
+      totalCost: 3200,
+      notes: 'Rates: Loaders $32/hr, Audio/Lighting $38/hr, Riggers $42/hr. Local steward fee $50.',
+    },
+
+    // Ticket tracking
     capacity: 1701,
     ticketsSold: 0,
     totalComps: 30,
     compsUsed: 0,
-    notes: 'Rehearsal day - full production setup',
+
+    // Notes
+    notes: 'Rehearsal day - full production setup. This is a private rehearsal, no audience. Use this day to dial in all technical elements before tomorrow\'s opening night.',
   },
   
   // Show 2: Moncton (day-4)
