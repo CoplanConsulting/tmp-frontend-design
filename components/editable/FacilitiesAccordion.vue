@@ -123,7 +123,7 @@ const hasAnyData = computed(() => {
             <!-- VIEW MODE -->
             <div v-if="!isEditMode" key="view" class="grid gap-y-3" style="grid-template-columns: auto 1fr; column-gap: 1.5rem;">
             <template v-if="facilities?.catering?.breakfast?.time">
-              <span class="text-sm text-gray-600 font-medium text-right uppercase">Breakfast Time</span>
+              <span class="text-sm text-gray-600 font-medium text-right uppercase"></span>
               <span class="text-sm text-gray-900">{{ facilities.catering.breakfast.time }}</span>
             </template>
             <template v-if="facilities?.catering?.breakfast?.count">
