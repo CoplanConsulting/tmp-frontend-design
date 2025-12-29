@@ -144,3 +144,14 @@
     text-wrap: pretty;
   }
 }
+
+/* Edit mode transitions */
+.edit-fade-enter-active,
+.edit-fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.edit-fade-enter-from,
+.edit-fade-leave-to {
+  opacity: 0;
+}
