@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Building2, Phone, Globe, Users, Search, Plus, Filter } from 'lucide-vue-next'
+import { Building2, Phone, Globe, Users, Plus, Filter } from 'lucide-vue-next'
 import { companies, getContactsByCompanyId } from '@/utils/mockData/people'
 import type { Company } from '@/utils/mockData/types'
 
@@ -44,20 +44,6 @@ const getContactCount = (companyId: string) => {
   return getContactsByCompanyId(companyId).length
 }
 
-// Enhanced badge styling with custom colors
-const getTypeBadgeClass = (type: string) => {
-  switch (type) {
-    case 'Promoter':
-      return 'bg-purple-100 text-purple-700 border-purple-200'
-    case 'Venue':
-      return 'bg-green-100 text-green-700 border-green-200'
-    case 'Production':
-      return 'bg-blue-100 text-blue-700 border-blue-200'
-    default:
-      return 'bg-gray-100 text-gray-700 border-gray-200'
-  }
-}
-
 // Check if filters are active
 const hasActiveFilters = computed(() => {
   return searchQuery.value.trim() !== '' || selectedType.value !== 'all'
@@ -96,15 +82,7 @@ const handleAddCompany = () => {
 
     <!-- Search and Filter Bar -->
     <div class="mb-6 flex items-center gap-4">
-      <div class="relative flex-1 max-w-md">
-        <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-        <Input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search companies..."
-          class="pl-10 border-gray-200"
-        />
-      </div>
+      <SearchInput v-model="searchQuery" placeholder="Search companies..." />
       <div class="flex items-center gap-2">
         <Filter class="h-4 w-4 text-gray-600" />
         <select
@@ -120,15 +98,14 @@ const handleAddCompany = () => {
     </div>
 
     <!-- TRUE EMPTY STATE: No companies exist at all -->
-    <Card v-if="companies.length === 0" class="border-2 border-dashed border-gray-300 bg-white">
-      <div class="flex flex-col items-center justify-center py-16 px-8">
-        <div class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
-          <Building2 class="h-8 w-8 text-gray-600" />
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">No companies yet</h3>
-        <p class="text-sm text-gray-600 text-center max-w-md mb-8">
-          Add your first company to start building your network of promoters, venues, and production partners
-        </p>
+    <EmptyState
+      v-if="companies.length === 0"
+      :icon="Building2"
+      title="No companies yet"
+      description="Add your first company to start building your network of promoters, venues, and production partners"
+      dashed
+    >
+      <template #action>
         <Button
           class="bg-black text-white hover:bg-gray-800 gap-2"
           @click="handleAddCompany"
@@ -136,8 +113,8 @@ const handleAddCompany = () => {
           <Plus class="h-4 w-4" />
           Add Your First Company
         </Button>
-      </div>
-    </Card>
+      </template>
+    </EmptyState>
 
     <!-- COMPANIES TABLE (when data exists) -->
     <Card v-else class="border border-gray-200 bg-white">
@@ -188,9 +165,9 @@ const handleAddCompany = () => {
               </div>
             </TableCell>
             <TableCell>
-              <Badge :class="getTypeBadgeClass(company.type)" class="font-semibold border">
+              <StatusBadge :type="company.type">
                 {{ company.type }}
-              </Badge>
+              </StatusBadge>
             </TableCell>
             <TableCell class="text-gray-600">
               {{ company.city }}{{ company.state ? `, ${company.state}` : '' }}

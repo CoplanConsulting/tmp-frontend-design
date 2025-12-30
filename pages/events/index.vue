@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Filter, Search, Plus, Clock, Users } from 'lucide-vue-next'
+import { Filter, Plus, Clock, Users } from 'lucide-vue-next'
 import { events, getEventWithDetails, formatDisplayDate, getLocation } from '~/utils/mockData'
 import type { EventWithDetails } from '~/utils/mockData'
 
@@ -55,14 +55,10 @@ const getAdvanceStatusText = (status: string) => {
               Filter
             </Button>
 
-            <div class="relative">
-              <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                v-model="searchQuery"
-                placeholder="Search Shows"
-                class="pl-9 w-64"
-              />
-            </div>
+            <SearchInput
+              v-model="searchQuery"
+              placeholder="Search Shows"
+            />
 
             <Button class="gap-2 bg-black text-white hover:bg-gray-800" as-child>
               <a href="/events/add">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search, Briefcase, Building2, List, LayoutGrid, UserPlus } from 'lucide-vue-next'
+import { Briefcase, Building2, List, LayoutGrid, UserPlus } from 'lucide-vue-next'
 import { contacts, companies, searchContacts, getContactsByCompanyId } from '@/utils/mockData/people'
 import type { Company } from '@/utils/mockData/types'
 
@@ -84,13 +84,6 @@ const getRoleBadgeVariant = (role: string): 'default' | 'outline' | 'secondary' 
   return 'secondary'
 }
 
-// Get company type badge variant
-const getCompanyTypeBadgeVariant = (type: string): 'default' | 'outline' | 'secondary' => {
-  if (type === 'Promoter') return 'default'
-  if (type === 'Venue') return 'outline'
-  return 'secondary'
-}
-
 // Check if filters are active
 const hasActiveFilters = computed(() => {
   return searchQuery.value.trim() !== '' ||
@@ -123,14 +116,10 @@ const handleAddContact = () => {
     <div class="border border-gray-200 rounded-lg p-6 bg-white">
       <div class="space-y-4">
         <!-- Search Input -->
-        <div class="relative">
-          <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            v-model="searchQuery"
-            placeholder="Search by name, role, or company..."
-            class="pl-9 bg-white"
-          />
-        </div>
+        <SearchInput
+          v-model="searchQuery"
+          placeholder="Search by name, role, or company..."
+        />
 
         <!-- Filters Row -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -179,15 +168,14 @@ const handleAddContact = () => {
       <!-- All Contacts View (Flat Table) -->
       <TabsContent value="all" class="mt-6">
         <!-- TRUE EMPTY STATE: No contacts exist at all -->
-        <div v-if="contacts.length === 0" class="border-2 border-dashed border-gray-300 rounded-lg bg-white">
-          <div class="flex flex-col items-center justify-center py-16 px-8">
-            <div class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
-              <UserPlus class="h-8 w-8 text-gray-600" />
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">No contacts yet</h3>
-            <p class="text-sm text-gray-600 text-center max-w-md mb-8">
-              Add your first contact to start building your network of promoters, venue managers, and industry professionals
-            </p>
+        <EmptyState
+          v-if="contacts.length === 0"
+          :icon="UserPlus"
+          title="No contacts yet"
+          description="Add your first contact to start building your network of promoters, venue managers, and industry professionals"
+          dashed
+        >
+          <template #action>
             <Button
               class="bg-black text-white hover:bg-gray-800 gap-2"
               @click="handleAddContact"
@@ -195,8 +183,8 @@ const handleAddContact = () => {
               <UserPlus class="h-4 w-4" />
               Add Your First Contact
             </Button>
-          </div>
-        </div>
+          </template>
+        </EmptyState>
 
         <!-- CONTACTS TABLE (when contacts exist) -->
         <div v-else class="border border-gray-200 rounded-lg overflow-hidden bg-white">
@@ -288,15 +276,14 @@ const handleAddContact = () => {
       <!-- Grouped by Company View -->
       <TabsContent value="grouped" class="mt-6 space-y-4">
         <!-- TRUE EMPTY STATE: No contacts exist at all -->
-        <div v-if="contacts.length === 0" class="border-2 border-dashed border-gray-300 rounded-lg bg-white">
-          <div class="flex flex-col items-center justify-center py-16 px-8">
-            <div class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
-              <UserPlus class="h-8 w-8 text-gray-600" />
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">No contacts yet</h3>
-            <p class="text-sm text-gray-600 text-center max-w-md mb-8">
-              Add your first contact to start building your network of promoters, venue managers, and industry professionals
-            </p>
+        <EmptyState
+          v-if="contacts.length === 0"
+          :icon="UserPlus"
+          title="No contacts yet"
+          description="Add your first contact to start building your network of promoters, venue managers, and industry professionals"
+          dashed
+        >
+          <template #action>
             <Button
               class="bg-black text-white hover:bg-gray-800 gap-2"
               @click="handleAddContact"
@@ -304,8 +291,8 @@ const handleAddContact = () => {
               <UserPlus class="h-4 w-4" />
               Add Your First Contact
             </Button>
-          </div>
-        </div>
+          </template>
+        </EmptyState>
 
         <!-- GROUPED VIEW CONTENT (when contacts exist) -->
         <template v-else>
@@ -321,9 +308,9 @@ const handleAddContact = () => {
                 <div>
                   <h3 class="font-bold text-gray-900">{{ item.company.name }}</h3>
                   <div class="flex items-center gap-2 mt-1">
-                    <Badge :variant="getCompanyTypeBadgeVariant(item.company.type)" class="text-xs">
+                    <StatusBadge :type="item.company.type">
                       {{ item.company.type }}
-                    </Badge>
+                    </StatusBadge>
                     <span v-if="item.company.city" class="text-xs text-gray-500">
                       {{ item.company.city }}<span v-if="item.company.state">, {{ item.company.state }}</span>
                     </span>

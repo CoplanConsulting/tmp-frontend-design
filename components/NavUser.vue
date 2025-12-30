@@ -5,6 +5,8 @@ import {
   ChevronsUpDown,
   LogOut,
   Settings,
+  Moon,
+  Sun,
 } from "lucide-vue-next"
 
 import {
@@ -37,6 +39,11 @@ const props = defineProps<{
 }>()
 
 const { isMobile } = useSidebar()
+const colorMode = useColorMode()
+
+const toggleDarkMode = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
 </script>
 
 <template>
@@ -97,6 +104,11 @@ const { isMobile } = useSidebar()
             <DropdownMenuItem>
               <Bell />
               Notifications
+            </DropdownMenuItem>
+            <DropdownMenuItem @click="toggleDarkMode">
+              <Moon v-if="colorMode.value === 'light'" />
+              <Sun v-else />
+              {{ colorMode.value === 'dark' ? 'Light' : 'Dark' }} Mode
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />

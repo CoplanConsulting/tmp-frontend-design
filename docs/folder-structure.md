@@ -60,7 +60,9 @@ Last updated: 2025-12-29
 │   ├── useNavigation.ts
 │   └── useSelectedEvent.ts
 ├── docs
-│   ├── folder-structure.md (this file)
+│   ├── folder-structure.md
+│   ├── CSS_AUDIT_SUMMARY.md
+│   ├── CSS_REFACTOR_ROADMAP.md
 │   ├── MIGRATION-CHECKLIST.md
 │   └── TMP-Frontend-Schema-Audit.md
 ├── layouts
@@ -164,6 +166,28 @@ Last updated: 2025-12-29
 ```
 
 ## Recent Additions
+
+### CSS Architecture Audit & Phase 1 Token System (2025-12-29)
+- **Complete CSS Cleanup**: Rewrote `assets/css/main.css` with proper TW4 structure
+  - Removed 20+ redundant variable mappings (`--color-x: var(--x)`)
+  - Added typography scale tokens (`--font-size-xs` through `--font-size-3xl`)
+  - Added spacing scale tokens (8px grid: `--spacing-0` through `--spacing-16`)
+  - Added shadow system (6 levels: xs, sm, base, md, lg, xl)
+  - Added transition tokens (fast, base, slow with timing function)
+- **Badge Color System**: Global utility classes with dark mode support
+  - `.badge-promoter`, `.badge-venue`, `.badge-production`, `.badge-default`
+  - OKLCH-based colors with automatic dark mode switching
+  - Replaces 37 inline badge color implementations
+- **Layout Utilities**: Semantic spacing classes
+  - `.gap-section`, `.p-card`, `.mb-section` (uses spacing tokens)
+  - `.shadow-card`, `.shadow-card-hover` (consistent elevation)
+- **Documentation**:
+  - Added `docs/CSS_AUDIT_SUMMARY.md` with full Phase 1 change log
+  - Added `docs/CSS_REFACTOR_ROADMAP.md` with Phase 2-4 implementation plan
+    - Breaks remaining work into digestible Claude prompts
+    - Progress tracking with checkboxes
+    - Context preservation for multi-session work
+- **Dark Mode**: Complete light/dark token system ready for production
 
 ### Empty States & Add Forms for Venues (2025-12-29)
 - **Complete User Flow** - Empty state → Add form → Success:

@@ -1,12 +1,89 @@
+/**
+ * Tour Management Pro - Design System
+ * Tailwind CSS 4.x (CSS-First Configuration)
+ *
+ * Structure:
+ * 1. @theme - Design tokens (spacing, colors, typography, shadows)
+ * 2. :root - Light mode color values
+ * 3. .dark - Dark mode overrides
+ * 4. @layer base - Global element styles
+ * 5. @layer utilities - Custom utility classes
+ * 6. Component transitions - Vue-specific animations
+ */
+
 @import "tailwindcss";
 
+/* Custom dark mode variant for Nuxt Color Mode */
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================================
+   DESIGN TOKENS - Single Source of Truth
+   ============================================================================ */
 @theme {
-  /* 1. Preserved Existing Frontend Vars (Mapped to Main Values) */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
+  /* --------------------------------------------------------------------------
+     TYPOGRAPHY SCALE (System font stack + size scale)
+     -------------------------------------------------------------------------- */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+
+  /* --------------------------------------------------------------------------
+     SPACING SCALE (8px grid system)
+     -------------------------------------------------------------------------- */
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;   /* 4px */
+  --spacing-2: 0.5rem;    /* 8px */
+  --spacing-3: 0.75rem;   /* 12px */
+  --spacing-4: 1rem;      /* 16px */
+  --spacing-5: 1.25rem;   /* 20px */
+  --spacing-6: 1.5rem;    /* 24px */
+  --spacing-8: 2rem;      /* 32px */
+  --spacing-10: 2.5rem;   /* 40px */
+  --spacing-12: 3rem;     /* 48px */
+  --spacing-16: 4rem;     /* 64px */
+
+  /* --------------------------------------------------------------------------
+     BORDER RADIUS SCALE
+     -------------------------------------------------------------------------- */
+  --radius: 0.625rem;               /* 10px - base radius */
+  --radius-sm: calc(var(--radius) - 4px);   /* 6px */
+  --radius-md: calc(var(--radius) - 2px);   /* 8px */
+  --radius-lg: var(--radius);               /* 10px */
+  --radius-xl: calc(var(--radius) + 4px);   /* 14px */
+
+  /* --------------------------------------------------------------------------
+     SHADOWS (From shadcn-vue defaults)
+     -------------------------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* --------------------------------------------------------------------------
+     TRANSITIONS
+     -------------------------------------------------------------------------- */
+  --transition-duration-fast: 150ms;
+  --transition-duration-base: 200ms;
+  --transition-duration-slow: 300ms;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --------------------------------------------------------------------------
+     LAYOUT (Sidebar dimensions)
+     -------------------------------------------------------------------------- */
+  --sidebar-width: 16rem;       /* 256px */
+  --sidebar-width-icon: 3rem;   /* 48px - collapsed width */
+
+  /* --------------------------------------------------------------------------
+     SEMANTIC COLOR TOKENS (Point to :root values below)
+     -------------------------------------------------------------------------- */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -27,13 +104,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* 2. Added Radius Logic from Main to replace frontend defaults */
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-xl: calc(var(--radius) + 4px);
-
-  /* 3. Mapped Sidebar (Frontend names mapped to Main vars) */
+  /* Sidebar semantic tokens */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -44,111 +115,252 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ============================================================================
+   LIGHT MODE - Color Palette (OKLCH)
+   ============================================================================ */
 :root {
-  /* Main Project Color Palette (Light Mode) */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.98 0.01 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --radius: 0.625rem;
+  /* --------------------------------------------------------------------------
+     BASE COLORS
+     -------------------------------------------------------------------------- */
+  --background: oklch(1 0 0);                       /* Pure white */
+  --foreground: oklch(0.129 0.042 264.695);         /* Very dark blue-gray */
 
-  /* Sidebar Values from Main */
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --card: oklch(1 0 0);                             /* White */
+  --card-foreground: oklch(0.129 0.042 264.695);    /* Dark blue-gray */
 
-  /* Preserved Layout-only vars from Frontend */
-  --sidebar-width: 16rem;
-  --sidebar-width-icon: 3rem;
+  --popover: oklch(1 0 0);                          /* White */
+  --popover-foreground: oklch(0.129 0.042 264.695); /* Dark blue-gray */
+
+  /* --------------------------------------------------------------------------
+     BRAND COLORS
+     -------------------------------------------------------------------------- */
+  --primary: oklch(0.208 0.042 265.755);            /* Dark blue */
+  --primary-foreground: oklch(0.984 0.003 247.858); /* Off-white */
+
+  --secondary: oklch(0.968 0.007 247.896);          /* Very light gray */
+  --secondary-foreground: oklch(0.208 0.042 265.755); /* Dark blue */
+
+  --muted: oklch(0.968 0.007 247.896);              /* Light gray */
+  --muted-foreground: oklch(0.554 0.046 257.417);   /* Medium gray */
+
+  --accent: oklch(0.968 0.007 247.896);             /* Light gray */
+  --accent-foreground: oklch(0.208 0.042 265.755);  /* Dark blue */
+
+  /* --------------------------------------------------------------------------
+     SEMANTIC COLORS
+     -------------------------------------------------------------------------- */
+  --destructive: oklch(0.577 0.245 27.325);         /* Red */
+  --destructive-foreground: oklch(0.98 0.01 27.325); /* Light red/white */
+
+  --border: oklch(0.929 0.013 255.508);             /* Light gray border */
+  --input: oklch(0.929 0.013 255.508);              /* Light gray border */
+  --ring: oklch(0.704 0.04 256.788);                /* Focus ring blue */
+
+  /* --------------------------------------------------------------------------
+     SIDEBAR COLORS (Light mode)
+     -------------------------------------------------------------------------- */
+  --sidebar: oklch(0.984 0.003 247.858);            /* Off-white background */
+  --sidebar-foreground: oklch(0.129 0.042 264.695); /* Dark text */
+  --sidebar-primary: oklch(0.208 0.042 265.755);    /* Dark blue */
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858); /* Off-white */
+  --sidebar-accent: oklch(0.968 0.007 247.896);     /* Light gray */
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755); /* Dark blue */
+  --sidebar-border: oklch(0.929 0.013 255.508);     /* Light gray border */
+  --sidebar-ring: oklch(0.704 0.04 256.788);        /* Focus ring */
+
+  /* --------------------------------------------------------------------------
+     BADGE STATUS COLORS (Light mode)
+     -------------------------------------------------------------------------- */
+  --badge-promoter-bg: oklch(0.95 0.05 300);        /* Light purple */
+  --badge-promoter-text: oklch(0.4 0.15 300);       /* Dark purple */
+  --badge-promoter-border: oklch(0.85 0.08 300);    /* Medium purple */
+
+  --badge-venue-bg: oklch(0.95 0.05 150);           /* Light green */
+  --badge-venue-text: oklch(0.4 0.15 150);          /* Dark green */
+  --badge-venue-border: oklch(0.85 0.08 150);       /* Medium green */
+
+  --badge-production-bg: oklch(0.95 0.05 240);      /* Light blue */
+  --badge-production-text: oklch(0.4 0.15 240);     /* Dark blue */
+  --badge-production-border: oklch(0.85 0.08 240);  /* Medium blue */
+
+  --badge-default-bg: oklch(0.95 0 0);              /* Light gray */
+  --badge-default-text: oklch(0.4 0 0);             /* Dark gray */
+  --badge-default-border: oklch(0.85 0 0);          /* Medium gray */
 }
 
+/* ============================================================================
+   DARK MODE - Color Overrides
+   ============================================================================ */
 .dark {
-  /* Main Project Color Palette (Dark Mode) */
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.129 0.042 264.695);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.129 0.042 264.695);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.984 0.003 247.858);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.279 0.041 260.031);
-  --input: oklch(0.279 0.041 260.031);
-  --ring: oklch(0.446 0.043 257.281);
+  /* --------------------------------------------------------------------------
+     BASE COLORS
+     -------------------------------------------------------------------------- */
+  --background: oklch(0.129 0.042 264.695);         /* Very dark blue-gray */
+  --foreground: oklch(0.984 0.003 247.858);         /* Off-white */
 
-  /* Sidebar Dark Values from Main */
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(0.279 0.041 260.031);
-  --sidebar-ring: oklch(0.446 0.043 257.281);
+  --card: oklch(0.129 0.042 264.695);               /* Dark blue-gray */
+  --card-foreground: oklch(0.984 0.003 247.858);    /* Off-white */
+
+  --popover: oklch(0.129 0.042 264.695);            /* Dark blue-gray */
+  --popover-foreground: oklch(0.984 0.003 247.858); /* Off-white */
+
+  /* --------------------------------------------------------------------------
+     BRAND COLORS
+     -------------------------------------------------------------------------- */
+  --primary: oklch(0.984 0.003 247.858);            /* Off-white (inverted) */
+  --primary-foreground: oklch(0.208 0.042 265.755); /* Dark blue */
+
+  --secondary: oklch(0.279 0.041 260.031);          /* Dark gray-blue */
+  --secondary-foreground: oklch(0.984 0.003 247.858); /* Off-white */
+
+  --muted: oklch(0.279 0.041 260.031);              /* Dark gray-blue */
+  --muted-foreground: oklch(0.704 0.04 256.788);    /* Light gray */
+
+  --accent: oklch(0.279 0.041 260.031);             /* Dark gray-blue */
+  --accent-foreground: oklch(0.984 0.003 247.858);  /* Off-white */
+
+  /* --------------------------------------------------------------------------
+     SEMANTIC COLORS
+     -------------------------------------------------------------------------- */
+  --destructive: oklch(0.396 0.141 25.723);         /* Dark red */
+  --destructive-foreground: oklch(0.637 0.237 25.331); /* Light red */
+
+  --border: oklch(0.279 0.041 260.031);             /* Dark gray border */
+  --input: oklch(0.279 0.041 260.031);              /* Dark gray border */
+  --ring: oklch(0.446 0.043 257.281);               /* Darker blue ring */
+
+  /* --------------------------------------------------------------------------
+     SIDEBAR COLORS (Dark mode)
+     -------------------------------------------------------------------------- */
+  --sidebar: oklch(0.208 0.042 265.755);            /* Dark blue background */
+  --sidebar-foreground: oklch(0.984 0.003 247.858); /* Off-white text */
+  --sidebar-primary: oklch(0.488 0.243 264.376);    /* Medium blue */
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858); /* Off-white */
+  --sidebar-accent: oklch(0.279 0.041 260.031);     /* Dark gray-blue */
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858); /* Off-white */
+  --sidebar-border: oklch(0.279 0.041 260.031);     /* Dark gray border */
+  --sidebar-ring: oklch(0.446 0.043 257.281);       /* Darker ring */
+
+  /* --------------------------------------------------------------------------
+     BADGE STATUS COLORS (Dark mode)
+     -------------------------------------------------------------------------- */
+  --badge-promoter-bg: oklch(0.25 0.05 300);        /* Very dark purple */
+  --badge-promoter-text: oklch(0.75 0.1 300);       /* Light purple */
+  --badge-promoter-border: oklch(0.35 0.08 300);    /* Dark purple border */
+
+  --badge-venue-bg: oklch(0.25 0.05 150);           /* Very dark green */
+  --badge-venue-text: oklch(0.75 0.1 150);          /* Light green */
+  --badge-venue-border: oklch(0.35 0.08 150);       /* Dark green border */
+
+  --badge-production-bg: oklch(0.25 0.05 240);      /* Very dark blue */
+  --badge-production-text: oklch(0.75 0.1 240);     /* Light blue */
+  --badge-production-border: oklch(0.35 0.08 240);  /* Dark blue border */
+
+  --badge-default-bg: oklch(0.25 0 0);              /* Very dark gray */
+  --badge-default-text: oklch(0.75 0 0);            /* Light gray */
+  --badge-default-border: oklch(0.35 0 0);          /* Dark gray border */
 }
 
+/* ============================================================================
+   BASE LAYER - Global Element Styles
+   ============================================================================ */
 @layer base {
+  /* Universal box-sizing and outline */
   * {
     @apply border-border outline-ring/50;
   }
 
-  /* Main project typography logic applied to Frontend */
+  /* Full-height layout for Nuxt app */
   html,
   body,
   #__nuxt {
     @apply h-full;
   }
 
+  /* Body default background and text */
   body {
     @apply bg-background text-foreground;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    text-wrap: balance;
+  /* Typography improvements for readability */
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;  /* Better line breaks for headings */
   }
 
   p {
-    text-wrap: pretty;
+    text-wrap: pretty;   /* Avoid orphans/widows in paragraphs */
   }
 }
 
-/* Edit mode transitions */
+/* ============================================================================
+   UTILITY LAYER - Custom Utility Classes
+   ============================================================================ */
+@layer utilities {
+  /* --------------------------------------------------------------------------
+     BADGE STATUS UTILITIES
+     Used across: companies, contacts, venues, personnel, events (37 files)
+     -------------------------------------------------------------------------- */
+  .badge-promoter {
+    background-color: var(--badge-promoter-bg);
+    color: var(--badge-promoter-text);
+    border-color: var(--badge-promoter-border);
+  }
+
+  .badge-venue {
+    background-color: var(--badge-venue-bg);
+    color: var(--badge-venue-text);
+    border-color: var(--badge-venue-border);
+  }
+
+  .badge-production {
+    background-color: var(--badge-production-bg);
+    color: var(--badge-production-text);
+    border-color: var(--badge-production-border);
+  }
+
+  .badge-default {
+    background-color: var(--badge-default-bg);
+    color: var(--badge-default-text);
+    border-color: var(--badge-default-border);
+  }
+
+  /* --------------------------------------------------------------------------
+     LAYOUT UTILITIES
+     Semantic spacing for common patterns
+     -------------------------------------------------------------------------- */
+  .gap-section {
+    gap: var(--spacing-6);  /* 24px - standard section gap */
+  }
+
+  .p-card {
+    padding: var(--spacing-8);  /* 32px - standard card padding */
+  }
+
+  .mb-section {
+    margin-bottom: var(--spacing-6);  /* 24px - section spacing */
+  }
+
+  /* --------------------------------------------------------------------------
+     SHADOW UTILITIES
+     Consistent elevation system
+     -------------------------------------------------------------------------- */
+  .shadow-card {
+    box-shadow: var(--shadow-md);
+  }
+
+  .shadow-card-hover {
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* ============================================================================
+   COMPONENT TRANSITIONS - Vue-Specific Animations
+   ============================================================================ */
+
+/* Edit mode fade transition (used in editable components) */
 .edit-fade-enter-active,
 .edit-fade-leave-active {
-  transition: opacity 0.15s ease;
+  transition: opacity var(--transition-duration-fast) var(--transition-timing);
 }
 
 .edit-fade-enter-from,

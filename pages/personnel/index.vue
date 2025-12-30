@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search, UserCog } from 'lucide-vue-next'
+import { UserCog } from 'lucide-vue-next'
 import { personnel, getDepartments } from '@/utils/mockData/people'
 import { tours, getTourName } from '@/utils/mockData'
 
@@ -57,14 +57,10 @@ const filteredPeople = computed(() => {
     <div class="border border-gray-200 rounded-lg p-6 bg-white">
       <div class="space-y-4">
         <!-- Search Input -->
-        <div class="relative">
-          <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            v-model="searchQuery"
-            placeholder="Search by name or role..."
-            class="pl-9 bg-white"
-          />
-        </div>
+        <SearchInput
+          v-model="searchQuery"
+          placeholder="Search by name or role..."
+        />
 
         <!-- Filters Row -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">

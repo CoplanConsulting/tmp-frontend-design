@@ -32,15 +32,14 @@ const handleAddVenue = () => {
     </div>
 
     <!-- TRUE EMPTY STATE: No venues exist at all -->
-    <Card v-if="venues.length === 0" class="border-2 border-dashed border-gray-300 bg-white">
-      <div class="flex flex-col items-center justify-center py-16 px-8">
-        <div class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
-          <MapPin class="h-8 w-8 text-gray-600" />
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">No venues yet</h3>
-        <p class="text-sm text-gray-600 text-center max-w-md mb-8">
-          Add your first venue to build your database of performance spaces with technical specs, contacts, and logistics
-        </p>
+    <EmptyState
+      v-if="venues.length === 0"
+      :icon="MapPin"
+      title="No venues yet"
+      description="Add your first venue to build your database of performance spaces with technical specs, contacts, and logistics"
+      dashed
+    >
+      <template #action>
         <Button
           class="bg-black text-white hover:bg-gray-800 gap-2"
           @click="handleAddVenue"
@@ -48,8 +47,8 @@ const handleAddVenue = () => {
           <Plus class="h-4 w-4" />
           Add Your First Venue
         </Button>
-      </div>
-    </Card>
+      </template>
+    </EmptyState>
 
     <!-- VENUES GRID (when data exists) -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
