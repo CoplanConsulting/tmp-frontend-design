@@ -24,6 +24,8 @@ npx nuxi typecheck                      # TypeScript checking
 npx shadcn-vue@latest add [component]   # Add UI component
 ```
 
+**Note**: Dev server is typically running in a separate terminal window on `http://localhost:3000` during development. Claude should not start/stop the server unless explicitly requested.
+
 ## Architecture Standards
 
 ### Layouts & Navigation
@@ -46,8 +48,11 @@ components/
 ```
 
 ### Data & State Management
-- **Current**: Mock data in `utils/mock*.ts` files
-- **Future**:
+- **UI Sandbox Context**: This is a UI/UX prototyping environment
+  - Use local reactive state (ref, computed) for component demos
+  - Pass data via query params or props for multi-page flows
+  - NO Pinia or heavy state management needed for prototypes
+- **Future Production**:
   - API routes in `server/api/`
   - Pinia stores for global state (user, current tour, etc.)
   - Supabase for database + auth
@@ -78,6 +83,12 @@ components/
 - Define interfaces for all data structures
 - Type props and emits in components
 - Keep types near their usage (or in utils files)
+
+### Documentation
+- **IMPORTANT**: When creating new files/folders or modifying project structure, ALWAYS update `docs/folder-structure.md`
+- Update the folder tree to reflect new pages, components, schemas, or utilities
+- Add a "Recent Additions" entry with date and description
+- This keeps the project documentation accurate and helps onboarding
 
 ## Domain-Specific Notes
 
