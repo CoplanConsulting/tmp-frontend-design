@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search, Briefcase, Building2, List, LayoutGrid } from 'lucide-vue-next'
+import { Search, Briefcase, Building2, List, LayoutGrid, UserPlus } from 'lucide-vue-next'
 import { contacts, companies, searchContacts, getContactsByCompanyId } from '@/utils/mockData/people'
 import type { Company } from '@/utils/mockData/types'
 
@@ -90,6 +90,25 @@ const getCompanyTypeBadgeVariant = (type: string): 'default' | 'outline' | 'seco
   if (type === 'Venue') return 'outline'
   return 'secondary'
 }
+
+// Check if filters are active
+const hasActiveFilters = computed(() => {
+  return searchQuery.value.trim() !== '' ||
+         selectedCompanyId.value !== 'all' ||
+         selectedRole.value !== 'all'
+})
+
+// Clear all filters
+const clearFilters = () => {
+  searchQuery.value = ''
+  selectedCompanyId.value = 'all'
+  selectedRole.value = 'all'
+}
+
+// Handle add contact click
+const handleAddContact = () => {
+  navigateTo('/contacts/add')
+}
 </script>
 
 <template>
@@ -159,7 +178,28 @@ const getCompanyTypeBadgeVariant = (type: string): 'default' | 'outline' | 'seco
 
       <!-- All Contacts View (Flat Table) -->
       <TabsContent value="all" class="mt-6">
-        <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
+        <!-- TRUE EMPTY STATE: No contacts exist at all -->
+        <div v-if="contacts.length === 0" class="border-2 border-dashed border-gray-300 rounded-lg bg-white">
+          <div class="flex flex-col items-center justify-center py-16 px-8">
+            <div class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
+              <UserPlus class="h-8 w-8 text-gray-600" />
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">No contacts yet</h3>
+            <p class="text-sm text-gray-600 text-center max-w-md mb-8">
+              Add your first contact to start building your network of promoters, venue managers, and industry professionals
+            </p>
+            <Button
+              class="bg-black text-white hover:bg-gray-800 gap-2"
+              @click="handleAddContact"
+            >
+              <UserPlus class="h-4 w-4" />
+              Add Your First Contact
+            </Button>
+          </div>
+        </div>
+
+        <!-- CONTACTS TABLE (when contacts exist) -->
+        <div v-else class="border border-gray-200 rounded-lg overflow-hidden bg-white">
           <Table>
             <TableHeader>
               <TableRow class="bg-white border-b border-gray-200">
@@ -172,18 +212,29 @@ const getCompanyTypeBadgeVariant = (type: string): 'default' | 'outline' | 'seco
               </TableRow>
             </TableHeader>
             <TableBody>
+              <!-- FILTERED EMPTY STATE: No results after filtering -->
               <TableRow
                 v-if="filteredContacts.length === 0"
                 class="hover:bg-transparent"
               >
-                <TableCell colspan="6" class="h-32 text-center">
-                  <div class="flex flex-col items-center justify-center gap-2 text-gray-500">
-                    <Briefcase class="h-8 w-8" />
-                    <p class="text-sm font-medium">No contacts found</p>
-                    <p class="text-xs">Try adjusting your search or filters</p>
+                <TableCell colspan="6" class="h-64">
+                  <div class="flex flex-col items-center justify-center text-center">
+                    <Briefcase class="h-12 w-12 text-gray-400 mb-4" />
+                    <p class="text-base font-semibold text-gray-900 mb-1">No contacts match your search</p>
+                    <p class="text-sm text-gray-600 mb-4">Try adjusting your search or filters</p>
+                    <Button
+                      v-if="hasActiveFilters"
+                      variant="outline"
+                      size="sm"
+                      @click="clearFilters"
+                    >
+                      Clear Filters
+                    </Button>
                   </div>
                 </TableCell>
               </TableRow>
+
+              <!-- CONTACT ROWS -->
               <TableRow
                 v-for="contact in filteredContacts"
                 :key="contact.id"
@@ -236,8 +287,30 @@ const getCompanyTypeBadgeVariant = (type: string): 'default' | 'outline' | 'seco
 
       <!-- Grouped by Company View -->
       <TabsContent value="grouped" class="mt-6 space-y-4">
-        <!-- Companies Sections -->
-        <div v-for="item in groupedContacts.companies" :key="item.company.id" class="border border-gray-200 rounded-lg bg-white overflow-hidden">
+        <!-- TRUE EMPTY STATE: No contacts exist at all -->
+        <div v-if="contacts.length === 0" class="border-2 border-dashed border-gray-300 rounded-lg bg-white">
+          <div class="flex flex-col items-center justify-center py-16 px-8">
+            <div class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
+              <UserPlus class="h-8 w-8 text-gray-600" />
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">No contacts yet</h3>
+            <p class="text-sm text-gray-600 text-center max-w-md mb-8">
+              Add your first contact to start building your network of promoters, venue managers, and industry professionals
+            </p>
+            <Button
+              class="bg-black text-white hover:bg-gray-800 gap-2"
+              @click="handleAddContact"
+            >
+              <UserPlus class="h-4 w-4" />
+              Add Your First Contact
+            </Button>
+          </div>
+        </div>
+
+        <!-- GROUPED VIEW CONTENT (when contacts exist) -->
+        <template v-else>
+          <!-- Companies Sections -->
+          <div v-for="item in groupedContacts.companies" :key="item.company.id" class="border border-gray-200 rounded-lg bg-white overflow-hidden">
           <!-- Company Header -->
           <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
             <div class="flex items-center justify-between">
@@ -399,14 +472,23 @@ const getCompanyTypeBadgeVariant = (type: string): 'default' | 'outline' | 'seco
           </Table>
         </div>
 
-        <!-- Empty State for Grouped View -->
-        <div v-if="groupedContacts.companies.length === 0 && groupedContacts.independent.length === 0" class="border border-gray-200 rounded-lg bg-white p-12">
-          <div class="flex flex-col items-center justify-center gap-2 text-gray-500">
-            <Briefcase class="h-12 w-12" />
-            <p class="text-sm font-medium">No contacts found</p>
-            <p class="text-xs">Try adjusting your search or filters</p>
+          <!-- FILTERED EMPTY STATE for Grouped View -->
+          <div v-if="groupedContacts.companies.length === 0 && groupedContacts.independent.length === 0" class="border border-gray-200 rounded-lg bg-white">
+            <div class="flex flex-col items-center justify-center py-16 px-8 text-center">
+              <Briefcase class="h-12 w-12 text-gray-400 mb-4" />
+              <p class="text-base font-semibold text-gray-900 mb-1">No contacts match your search</p>
+              <p class="text-sm text-gray-600 mb-4">Try adjusting your search or filters</p>
+              <Button
+                v-if="hasActiveFilters"
+                variant="outline"
+                size="sm"
+                @click="clearFilters"
+              >
+                Clear Filters
+              </Button>
+            </div>
           </div>
-        </div>
+        </template>
       </TabsContent>
     </Tabs>
   </div>

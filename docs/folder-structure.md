@@ -75,18 +75,28 @@ Last updated: 2025-12-29
 │   ├── Event_details.png
 │   ├── Event_Guest_Add.png
 │   ├── Event_Guest_List.png
-│   └── Events_LIst_TM.png
+│   ├── Events_LIst_TM.png
+│   ├── Login_Form.jpg
+│   └── Sign_Up_Form.jpg
 ├── nuxt.config.ts
 ├── package-lock.json
 ├── package.json
 ├── pages
+│   ├── auth
+│   │   ├── forgot-password.vue
+│   │   ├── login.vue
+│   │   └── signup.vue
 │   ├── calendar
 │   │   └── index.vue
 │   ├── companies
 │   │   ├── [id].vue
+│   │   ├── add.vue
+│   │   ├── empty.vue
 │   │   └── index.vue
 │   ├── contacts
 │   │   ├── [id].vue
+│   │   ├── add.vue
+│   │   ├── empty.vue
 │   │   └── index.vue
 │   ├── dashboard.vue
 │   ├── days
@@ -125,6 +135,8 @@ Last updated: 2025-12-29
 │   │       └── profile.vue
 │   └── venues
 │       ├── [id].vue
+│       ├── add.vue
+│       ├── empty.vue
 │       └── index.vue
 ├── public
 │   └── img
@@ -152,6 +164,72 @@ Last updated: 2025-12-29
 ```
 
 ## Recent Additions
+
+### Empty States & Add Forms for Venues (2025-12-29)
+- **Complete User Flow** - Empty state → Add form → Success:
+
+  **Venues Flow:**
+  1. `/venues/empty` - Empty state showcase page with "Add Your First Venue" CTA
+  2. `/venues/add` - Comprehensive venue creation form (basic info, contacts, technical specs, logistics, amenities, hospitality, parking, notes)
+  3. On save → navigates to `/venues` index
+  4. `/venues` index now shows:
+     - Grid view of all venues (name, location, capacity, contact info)
+     - Empty state when no venues exist
+     - Click venue card → navigates to `/venues/[id]` detail page
+
+- **Form Sections** in `/venues/add`:
+  - Basic Information (name, address, phone, website, capacity)
+  - Contacts (venue contact, production contact)
+  - Technical Specs (stage dimensions, load-in info, power info)
+  - Logistics & Amenities (dressing rooms, laundry, runner)
+  - Hospitality (WiFi, merch split, merch contact)
+  - Parking (bus parking, parking instructions)
+  - Additional Notes
+
+- Design approach: Comprehensive venue database management matching companies/contacts pattern
+
+### Empty States & Add Forms for Companies & Contacts (2025-12-29)
+- **Complete User Flow** - Empty state → Add form → Success:
+
+  **Companies Flow:**
+  1. `/companies/empty` - Empty state showcase page with "Add Your First Company" CTA
+  2. `/companies/add` - Full company creation form (name, type, address, contact info, notes)
+  3. On save → navigates to `/companies` index
+
+  **Contacts Flow:**
+  1. `/contacts/empty` - Empty state showcase page with "Add Your First Contact" CTA
+  2. `/contacts/add` - Full contact creation form (name, title, role, company, email, phone, notes)
+  3. On save → navigates to `/contacts` index
+
+- **Empty State Pages** (`empty.vue`):
+  - Clean showcase pages with just header + empty state card
+  - Dashed border "invitation zone" design
+  - CTA buttons navigate to respective `/add` pages
+
+- **Add Form Pages** (`add.vue`):
+  - Professional layout matching `/events/advance/[slug]` aesthetic
+  - Back navigation breadcrumb
+  - Form in white card with logical field grouping
+  - Section dividers and helper text
+  - Black "Save" button + outline "Cancel" button
+  - Blue helper card explaining "What happens next?"
+
+- **Index Pages** (`index.vue`) - Dual empty states:
+  - **True empty** (no data): Dashed border card with "Add Your First X" CTA
+  - **Filtered empty** (filtered out): "No matches" message with "Clear Filters" button
+  - Helper functions: `hasActiveFilters`, `clearFilters()`, `handleAddX()`
+
+- Design approach: Professional, action-oriented UX that guides new users through complete workflows
+
+### Authentication Pages (2025-12-29)
+- `pages/auth/` - Pre-authentication pages (no default layout)
+  - `login.vue` - Login form with email/password fields
+  - `signup.vue` - Sign-up form with two-column grid layout
+  - `forgot-password.vue` - Password reset request form
+- `mocks/Login_Form.jpg` - Login page mockup
+- `mocks/Sign_Up_Form.jpg` - Sign-up page mockup
+- Simple sandbox prototypes: no validation, no state management, console.log only
+- Post-login navigation to `/dashboard`, post-signup to `/onboarding`
 
 ### Onboarding Flow (2025-12-29)
 - `pages/onboarding/` - 3-step onboarding flow for new users

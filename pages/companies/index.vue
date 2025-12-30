@@ -57,6 +57,22 @@ const getTypeBadgeClass = (type: string) => {
       return 'bg-gray-100 text-gray-700 border-gray-200'
   }
 }
+
+// Check if filters are active
+const hasActiveFilters = computed(() => {
+  return searchQuery.value.trim() !== '' || selectedType.value !== 'all'
+})
+
+// Clear all filters
+const clearFilters = () => {
+  searchQuery.value = ''
+  selectedType.value = 'all'
+}
+
+// Handle add company click
+const handleAddCompany = () => {
+  navigateTo('/companies/add')
+}
 </script>
 
 <template>
@@ -72,7 +88,7 @@ const getTypeBadgeClass = (type: string) => {
         </div>
         <p class="text-sm text-gray-600 mt-1">Manage promoters, venues, and production companies</p>
       </div>
-      <Button class="bg-black text-white hover:bg-gray-800">
+      <Button class="bg-black text-white hover:bg-gray-800" @click="handleAddCompany">
         <Plus class="h-4 w-4 mr-2" />
         Add Company
       </Button>
@@ -103,8 +119,28 @@ const getTypeBadgeClass = (type: string) => {
       </div>
     </div>
 
-    <!-- Companies Table -->
-    <Card class="border border-gray-200 bg-white">
+    <!-- TRUE EMPTY STATE: No companies exist at all -->
+    <Card v-if="companies.length === 0" class="border-2 border-dashed border-gray-300 bg-white">
+      <div class="flex flex-col items-center justify-center py-16 px-8">
+        <div class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
+          <Building2 class="h-8 w-8 text-gray-600" />
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">No companies yet</h3>
+        <p class="text-sm text-gray-600 text-center max-w-md mb-8">
+          Add your first company to start building your network of promoters, venues, and production partners
+        </p>
+        <Button
+          class="bg-black text-white hover:bg-gray-800 gap-2"
+          @click="handleAddCompany"
+        >
+          <Plus class="h-4 w-4" />
+          Add Your First Company
+        </Button>
+      </div>
+    </Card>
+
+    <!-- COMPANIES TABLE (when data exists) -->
+    <Card v-else class="border border-gray-200 bg-white">
       <Table>
         <TableHeader>
           <TableRow class="border-b border-gray-200">
@@ -117,6 +153,26 @@ const getTypeBadgeClass = (type: string) => {
           </TableRow>
         </TableHeader>
         <TableBody>
+          <!-- FILTERED EMPTY STATE: No results after filtering -->
+          <TableRow v-if="filteredCompanies.length === 0">
+            <TableCell colspan="6" class="h-64">
+              <div class="flex flex-col items-center justify-center text-center">
+                <Building2 class="h-12 w-12 text-gray-400 mb-4" />
+                <p class="text-base font-semibold text-gray-900 mb-1">No companies match your search</p>
+                <p class="text-sm text-gray-600 mb-4">Try adjusting your filters or search terms</p>
+                <Button
+                  v-if="hasActiveFilters"
+                  variant="outline"
+                  size="sm"
+                  @click="clearFilters"
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+
+          <!-- COMPANY ROWS -->
           <TableRow
             v-for="company in filteredCompanies"
             :key="company.id"
@@ -173,11 +229,5 @@ const getTypeBadgeClass = (type: string) => {
         </TableBody>
       </Table>
     </Card>
-
-    <!-- Empty State -->
-    <div v-if="filteredCompanies.length === 0" class="text-center py-12">
-      <Building2 class="h-12 w-12 text-gray-400 mx-auto mb-4" />
-      <p class="text-gray-600">No companies found</p>
-    </div>
   </div>
 </template>
