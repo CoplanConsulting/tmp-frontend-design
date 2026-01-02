@@ -64,6 +64,18 @@ components/
 - **Assets**: Processed assets (images, CSS)
 - **Public**: Static assets
 
+### Special Directories
+
+#### `/pages/calendar/`
+- **Primary Purpose**: Quick UI/UX prototyping directory for calendar views, built outside the main app development flow
+- **Goal**: Rapid visual iteration and UX testing without affecting core application
+- **Data Pattern**: Uses `/utils/mockData` to simulate data and API routes for realistic prototypes
+  - Imports: `getCalendarDays()`, `CalendarDay` from `~/utils/mockData`
+  - Types: `DAY_TYPE_CONFIG` from `~/utils/mockData/types`
+- **Original Implementation**: Built with `frontend-design` skill for initial rapid prototyping
+- **Current Migration**: Transitioning to **schedule-x** (https://schedule-x.dev/docs/calendar) for production-grade calendar functionality
+- **Styling Note**: Initially built with Tailwind 4.x utilities for speed; now addressing consistency issues from multiple Claude Code sessions
+
 ## Coding Standards
 
 ### Vue/Nuxt Conventions
@@ -78,6 +90,8 @@ components/
 - **No inline styles** - use Tailwind or CSS variables
 - **Arbitrary values**: Use `[42px]`, `[#ff0000]` for exact mockup matching
 - **Important**: No `tailwind.config.js` file (Tailwind 4 uses CSS-first config)
+- **BEM Workflow**: As the project has grown, `main.css` is transitioning to manage a BEM (Block Element Modifier) workflow alongside Tailwind utilities to address inconsistencies from different prototyping sessions
+- **Future Direction**: The main project will move completely to a BEM atomic design approach for better consistency and maintainability
 
 ### TypeScript
 - Define interfaces for all data structures

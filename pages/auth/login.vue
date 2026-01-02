@@ -20,8 +20,8 @@ const handleLogin = () => {
 
 <template>
   <div class="min-h-screen bg-[#F5F5F5] flex flex-col items-center justify-center p-6 gap-6">
-    <Card class="w-full max-w-md bg-white shadow-sm">
-      <CardHeader class="text-center pb-8">
+    <Card class="w-full max-w-sm py-12 bg-white shadow-sm">
+      <CardHeader class=" pb-8">
         <CardTitle class="text-2xl font-bold text-black mb-2">
           Welcome back
         </CardTitle>

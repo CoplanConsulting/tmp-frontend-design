@@ -399,6 +399,63 @@
   .org-required-warning {
     @apply mt-3 flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg;
   }
+
+  /* --------------------------------------------------------------------------
+     CALENDAR COMPONENTS (Schedule-X Overrides)
+     BEM-style overrides for schedule-x calendar
+     -------------------------------------------------------------------------- */
+
+  /* Calendar container */
+  .calendar-container {
+    @apply bg-white rounded-lg border overflow-hidden;
+    width: 100%;
+    height: 800px;
+    max-height: 90vh;
+  }
+
+  /* Schedule-X theme overrides - match design system */
+  .sx__month-grid-day {
+    @apply min-h-[120px] border-r border-b;
+  }
+
+  .sx__month-grid-day--is-today {
+    @apply bg-blue-50;
+  }
+
+  .sx__month-grid-day--is-leading,
+  .sx__month-grid-day--is-trailing {
+    @apply bg-gray-50/50 opacity-60;
+  }
+
+  /* Event styling within calendar */
+  .sx__event {
+    @apply rounded text-xs px-2 py-1.5 font-medium cursor-pointer transition-opacity;
+    @apply hover:opacity-80;
+  }
+
+  /* Calendar header controls */
+  .sx__month-grid-header {
+    @apply bg-gray-50/50 border-b;
+  }
+
+  .sx__month-grid-day-name {
+    @apply p-3 text-center text-sm font-semibold;
+  }
+
+  /* Day number styling */
+  .sx__date {
+    @apply text-sm font-medium mb-1;
+  }
+
+  /* Navigation controls styling */
+  .sx__chevron-wrapper {
+    @apply rounded-md hover:bg-gray-100 transition-colors;
+  }
+
+  /* Month/year display */
+  .sx__range-heading {
+    @apply font-semibold text-base;
+  }
 }
 
 /* ============================================================================

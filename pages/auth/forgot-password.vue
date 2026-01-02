@@ -17,8 +17,8 @@ const handleResetRequest = () => {
 
 <template>
   <div class="min-h-screen bg-[#F5F5F5] flex flex-col items-center justify-center p-6 gap-6">
-    <Card class="w-full max-w-md bg-white shadow-sm">
-      <CardHeader class="text-center pb-8">
+    <Card class="w-full max-w-sm bg-white shadow-sm py-12">
+      <CardHeader class="pb-8">
         <CardTitle class="text-2xl font-bold text-black mb-2">
           Forgot your password?
         </CardTitle>
