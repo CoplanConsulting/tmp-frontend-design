@@ -121,15 +121,15 @@ export const personnel: Person[] = [
 
     // Privacy settings
     privacySettings: {
+      personalDetails: 'private',
       contactInfo: 'organization',
       emergencyContact: 'organization',
-      familyInfo: 'private',
+      travelPreferences: 'tourTeam',
       travelDocuments: 'organization',
-      clothing: 'tourTeam',
-      tourPrefs: 'tourTeam',
-      medicalInfo: 'private',
-      personalDetails: 'private',
+      frequentFlyer: 'private',
       sizing: 'tourTeam',
+      family: 'private',
+      medical: 'private',
       professional: 'organization',
     },
 

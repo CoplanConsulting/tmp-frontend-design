@@ -474,15 +474,15 @@ export interface Person {
 
   // Privacy settings — per-section toggle
   privacySettings?: {
+    personalDetails?: 'private' | 'organization' | 'tourTeam'
     contactInfo?: 'private' | 'organization' | 'tourTeam'
     emergencyContact?: 'private' | 'organization' | 'tourTeam'
-    familyInfo?: 'private' | 'organization' | 'tourTeam'
+    travelPreferences?: 'private' | 'organization' | 'tourTeam'
     travelDocuments?: 'private' | 'organization' | 'tourTeam'
-    clothing?: 'private' | 'organization' | 'tourTeam'
-    tourPrefs?: 'private' | 'organization' | 'tourTeam'
-    medicalInfo?: 'private' | 'organization' | 'tourTeam'
-    personalDetails?: 'private' | 'organization' | 'tourTeam'
+    frequentFlyer?: 'private' | 'organization' | 'tourTeam'
     sizing?: 'private' | 'organization' | 'tourTeam'
+    family?: 'private' | 'organization' | 'tourTeam'
+    medical?: 'private' | 'organization' | 'tourTeam'
     professional?: 'private' | 'organization' | 'tourTeam'
   }
 

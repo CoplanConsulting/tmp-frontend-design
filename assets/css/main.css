@@ -351,6 +351,54 @@
   .shadow-card-hover {
     box-shadow: var(--shadow-lg);
   }
+
+  /* --------------------------------------------------------------------------
+     PRIVACY SETTINGS COMPONENTS
+     Reusable BEM-style classes for privacy controls
+     -------------------------------------------------------------------------- */
+  .privacy-option-btn {
+    @apply flex items-start gap-3 p-3 rounded-lg border-2 transition-all;
+  }
+
+  .privacy-option-btn--selected {
+    @apply border-2;
+  }
+
+  .privacy-option-btn--disabled {
+    @apply opacity-70 cursor-not-allowed;
+  }
+
+  .privacy-option-btn--disabled-inactive {
+    @apply opacity-40 cursor-not-allowed;
+  }
+
+  .privacy-option-btn--active {
+    @apply cursor-pointer;
+  }
+
+  .privacy-option-btn--inactive {
+    @apply border-gray-200 bg-white hover:border-gray-300;
+  }
+
+  .privacy-label {
+    @apply text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5;
+  }
+
+  .privacy-value {
+    @apply text-lg text-gray-950;
+  }
+
+  .privacy-help-text {
+    @apply text-xs text-gray-500 mt-2 italic;
+  }
+
+  .org-required-badge {
+    @apply bg-amber-50 text-amber-800 border-amber-300 flex items-center gap-1.5 shrink-0;
+  }
+
+  .org-required-warning {
+    @apply mt-3 flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg;
+  }
 }
 
 /* ============================================================================
