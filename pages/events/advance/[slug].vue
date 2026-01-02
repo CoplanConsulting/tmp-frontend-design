@@ -235,11 +235,17 @@ onUnmounted(() => {
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden bg-gray-50">
           <header class="flex items-center gap-4 border-b border-gray-200 bg-white py-3 px-6">
-            <div class="flex items-center gap-3">
-              <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-300 bg-white flex-shrink-0">
+            <div class="flex flex-col gap-3">
+                <div class="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                    <span class="px-2 py-0.5 bg-primary/10 text-primary rounded font-medium">{{ headerDate.dayOfWeek }}</span>
+                    <span>•</span>
+                    <span>{{ headerDate.dateShort }}</span></div>
+
+
+              <!-- <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-300 bg-white flex-shrink-0">
                 <span class="text-xs font-semibold text-gray-900 leading-none">{{ headerDate.dayOfWeek }}</span>
                 <span class="text-xs text-gray-600 leading-none mt-1">{{ headerDate.dateShort }}</span>
-              </div>
+              </div> -->
               <div>
                 <h1 class="text-4xl font-semibold text-gray-900">
                   {{ currentEvent?.day ? getLocation(currentEvent.day.city, currentEvent.day.state) : 'Event' }}

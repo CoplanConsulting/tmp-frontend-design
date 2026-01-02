@@ -20,7 +20,14 @@
       "Bash(timeout 15 npx nuxi:*)",
       "Bash(timeout 30 npx nuxi typecheck:*)",
       "Bash(mkdir:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(node -e:*)",
+      "WebSearch",
+      "WebFetch(domain:cdn.dribbble.com)",
+      "WebFetch(domain:mir-s3-cdn-cf.behance.net)",
+      "Bash(git checkout:*)",
+      "Bash(cat:*)",
+      "Bash(git fsck:*)"
     ]
   }
 }

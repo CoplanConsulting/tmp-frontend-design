@@ -158,15 +158,25 @@ interface Person {
   tourIds: string                  // ❌ NOT IN SCHEMA for people table
   tourName?: string               // ❌ NOT IN SCHEMA (derived)
   passportNumber?: string
-  passportExpiration?: string
+  passportExpDate?: string
   passportCountry?: string
   nationality?: string
-  emergencyContactName?: string
-  emergencyContactRelationship?: string
-  emergencyContactPhone?: string
-  emergencyContactEmail?: string
-  shirtSize?: string
-  jacketSize?: string
+  emergencyContact?: {
+    name: string
+    relationship: string
+    phone: string
+    email?: string
+  }
+  clothing?: {
+    height?: string
+    weight?: string
+    tshirt?: string
+    hoodie?: string
+    pants?: string
+    shoes?: string
+    jacket?: string
+    hat?: string
+  }
   notes?: string
 }
 ```
@@ -726,7 +736,7 @@ The `people` table is for **external contacts** (promoters, venue staff, vendors
 | tourIds | tourMembers.tourIds | ✅ Aligned | |
 | tourName | (via tour.name) | ⚠️ Indirect | Needs join |
 | passportNumber | profiles.passportNumber | ✅ Aligned | |
-| passportExpiration | profiles.passportExpDate | ⚠️ Name mismatch | |
+| passportExpDate | profiles.passportExpDate | ⚠️ Name mismatch | |
 | passportCountry | profiles.passportCountry | ✅ Aligned | |
 | nationality | profiles.nationalityCitizenship | ⚠️ Name mismatch | |
 | emergencyContactName | profiles.emergencyContactName | ✅ Aligned | |
@@ -816,7 +826,7 @@ export const eventTicketAllocations = pgTable("event_ticket_allocations", {
 | merchPercent | merchandiseSplit | venues |
 | timeZone | timezone | days (case) |
 | dob | dateOfBirth | profiles |
-| passportExpiration | passportExpDate | profiles |
+| passportExpDate | passportExpDate | profiles |
 | nationality | nationalityCitizenship | profiles |
 
 ---

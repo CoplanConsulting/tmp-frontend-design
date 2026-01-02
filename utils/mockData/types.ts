@@ -52,6 +52,45 @@ export interface Organization {
   updatedAt: string  // ISO string
 }
 
+export interface OrganizationMember {
+  id: string
+  organizationId: string
+  profileId: string               // FK to profiles
+  
+  // Org-specific role (different from tour role)
+  orgRole: 'admin' | 'manager' | 'member'
+  
+  // Visibility settings (admin can configure)
+  visibility: 'full' | 'limited' | 'minimal'
+  
+  // Org-level permissions
+  permissions?: {
+    canManageTours: boolean
+    canManageMembers: boolean
+    canManageSettings: boolean
+    // etc.
+  }
+  
+  // Org-assigned fields (admin can override/add context)
+  displayTitle?: string           // Override for this org
+  displayDepartment?: string
+  
+  // User groups in this org
+  userGroupIds?: string[]
+  
+  // Status
+  status: 'active' | 'pending' | 'inactive'
+  
+  // Invitation tracking
+  invitedAt?: string
+  invitedBy?: string
+  joinedAt?: string
+  
+  // Meta
+  createdAt: Date
+  updatedAt: Date
+}
+
 /**
  * Tour
  */
@@ -320,48 +359,128 @@ export interface Hotel {
  * This represents someone ON the tour (profiles + tour_members combined)
  */
 export interface Person {
-  id: string
+  id: string                      // UUID - actual PK
+  email: string                   // Unique, lookup key for invites
   organizationIds?: string[]
+  currentOrganizationId?: string
   
   // Basic info
   firstName: string
   lastName: string
   middleName?: string
-  email?: string
-  phone?: string
-  address?: string
-  dateOfBirth?: string
+  nickname?: string
+  preferredName?: string          // What they want to be called
   
-  // Tour role
-  tourIds: string[]
-  role: string              // "Tour Manager", "FOH Engineer", etc.
-  department: string        // "Management", "Audio", "Band", etc.
+  // Contact (user can add multiples)
+  phone?: string
+
+  // Address
+  address?: {
+    street: string
+    line2?: string
+    city: string
+    state: string
+    zip: string
+    country?: string
+  }
+
+  // Personal Info
+  gender?: string
+  birthplace?: string
+  nationality?: string
+  dateOfBirth?: string
+  pronouns?: string
+
+  // Professional
+  jobTitle?: string
   company?: string
+  primaryArtistOrOrg?: string     // Who they primarily work for
+  
+  // Family Info
+  maritalStatus?: 'single' | 'married' | 'divorced' | 'widowed' | 'civil_union'
+  anniversary?: string
+  spouseName?: string
+  spouseBirthday?: string
+  children?: string               // Free text or structured
+  familyNotes?: string
+  
+  // Tour Preferences
+  hotelPrefs?: {
+    roomType?: 'king' | 'queen' | 'double' | 'single' | 'suite'
+    smoking?: boolean
+  }
+  busPrefs?: {
+    bunkSide?: 'driver' | 'passenger'
+    bunkLevel?: 'top' | 'middle' | 'bottom'
+    bunkPosition?: 'front' | 'back'
+  }
+  flightPrefs?: {
+    seat?: 'window' | 'aisle' | 'exit'
+    time?: 'am' | 'pm'
+    meal?: 'no_preference' | 'carnivore' | 'vegetarian' | 'vegan' | 'gluten_free' | 'diabetic'
+    notes?: string
+  }
+  frequentFlyer?: {              // Repeater field
+    airline: string
+    accountNumber: string
+  }[]
+
+  // Clothing Sizes
+  clothing?: {
+    height?: string
+    weight?: string
+    tshirt?: string
+    hoodie?: string
+    pants?: string
+    shoes?: string
+    jacket?: string
+    hat?: string
+  }
+
+  // Emergency contact
+  emergencyContact?: {
+    name: string
+    relationship: string
+    phone: string
+    email?: string
+  }
   
   // Travel documents
   passportNumber?: string
-  passportExpiration?: string
+  passportExpDate?: string
   passportCountry?: string
-  nationality?: string
-  
-  // Emergency contact
-  emergencyContactName?: string
-  emergencyContactRelationship?: string
-  emergencyContactPhone?: string
-  emergencyContactEmail?: string
-  
-  // Sizing
-  shirtSize?: string
-  jacketSize?: string
+  knownTravelerNumber?: string      // TSA PreCheck
+  globalEntryNumber?: string
+  driversLicense?: {
+    number: string
+    state: string
+  }
   
   notes?: string
+
+  // Medical/Health ===
+  bloodType?: string
+  medicalConditions?: string 
+  allergies?: string
+  dietaryRestrictions?: string
+  
+  // Professional/Skills  ===
+  bio?: string                      // About me
+  skills?: string[]                 // Array of skills
+  certifications?: string[]         // Array: "CDL Class A", "Pyrotechnics Licensed"
+  languages?: string[]              // Array: "English", "Spanish"
+  equipmentOwned?: string           // Free text for gear they own
+  
 
   // Privacy settings — per-section toggle
   privacySettings?: {
     contactInfo?: 'private' | 'organization' | 'tourTeam'
     emergencyContact?: 'private' | 'organization' | 'tourTeam'
-    medicalInfo?: 'private' | 'organization' | 'tourTeam'
+    familyInfo?: 'private' | 'organization' | 'tourTeam'
     travelDocuments?: 'private' | 'organization' | 'tourTeam'
+    clothing?: 'private' | 'organization' | 'tourTeam'
+    tourPrefs?: 'private' | 'organization' | 'tourTeam'
+    medicalInfo?: 'private' | 'organization' | 'tourTeam'
     personalDetails?: 'private' | 'organization' | 'tourTeam'
     sizing?: 'private' | 'organization' | 'tourTeam'
     professional?: 'private' | 'organization' | 'tourTeam'
@@ -369,6 +488,47 @@ export interface Person {
 
   // Org-required flags (set by admin, read-only for user)
   orgRequiredSections?: string[]  // e.g., ['contactInfo', 'emergencyContact']
+  
+  // Tour role
+  tourIds: string[]
+  role: string              // "Tour Manager", "FOH Engineer", etc.
+  department: string        // "Management", "Audio", "Band", etc.
+
+  // Meta
+  avatarUrl?: string
+  createdAt: Date
+  updatedAt: Date
+
+}
+
+export interface TourMember {
+  id: string
+  tourId: string
+  profileId: string               // FK to profiles
+  
+  // Tour-specific role/position
+  roleOnTour: string              // "FOH Engineer", "Tour Manager", etc.
+  department: string              // "Audio", "Management", "Band", etc.
+  
+  // Contract details
+  dailyRate?: string
+  startDate: string
+  endDate?: string
+  
+  // Status
+  status: 'pending' | 'confirmed' | 'completed'
+  
+  // Visibility (for this tour specifically)
+  visibility?: 'all' | 'crew' | 'management'
+  
+  notes?: string
+  
+  // Who assigned them
+  createdBy?: string
+  
+  // Meta
+  createdAt: Date
+  updatedAt: Date
 }
 
 /**

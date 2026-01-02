@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "cleanup": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true",
+    "dev:clean": "npm run cleanup && npm run dev",
     "dev": "nuxt dev",
     "build": "nuxt build",
     "generate": "nuxt generate",
