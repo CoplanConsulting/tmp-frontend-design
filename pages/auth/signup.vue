@@ -27,20 +27,20 @@ const handleSignUp = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F5F5F5] flex flex-col items-center justify-center p-6 gap-6">
-    <Card class="w-full max-w-2xl bg-white shadow-sm">
-      <CardHeader class="pb-8">
-        <CardTitle class="text-2xl font-bold text-black">
+  <div class="min-h-screen bg-[var(--background)] flex flex-col items-center justify-center p-[var(--spacing-6)] gap-[var(--spacing-6)]">
+    <Card class="w-full max-w-2xl bg-[var(--card)] shadow-card">
+      <CardHeader class="pb-[var(--spacing-8)]">
+        <CardTitle class="text-[var(--font-size-2xl)] font-bold text-[var(--foreground)]">
           Create an account
         </CardTitle>
       </CardHeader>
 
-      <CardContent class="px-8 pb-8">
-        <form @submit.prevent="handleSignUp" class="grid gap-6">
+      <CardContent class="px-[var(--spacing-8)] pb-[var(--spacing-8)]">
+        <form @submit.prevent="handleSignUp" class="grid gap-[var(--spacing-6)]">
           <!-- Name Fields Row -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="grid gap-2">
-              <Label for="firstName" class="text-sm font-medium text-black">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-4)]">
+            <div class="grid gap-[var(--spacing-2)]">
+              <Label for="firstName" class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">
                 First Name
               </Label>
               <Input
@@ -51,8 +51,8 @@ const handleSignUp = () => {
               />
             </div>
 
-            <div class="grid gap-2">
-              <Label for="lastName" class="text-sm font-medium text-black">
+            <div class="grid gap-[var(--spacing-2)]">
+              <Label for="lastName" class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">
                 Last Name
               </Label>
               <Input
@@ -65,9 +65,9 @@ const handleSignUp = () => {
           </div>
 
           <!-- Email and Company Row -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="grid gap-2">
-              <Label for="email" class="text-sm font-medium text-black">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-4)]">
+            <div class="grid gap-[var(--spacing-2)]">
+              <Label for="email" class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">
                 Email Address
               </Label>
               <Input
@@ -78,8 +78,8 @@ const handleSignUp = () => {
               />
             </div>
 
-            <div class="grid gap-2">
-              <Label for="company" class="text-sm font-medium text-black">
+            <div class="grid gap-[var(--spacing-4)]">
+              <Label for="company" class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">
                 Company
               </Label>
               <Input
@@ -92,9 +92,9 @@ const handleSignUp = () => {
           </div>
 
           <!-- Password Fields Row -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="grid gap-2">
-              <Label for="password" class="text-sm font-medium text-black">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-4)]">
+            <div class="grid gap-[var(--spacing-2)]">
+              <Label for="password" class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">
                 Password
               </Label>
               <Input
@@ -105,8 +105,8 @@ const handleSignUp = () => {
               />
             </div>
 
-            <div class="grid gap-2">
-              <Label for="confirmPassword" class="text-sm font-medium text-black">
+            <div class="grid gap-[var(--spacing-2)]">
+              <Label for="confirmPassword" class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">
                 Confirm Password
               </Label>
               <Input
@@ -119,21 +119,21 @@ const handleSignUp = () => {
           </div>
 
           <!-- Sign Up Button -->
-          <div class="flex justify-center mt-2">
+          <div class="flex justify-center mt-[var(--spacing-2)]">
             <Button
               type="submit"
-              class="bg-black text-white hover:bg-gray-800 h-11 px-16"
+              class="bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary)]/90 h-11 px-[var(--spacing-16)] transition-colors duration-[var(--transition-duration-base)]"
             >
               Sign Up
             </Button>
           </div>
 
           <!-- Login Link -->
-          <div class="text-center text-sm text-gray-600">
+          <div class="text-center text-[var(--font-size-sm)] text-[var(--muted-foreground)]">
             Already have an account?
             <NuxtLink
               to="/auth/login"
-              class="text-black font-medium hover:underline"
+              class="text-[var(--foreground)] font-medium hover:underline"
             >
               Login
             </NuxtLink>
@@ -143,11 +143,11 @@ const handleSignUp = () => {
     </Card>
 
     <!-- Terms Footer - OUTSIDE card -->
-    <p class="text-xs text-gray-500 text-center max-w-2xl">
+    <p class="text-[var(--font-size-xs)] text-[var(--muted-foreground)] text-center max-w-2xl">
       By clicking sign up, you agree to our
-      <a href="#" class="underline hover:text-black">Terms of Service</a>
+      <a href="#" class="underline hover:text-[var(--foreground)] transition-colors duration-[var(--transition-duration-fast)]">Terms of Service</a>
       and
-      <a href="#" class="underline hover:text-black">Privacy Policy</a>.
+      <a href="#" class="underline hover:text-[var(--foreground)] transition-colors duration-[var(--transition-duration-fast)]">Privacy Policy</a>.
     </p>
   </div>
 </template>

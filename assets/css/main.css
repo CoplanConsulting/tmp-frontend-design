@@ -109,7 +109,7 @@
   --color-destructive: oklch(0.577 0.245 27.325); /* Red */
 
   /* Semantic aliases (extend as needed) */
-  --color-card: var(--color-background);
+  --color-card: oklch(1 0 0); /* Pure white for elevated surfaces */
   --color-card-foreground: var(--color-text-primary);
   --color-primary: var(--color-accent);
   --color-primary-foreground: oklch(0.98 0.002 240); /* White on accent */
