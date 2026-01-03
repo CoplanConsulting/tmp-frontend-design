@@ -239,7 +239,7 @@ const selectedEventDetails = computed(() => {
         <!-- Right Panel: Utility Space -->
         <div class="flex-1 overflow-y-auto bg-gray-50">
           <!-- Placeholder View -->
-          <div v-if="currentView === 'placeholder'" class="flex items-center justify-center h-full p-8">
+          <div v-if="currentView === 'placeholder'" class="flex h-full p-8">
             <div class="text-center max-w-md">
               <div class="mx-auto w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
                 <CalendarIcon class="h-8 w-8 text-gray-400" />
