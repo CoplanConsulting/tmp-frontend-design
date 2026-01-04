@@ -30,34 +30,34 @@ const handleCancel = () => {
 </script>
 
 <template>
-  <div class="flex-1 p-8 bg-gray-50">
+  <div class="flex flex-1 flex-col gap-[var(--spacing-6)]">
     <!-- Page Header -->
-    <div class="mb-6">
-      <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
-        <NuxtLink to="/contacts" class="flex items-center gap-1 hover:text-gray-700 transition-colors">
+    <div class="flex flex-col gap-[var(--spacing-2)]">
+      <div class="flex items-center gap-[var(--spacing-2)] text-[length:var(--font-size-sm)] text-[var(--muted-foreground)]">
+        <NuxtLink to="/contacts" class="flex items-center gap-[var(--spacing-1)] hover:text-[var(--foreground)] transition-colors duration-[var(--transition-duration-fast)]">
           <ArrowLeft class="h-4 w-4" />
           Back to Contacts
         </NuxtLink>
       </div>
-      <div class="flex items-center gap-3 mb-1">
-        <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-100 border border-gray-200">
-          <UserPlus class="h-6 w-6 text-gray-600" />
+      <div class="flex items-center gap-[var(--spacing-3)] mb-[var(--spacing-1)]">
+        <div class="flex items-center justify-center w-12 h-12 rounded-[var(--radius-lg)] bg-[var(--muted)] border border-[var(--border)]">
+          <UserPlus class="h-6 w-6 text-[var(--muted-foreground)]" />
         </div>
-        <h1 class="text-3xl font-bold text-gray-900">Add New Contact</h1>
+        <h1 class="text-[length:var(--font-size-3xl)] font-bold text-[var(--foreground)]">Add New Contact</h1>
       </div>
-      <p class="text-sm text-gray-600 ml-[60px]">Add a promoter, venue manager, or industry professional to your network</p>
+      <p class="text-[length:var(--font-size-sm)] text-[var(--muted-foreground)] ml-[60px]">Add a promoter, venue manager, or industry professional to your network</p>
     </div>
 
     <!-- Form Container -->
     <form @submit.prevent="handleSubmit" class="max-w-4xl">
-      <Card class="border border-gray-200 bg-white shadow-sm">
-        <CardContent class="p-8">
-          <div class="space-y-6">
+      <Card class="border border-[var(--border)] bg-[var(--card)] shadow-card">
+        <CardContent class="p-[var(--spacing-8)]">
+          <div class="flex flex-col gap-[var(--spacing-6)]">
             <!-- Name Row -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="space-y-2">
-                <Label for="firstName" class="text-sm font-semibold text-gray-900">
-                  First Name <span class="text-red-500">*</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-6)]">
+              <div class="flex flex-col gap-[var(--spacing-2)]">
+                <Label for="firstName" class="text-[length:var(--font-size-sm)] font-semibold text-[var(--foreground)]">
+                  First Name <span class="text-[var(--destructive)]">*</span>
                 </Label>
                 <Input
                   id="firstName"
@@ -65,13 +65,13 @@ const handleCancel = () => {
                   type="text"
                   placeholder="John"
                   required
-                  class="bg-white border-gray-300"
+                  class="bg-[var(--card)] border-[var(--border)]"
                 />
               </div>
 
-              <div class="space-y-2">
-                <Label for="lastName" class="text-sm font-semibold text-gray-900">
-                  Last Name <span class="text-red-500">*</span>
+              <div class="flex flex-col gap-[var(--spacing-2)]">
+                <Label for="lastName" class="text-[length:var(--font-size-sm)] font-semibold text-[var(--foreground)]">
+                  Last Name <span class="text-[var(--destructive)]">*</span>
                 </Label>
                 <Input
                   id="lastName"
@@ -79,15 +79,15 @@ const handleCancel = () => {
                   type="text"
                   placeholder="Doe"
                   required
-                  class="bg-white border-gray-300"
+                  class="bg-[var(--card)] border-[var(--border)]"
                 />
               </div>
             </div>
 
             <!-- Title & Role Row -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="space-y-2">
-                <Label for="title" class="text-sm font-semibold text-gray-900">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-6)]">
+              <div class="flex flex-col gap-[var(--spacing-2)]">
+                <Label for="title" class="text-[length:var(--font-size-sm)] font-semibold text-[var(--foreground)]">
                   Title
                 </Label>
                 <Input
@@ -95,19 +95,19 @@ const handleCancel = () => {
                   v-model="form.title"
                   type="text"
                   placeholder="Venue Manager"
-                  class="bg-white border-gray-300"
+                  class="bg-[var(--card)] border-[var(--border)]"
                 />
               </div>
 
-              <div class="space-y-2">
-                <Label for="role" class="text-sm font-semibold text-gray-900">
-                  Role <span class="text-red-500">*</span>
+              <div class="flex flex-col gap-[var(--spacing-2)]">
+                <Label for="role" class="text-[length:var(--font-size-sm)] font-semibold text-[var(--foreground)]">
+                  Role <span class="text-[var(--destructive)]">*</span>
                 </Label>
                 <Select v-model="form.role">
-                  <SelectTrigger id="role" class="bg-white border-gray-300">
+                  <SelectTrigger id="role" class="bg-[var(--card)] border-[var(--border)]">
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
-                  <SelectContent class="bg-white">
+                  <SelectContent class="bg-[var(--card)]">
                     <SelectItem value="Promoter">Promoter</SelectItem>
                     <SelectItem value="Venue Contact">Venue Contact</SelectItem>
                     <SelectItem value="Production Contact">Production Contact</SelectItem>
@@ -118,11 +118,11 @@ const handleCancel = () => {
             </div>
 
             <!-- Divider -->
-            <div class="border-t border-gray-200" />
+            <div class="border-t border-[var(--border)]" />
 
             <!-- Company Section -->
-            <div class="space-y-2">
-              <Label for="company" class="text-sm font-semibold text-gray-900">
+            <div class="flex flex-col gap-[var(--spacing-2)]">
+              <Label for="company" class="text-[length:var(--font-size-sm)] font-semibold text-[var(--foreground)]">
                 Company
               </Label>
               <Input
@@ -130,22 +130,22 @@ const handleCancel = () => {
                 v-model="form.company"
                 type="text"
                 placeholder="Company name"
-                class="bg-white border-gray-300"
+                class="bg-[var(--card)] border-[var(--border)]"
               />
-              <p class="text-xs text-gray-500">💡 In production: Search and link to existing companies</p>
+              <p class="text-[length:var(--font-size-xs)] text-[var(--muted-foreground)]">💡 In production: Search and link to existing companies</p>
             </div>
 
             <!-- Divider -->
-            <div class="border-t border-gray-200" />
+            <div class="border-t border-[var(--border)]" />
 
             <!-- Contact Information Section -->
-            <div class="space-y-4">
-              <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Contact Information</h3>
+            <div class="flex flex-col gap-[var(--spacing-4)]">
+              <h3 class="text-[length:var(--font-size-sm)] font-semibold text-[var(--foreground)] uppercase tracking-wide">Contact Information</h3>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-4)]">
                 <!-- Email -->
-                <div class="space-y-2">
-                  <Label for="email" class="text-sm font-medium text-gray-700">
+                <div class="flex flex-col gap-[var(--spacing-2)]">
+                  <Label for="email" class="text-[length:var(--font-size-sm)] font-medium text-[var(--muted-foreground)]">
                     Email
                   </Label>
                   <Input
@@ -153,13 +153,13 @@ const handleCancel = () => {
                     v-model="form.email"
                     type="email"
                     placeholder="john@example.com"
-                    class="bg-white border-gray-300"
+                    class="bg-[var(--card)] border-[var(--border)]"
                   />
                 </div>
 
                 <!-- Phone -->
-                <div class="space-y-2">
-                  <Label for="phone" class="text-sm font-medium text-gray-700">
+                <div class="flex flex-col gap-[var(--spacing-2)]">
+                  <Label for="phone" class="text-[length:var(--font-size-sm)] font-medium text-[var(--muted-foreground)]">
                     Phone
                   </Label>
                   <Input
@@ -167,18 +167,18 @@ const handleCancel = () => {
                     v-model="form.phone"
                     type="tel"
                     placeholder="(555) 123-4567"
-                    class="bg-white border-gray-300"
+                    class="bg-[var(--card)] border-[var(--border)]"
                   />
                 </div>
               </div>
             </div>
 
             <!-- Divider -->
-            <div class="border-t border-gray-200" />
+            <div class="border-t border-[var(--border)]" />
 
             <!-- Notes Section -->
-            <div class="space-y-2">
-              <Label for="notes" class="text-sm font-semibold text-gray-900">
+            <div class="flex flex-col gap-[var(--spacing-2)]">
+              <Label for="notes" class="text-[length:var(--font-size-sm)] font-semibold text-[var(--foreground)]">
                 Notes
               </Label>
               <Textarea
@@ -186,27 +186,27 @@ const handleCancel = () => {
                 v-model="form.notes"
                 placeholder="Add any additional notes about this contact..."
                 rows="4"
-                class="bg-white border-gray-300 resize-none"
+                class="bg-[var(--card)] border-[var(--border)] resize-none"
               />
-              <p class="text-xs text-gray-500">Internal notes visible only to your team</p>
+              <p class="text-[length:var(--font-size-xs)] text-[var(--muted-foreground)]">Internal notes visible only to your team</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
       <!-- Action Buttons -->
-      <div class="flex items-center justify-between mt-6">
+      <div class="flex items-center justify-between mt-[var(--spacing-6)]">
         <Button
           type="button"
           variant="outline"
-          class="border-gray-300"
+          class="border-[var(--border)]"
           @click="handleCancel"
         >
           Cancel
         </Button>
         <Button
           type="submit"
-          class="bg-black text-white hover:bg-gray-800 gap-2"
+          class="bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 gap-[var(--spacing-2)] transition-colors duration-[var(--transition-duration-base)]"
         >
           <Save class="h-4 w-4" />
           Save Contact
@@ -215,10 +215,10 @@ const handleCancel = () => {
     </form>
 
     <!-- Helper Card -->
-    <Card class="mt-6 max-w-4xl border-blue-200 bg-blue-50">
-      <CardContent class="p-6">
-        <h3 class="font-semibold text-blue-900 mb-2 text-sm">💡 What happens next?</h3>
-        <ul class="text-sm text-blue-800 space-y-1.5">
+    <Card class="max-w-4xl border border-[var(--primary)] bg-[var(--primary)]/5">
+      <CardContent class="p-[var(--spacing-6)]">
+        <h3 class="font-semibold text-[var(--primary)] mb-[var(--spacing-2)] text-[length:var(--font-size-sm)]">💡 What happens next?</h3>
+        <ul class="text-[length:var(--font-size-sm)] text-[var(--primary)] flex flex-col gap-[var(--spacing-1)]">
           <li>• The contact will be added to your contacts directory</li>
           <li>• You can link this contact to events and companies</li>
           <li>• Contact information will be available when planning shows and tours</li>

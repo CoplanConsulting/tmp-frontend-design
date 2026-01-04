@@ -140,7 +140,7 @@ const hasData = computed(() => {
                   <TableCell>{{ entry.call }}</TableCell>
                   <TableCell>{{ entry.type }}</TableCell>
                   <TableCell>{{ entry.count }}</TableCell>
-                  <TableCell class="max-w-[300px]">{{ entry.notes }}</TableCell>
+                  <TableCell class="max-w-[var(--sidebar-width)]">{{ entry.notes }}</TableCell>
                 </TableRow>
               </template>
 

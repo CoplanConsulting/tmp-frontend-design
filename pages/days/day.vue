@@ -178,36 +178,36 @@ const selectedEventDetails = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-1 gap-0 bg-gray-50 h-[calc(100vh-6rem)] -m-4">
+  <div class="flex flex-1 gap-0 bg-[var(--background)] h-[calc(100vh-6rem)] -m-[var(--spacing-4)]">
         <!-- Left Panel: Days List -->
-        <div class="w-[300px] border-r border-gray-200 bg-white overflow-y-auto">
-          <div class="p-6">
+        <div class="w-[var(--sidebar-width)] border-r border-[var(--border)] bg-[var(--card)] overflow-y-auto">
+          <div class="p-[var(--spacing-6)]">
             <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-              <Button variant="outline" size="sm" class="gap-2 border-gray-300">
-                <CalendarIcon class="h-4 w-4" />
+            <div class="flex items-center justify-between mb-[var(--spacing-6)]">
+              <Button variant="outline" size="sm" class="gap-[var(--spacing-2)] border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]">
+                <CalendarIcon class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
                 Today
               </Button>
-              <Button variant="outline" size="sm" class="gap-2 border-gray-300">
-                <CalendarIcon class="h-4 w-4" />
+              <Button variant="outline" size="sm" class="gap-[var(--spacing-2)] border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]">
+                <CalendarIcon class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
                 Go To
               </Button>
             </div>
 
             <!-- Days List -->
-            <div class="space-y-4">
+            <div class="space-y-[var(--spacing-4)]">
               <template v-for="day in daysEvents" :key="day.id">
                 <!-- Empty Day with Add Event Button -->
-                <div v-if="day.isEmpty" class="flex items-center gap-4">
-                  <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-300 bg-white flex-shrink-0">
-                    <span class="text-xs font-semibold text-gray-900 leading-none">{{ day.dayOfWeek }}</span>
-                    <span class="text-xs text-gray-600 leading-none mt-1">{{ day.dateShort }}</span>
+                <div v-if="day.isEmpty" class="flex items-center gap-[var(--spacing-4)]">
+                  <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--card)] flex-shrink-0">
+                    <span class="text-[var(--font-size-xs)] font-semibold text-[var(--foreground)] leading-none">{{ day.dayOfWeek }}</span>
+                    <span class="text-[var(--font-size-xs)] text-[var(--muted-foreground)] leading-none mt-[var(--spacing-1)]">{{ day.dateShort }}</span>
                   </div>
                   <Button
-                    class="gap-2 bg-black text-white hover:bg-gray-800"
+                    class="gap-[var(--spacing-2)] bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 transition-colors duration-[var(--transition-duration-base)]"
                     @click="showAddEvent(day.date)"
                   >
-                    <Plus class="h-4 w-4" />
+                    <Plus class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
                     Add Event
                   </Button>
                 </div>
@@ -215,18 +215,18 @@ const selectedEventDetails = computed(() => {
                 <!-- Event Card -->
                 <div
                   v-else
-                  class="flex items-start gap-4 cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-2 rounded-md transition-colors"
+                  class="flex items-start gap-[var(--spacing-4)] cursor-pointer hover:bg-[var(--muted)] -mx-[var(--spacing-2)] px-[var(--spacing-2)] py-[var(--spacing-2)] rounded-[var(--radius-md)] transition-colors duration-[var(--transition-duration-fast)]"
                   @click="showEventDetail(day)"
                 >
-                  <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-300 bg-white flex-shrink-0">
-                    <span class="text-xs font-semibold text-gray-900 leading-none">{{ day.dayOfWeek }}</span>
-                    <span class="text-xs text-gray-600 leading-none mt-1">{{ day.dateShort }}</span>
+                  <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--card)] flex-shrink-0">
+                    <span class="text-[var(--font-size-xs)] font-semibold text-[var(--foreground)] leading-none">{{ day.dayOfWeek }}</span>
+                    <span class="text-[var(--font-size-xs)] text-[var(--muted-foreground)] leading-none mt-[var(--spacing-1)]">{{ day.dateShort }}</span>
                   </div>
-                  <div class="flex-1 pt-1">
-                    <h3 class="text-lg font-semibold text-gray-900 leading-tight">
+                  <div class="flex-1 pt-[var(--spacing-1)]">
+                    <h3 class="text-[var(--font-size-lg)] font-semibold text-[var(--foreground)] leading-tight">
                       {{ day.location }}
                     </h3>
-                    <p class="text-sm text-gray-500 mt-1">
+                    <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)] mt-[var(--spacing-1)]">
                       {{ day.venue?.name || 'Venue TBD' }}
                     </p>
                   </div>
@@ -237,53 +237,53 @@ const selectedEventDetails = computed(() => {
         </div>
 
         <!-- Right Panel: Utility Space -->
-        <div class="flex-1 overflow-y-auto bg-gray-50">
+        <div class="flex-1 overflow-y-auto bg-[var(--background)]">
           <!-- Placeholder View -->
-          <div v-if="currentView === 'placeholder'" class="flex h-full p-8">
+          <div v-if="currentView === 'placeholder'" class="flex h-full p-[var(--spacing-8)]">
             <div class="text-center max-w-md">
-              <div class="mx-auto w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <CalendarIcon class="h-8 w-8 text-gray-400" />
+              <div class="mx-auto w-[var(--spacing-16)] h-[var(--spacing-16)] rounded-full bg-[var(--muted)] flex items-center justify-center mb-[var(--spacing-4)]">
+                <CalendarIcon class="h-[var(--spacing-8)] w-[var(--spacing-8)] text-[var(--muted-foreground)]" />
               </div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">No Selection</h3>
-              <p class="text-sm text-gray-500">
+              <h3 class="text-[var(--font-size-xl)] font-semibold text-[var(--foreground)] mb-[var(--spacing-2)]">No Selection</h3>
+              <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">
                 Click on an event to view details or use the "+ Add Event" button to create a new event
               </p>
             </div>
           </div>
 
           <!-- Add Event Form View -->
-          <div v-else-if="currentView === 'add-event'" class="p-8">
+          <div v-else-if="currentView === 'add-event'" class="p-[var(--spacing-8)]">
             <div class="max-w-4xl">
-              <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center justify-between mb-[var(--spacing-6)]">
                 <div>
-                  <h2 class="text-2xl font-bold text-gray-900">Add Event</h2>
-                  <p class="text-sm text-gray-500 mt-1">Create a new event for {{ selectedDate }}</p>
+                  <h2 class="text-[var(--font-size-2xl)] font-bold text-[var(--foreground)]">Add Event</h2>
+                  <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)] mt-[var(--spacing-1)]">Create a new event for {{ selectedDate }}</p>
                 </div>
-                <Button variant="ghost" size="sm" @click="closePanelView">
+                <Button variant="ghost" size="sm" class="transition-colors duration-[var(--transition-duration-base)]" @click="closePanelView">
                   Close
                 </Button>
               </div>
 
-              <Card class="border border-gray-200 bg-white">
-                <CardContent class="p-6">
-                  <form @submit="onSubmit" class="space-y-8">
+              <Card class="border border-[var(--border)] bg-[var(--card)]">
+                <CardContent class="p-[var(--spacing-6)]">
+                  <form @submit="onSubmit" class="space-y-[var(--spacing-8)]">
                     <!-- Event Information Section -->
-                    <div class="space-y-4">
+                    <div class="space-y-[var(--spacing-4)]">
                       <div>
-                        <h3 class="text-base font-semibold text-gray-900 mb-1">Event Information</h3>
-                        <p class="text-sm text-gray-500">Basic details about the event</p>
+                        <h3 class="text-[var(--font-size-base)] font-semibold text-[var(--foreground)] mb-[var(--spacing-1)]">Event Information</h3>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Basic details about the event</p>
                       </div>
 
-                      <div class="grid grid-cols-2 gap-4">
+                      <div class="grid grid-cols-2 gap-[var(--spacing-4)]">
                         <FormField v-slot="{ componentField }" name="eventName">
                           <FormItem>
-                            <FormLabel class="text-sm font-medium text-gray-900">Event Name</FormLabel>
+                            <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Event Name</FormLabel>
                             <FormControl>
                               <Input
                                 type="text"
                                 placeholder="e.g., Opening Night Concert"
                                 v-bind="componentField"
-                                class="border-gray-300"
+                                class="border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]"
                               />
                             </FormControl>
                             <FormMessage />
@@ -292,10 +292,10 @@ const selectedEventDetails = computed(() => {
 
                         <FormField v-slot="{ componentField }" name="eventType">
                           <FormItem>
-                            <FormLabel class="text-sm font-medium text-gray-900">Event Type</FormLabel>
+                            <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Event Type</FormLabel>
                             <Select v-bind="componentField">
                               <FormControl>
-                                <SelectTrigger class="border-gray-300">
+                                <SelectTrigger class="border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]">
                                   <SelectValue placeholder="Select event type" />
                                 </SelectTrigger>
                               </FormControl>
@@ -316,22 +316,22 @@ const selectedEventDetails = computed(() => {
                     </div>
 
                     <!-- Location & Venue Section -->
-                    <div class="space-y-4">
+                    <div class="space-y-[var(--spacing-4)]">
                       <div>
-                        <h3 class="text-base font-semibold text-gray-900 mb-1">Location & Venue</h3>
-                        <p class="text-sm text-gray-500">Where the event will take place</p>
+                        <h3 class="text-[var(--font-size-base)] font-semibold text-[var(--foreground)] mb-[var(--spacing-1)]">Location & Venue</h3>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Where the event will take place</p>
                       </div>
 
-                      <div class="grid grid-cols-2 gap-4">
+                      <div class="grid grid-cols-2 gap-[var(--spacing-4)]">
                         <FormField v-slot="{ componentField }" name="venue">
                           <FormItem>
-                            <FormLabel class="text-sm font-medium text-gray-900">Venue Name</FormLabel>
+                            <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Venue Name</FormLabel>
                             <FormControl>
                               <Input
                                 type="text"
                                 placeholder="e.g., Madison Square Garden"
                                 v-bind="componentField"
-                                class="border-gray-300"
+                                class="border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]"
                               />
                             </FormControl>
                             <FormMessage />
@@ -340,13 +340,13 @@ const selectedEventDetails = computed(() => {
 
                         <FormField v-slot="{ componentField }" name="location">
                           <FormItem>
-                            <FormLabel class="text-sm font-medium text-gray-900">Location</FormLabel>
+                            <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Location</FormLabel>
                             <FormControl>
                               <Input
                                 type="text"
                                 placeholder="e.g., New York, NY"
                                 v-bind="componentField"
-                                class="border-gray-300"
+                                class="border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]"
                               />
                             </FormControl>
                             <FormMessage />
@@ -356,27 +356,27 @@ const selectedEventDetails = computed(() => {
                     </div>
 
                     <!-- Date & Time Section -->
-                    <div class="space-y-4">
+                    <div class="space-y-[var(--spacing-4)]">
                       <div>
-                        <h3 class="text-base font-semibold text-gray-900 mb-1">Date & Time</h3>
-                        <p class="text-sm text-gray-500">Schedule details for the event</p>
+                        <h3 class="text-[var(--font-size-base)] font-semibold text-[var(--foreground)] mb-[var(--spacing-1)]">Date & Time</h3>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Schedule details for the event</p>
                       </div>
 
-                      <div class="grid grid-cols-3 gap-4">
+                      <div class="grid grid-cols-3 gap-[var(--spacing-4)]">
                         <FormField v-slot="{ componentField }" name="startDate">
                           <FormItem class="flex flex-col">
-                            <FormLabel class="text-sm font-medium text-gray-900">Start Date</FormLabel>
+                            <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Start Date</FormLabel>
                             <Popover>
                               <PopoverTrigger as-child>
                                 <FormControl>
                                   <Button
                                     variant="outline"
                                     :class="[
-                                      'w-full justify-start text-left font-normal border-gray-300',
-                                      !componentField.modelValue && 'text-gray-500',
+                                      'w-full justify-start text-left font-normal border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]',
+                                      !componentField.modelValue && 'text-[var(--muted-foreground)]',
                                     ]"
                                   >
-                                    <CalendarIcon class="mr-2 h-4 w-4 text-gray-500" />
+                                    <CalendarIcon class="mr-[var(--spacing-2)] h-[var(--spacing-4)] w-[var(--spacing-4)] text-[var(--muted-foreground)]" />
                                     {{
                                       componentField.modelValue
                                         ? format(componentField.modelValue, 'PPP')
@@ -395,18 +395,18 @@ const selectedEventDetails = computed(() => {
 
                         <FormField v-slot="{ componentField }" name="endDate">
                           <FormItem class="flex flex-col">
-                            <FormLabel class="text-sm font-medium text-gray-900">End Date</FormLabel>
+                            <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">End Date</FormLabel>
                             <Popover>
                               <PopoverTrigger as-child>
                                 <FormControl>
                                   <Button
                                     variant="outline"
                                     :class="[
-                                      'w-full justify-start text-left font-normal border-gray-300',
-                                      !componentField.modelValue && 'text-gray-500',
+                                      'w-full justify-start text-left font-normal border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]',
+                                      !componentField.modelValue && 'text-[var(--muted-foreground)]',
                                     ]"
                                   >
-                                    <CalendarIcon class="mr-2 h-4 w-4 text-gray-500" />
+                                    <CalendarIcon class="mr-[var(--spacing-2)] h-[var(--spacing-4)] w-[var(--spacing-4)] text-[var(--muted-foreground)]" />
                                     {{
                                       componentField.modelValue
                                         ? format(componentField.modelValue, 'PPP')
@@ -425,12 +425,12 @@ const selectedEventDetails = computed(() => {
 
                         <FormField v-slot="{ componentField }" name="showTime">
                           <FormItem>
-                            <FormLabel class="text-sm font-medium text-gray-900">Show Time</FormLabel>
+                            <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Show Time</FormLabel>
                             <FormControl>
                               <Input
                                 type="time"
                                 v-bind="componentField"
-                                class="border-gray-300"
+                                class="border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]"
                               />
                             </FormControl>
                             <FormMessage />
@@ -440,22 +440,22 @@ const selectedEventDetails = computed(() => {
                     </div>
 
                     <!-- Capacity Section -->
-                    <div class="space-y-4">
+                    <div class="space-y-[var(--spacing-4)]">
                       <div>
-                        <h3 class="text-base font-semibold text-gray-900 mb-1">Capacity</h3>
-                        <p class="text-sm text-gray-500">Venue capacity information</p>
+                        <h3 class="text-[var(--font-size-base)] font-semibold text-[var(--foreground)] mb-[var(--spacing-1)]">Capacity</h3>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Venue capacity information</p>
                       </div>
 
-                      <div class="grid grid-cols-2 gap-4">
+                      <div class="grid grid-cols-2 gap-[var(--spacing-4)]">
                         <FormField v-slot="{ componentField }" name="capacity">
                           <FormItem>
-                            <FormLabel class="text-sm font-medium text-gray-900">Expected Capacity</FormLabel>
+                            <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Expected Capacity</FormLabel>
                             <FormControl>
                               <Input
                                 type="text"
                                 placeholder="e.g., 5,000"
                                 v-bind="componentField"
-                                class="border-gray-300"
+                                class="border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]"
                               />
                             </FormControl>
                             <FormMessage />
@@ -465,23 +465,23 @@ const selectedEventDetails = computed(() => {
                     </div>
 
                     <!-- Additional Information Section -->
-                    <div class="space-y-4">
+                    <div class="space-y-[var(--spacing-4)]">
                       <div>
-                        <h3 class="text-base font-semibold text-gray-900 mb-1">Additional Information</h3>
-                        <p class="text-sm text-gray-500">Optional details and notes</p>
+                        <h3 class="text-[var(--font-size-base)] font-semibold text-[var(--foreground)] mb-[var(--spacing-1)]">Additional Information</h3>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Optional details and notes</p>
                       </div>
 
                       <FormField v-slot="{ componentField }" name="description">
                         <FormItem>
-                          <FormLabel class="text-sm font-medium text-gray-900">Description</FormLabel>
+                          <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Description</FormLabel>
                           <FormControl>
                             <Textarea
                               placeholder="Brief description of the event..."
                               v-bind="componentField"
-                              class="border-gray-300 resize-none h-20"
+                              class="border-[var(--border)] resize-none h-20 transition-colors duration-[var(--transition-duration-base)]"
                             />
                           </FormControl>
-                          <FormDescription class="text-xs text-gray-500">
+                          <FormDescription class="text-[var(--font-size-xs)] text-[var(--muted-foreground)]">
                             Maximum 500 characters
                           </FormDescription>
                           <FormMessage />
@@ -490,15 +490,15 @@ const selectedEventDetails = computed(() => {
 
                       <FormField v-slot="{ componentField }" name="notes">
                         <FormItem>
-                          <FormLabel class="text-sm font-medium text-gray-900">Internal Notes</FormLabel>
+                          <FormLabel class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">Internal Notes</FormLabel>
                           <FormControl>
                             <Textarea
                               placeholder="Add any internal notes or special requirements..."
                               v-bind="componentField"
-                              class="border-gray-300 resize-none h-24"
+                              class="border-[var(--border)] resize-none h-24 transition-colors duration-[var(--transition-duration-base)]"
                             />
                           </FormControl>
-                          <FormDescription class="text-xs text-gray-500">
+                          <FormDescription class="text-[var(--font-size-xs)] text-[var(--muted-foreground)]">
                             These notes are for internal use only
                           </FormDescription>
                           <FormMessage />
@@ -507,11 +507,11 @@ const selectedEventDetails = computed(() => {
                     </div>
 
                     <!-- Form Actions -->
-                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
-                      <Button variant="outline" type="button" class="border-gray-300" @click="closePanelView">
+                    <div class="flex items-center justify-end gap-[var(--spacing-3)] pt-[var(--spacing-4)] border-t border-[var(--border)]">
+                      <Button variant="outline" type="button" class="border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]" @click="closePanelView">
                         Cancel
                       </Button>
-                      <Button type="submit" class="bg-black text-white hover:bg-gray-800 px-8">
+                      <Button type="submit" class="bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 px-[var(--spacing-8)] transition-colors duration-[var(--transition-duration-base)]">
                         Create Event
                       </Button>
                     </div>
@@ -524,124 +524,124 @@ const selectedEventDetails = computed(() => {
           <!-- Event Detail View -->
           <div v-else-if="currentView === 'event-detail' && selectedEventDetails" class="h-full overflow-y-auto">
             <!-- Action Bar -->
-            <div class="flex items-center justify-between px-8 py-4 border-b border-gray-200 bg-white">
-              <Button variant="ghost" size="sm" class="gap-2" @click="closePanelView">
-                <ChevronLeft class="h-4 w-4" />
+            <div class="flex items-center justify-between px-[var(--spacing-8)] py-[var(--spacing-4)] border-b border-[var(--border)] bg-[var(--card)]">
+              <Button variant="ghost" size="sm" class="gap-[var(--spacing-2)] transition-colors duration-[var(--transition-duration-base)]" @click="closePanelView">
+                <ChevronLeft class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
                 Close
               </Button>
-              <div class="flex items-center gap-2">
-                <Button variant="outline" size="sm" class="gap-2 border-gray-300">
-                 <Pencil class="h-4 w-4" />
+              <div class="flex items-center gap-[var(--spacing-2)]">
+                <Button variant="outline" size="sm" class="gap-[var(--spacing-2)] border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]">
+                 <Pencil class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
                  Edit
                 </Button>
-                <Button variant="outline" size="sm" class="gap-2 border-gray-300">
-                  <Printer class="h-4 w-4" />
+                <Button variant="outline" size="sm" class="gap-[var(--spacing-2)] border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]">
+                  <Printer class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
                   Print
                 </Button>
-                <Button variant="outline" size="sm" class="gap-2 border-gray-300">
-                  <Download class="h-4 w-4" />
+                <Button variant="outline" size="sm" class="gap-[var(--spacing-2)] border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]">
+                  <Download class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
                   Download PDF
                 </Button>
-                <Button variant="outline" size="sm" class="gap-2 border-gray-300">
-                  <Share2 class="h-4 w-4" />
+                <Button variant="outline" size="sm" class="gap-[var(--spacing-2)] border-[var(--border)] transition-colors duration-[var(--transition-duration-base)]">
+                  <Share2 class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
                   Share
                 </Button>
               </div>
             </div>
 
             <!-- Hero Banner -->
-            <div class="bg-gradient-to-br from-slate-800 to-slate-900 text-white px-8 py-12 text-center">
-              <h1 class="text-4xl font-bold mb-2">{{ selectedEventDetails.fullDate }}</h1>
-              <p class="text-xl font-semibold uppercase tracking-wide mb-3">{{ selectedEventDetails.dayType }}</p>
-              <p class="text-lg">{{ selectedEventDetails.location }}</p>
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 text-white px-[var(--spacing-8)] py-[var(--spacing-12)] text-center">
+              <h1 class="text-[var(--font-size-4xl)] font-bold mb-[var(--spacing-2)]">{{ selectedEventDetails.fullDate }}</h1>
+              <p class="text-[var(--font-size-xl)] font-semibold uppercase tracking-wide mb-[var(--spacing-3)]">{{ selectedEventDetails.dayType }}</p>
+              <p class="text-[var(--font-size-lg)]">{{ selectedEventDetails.location }}</p>
             </div>
 
             <!-- Content Grid -->
-            <div class="grid grid-cols-2 gap-6 p-8">
+            <div class="grid grid-cols-2 gap-[var(--spacing-6)] p-[var(--spacing-8)]">
               <!-- Left Column: Show Info -->
-              <div class="space-y-6">
+              <div class="space-y-[var(--spacing-6)]">
                 <!-- Show Info Card -->
-                <Card class="border border-gray-200 bg-white">
-                  <CardContent class="p-6">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 mb-6">Show Info</h2>
+                <Card class="border border-[var(--border)] bg-[var(--card)]">
+                  <CardContent class="p-[var(--spacing-6)]">
+                    <h2 class="text-[var(--font-size-sm)] font-semibold uppercase tracking-wide text-[var(--muted-foreground)] mb-[var(--spacing-6)]">Show Info</h2>
 
-                    <div v-if="selectedEventDetails.showTime !== 'TBD'" class="mb-8">
-                      <div class="flex items-baseline gap-2 mb-2">
-                        <span class="text-xs font-medium uppercase text-gray-600">Showtime</span>
+                    <div v-if="selectedEventDetails.showTime !== 'TBD'" class="mb-[var(--spacing-8)]">
+                      <div class="flex items-baseline gap-[var(--spacing-2)] mb-[var(--spacing-2)]">
+                        <span class="text-[var(--font-size-xs)] font-medium uppercase text-[var(--muted-foreground)]">Showtime</span>
                       </div>
-                      <div class="flex items-baseline gap-2">
-                        <span class="text-4xl font-bold text-gray-900">{{ selectedEventDetails.showTime }}</span>
-                        <span class="text-sm text-gray-500">Length: {{ selectedEventDetails.showLength }}</span>
+                      <div class="flex items-baseline gap-[var(--spacing-2)]">
+                        <span class="text-[var(--font-size-4xl)] font-bold text-[var(--foreground)]">{{ selectedEventDetails.showTime }}</span>
+                        <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Length: {{ selectedEventDetails.showLength }}</span>
                       </div>
                     </div>
 
                     <!-- Schedule -->
-                    <div v-if="selectedEventDetails.schedule.length > 0" class="border-t border-gray-200 pt-6 space-y-3">
+                    <div v-if="selectedEventDetails.schedule.length > 0" class="border-t border-[var(--border)] pt-[var(--spacing-6)] space-y-[var(--spacing-3)]">
                       <div
                         v-for="(item, index) in selectedEventDetails.schedule"
                         :key="index"
-                        class="flex items-center gap-4"
+                        class="flex items-center gap-[var(--spacing-4)]"
                       >
-                        <span class="text-sm font-semibold text-gray-900 w-24">{{ item.time }}</span>
-                        <span class="text-sm text-gray-700">{{ item.activity }}</span>
+                        <span class="text-[var(--font-size-sm)] font-semibold text-[var(--foreground)] w-24">{{ item.time }}</span>
+                        <span class="text-[var(--font-size-sm)] text-[var(--foreground)]">{{ item.activity }}</span>
                       </div>
                     </div>
-                    <div v-else class="border-t border-gray-200 pt-6">
-                      <p class="text-sm text-gray-400 italic">No schedule details available</p>
+                    <div v-else class="border-t border-[var(--border)] pt-[var(--spacing-6)]">
+                      <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)] italic">No schedule details available</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <!-- Return to Hotel Card -->
-                <Card v-if="selectedEventDetails.returnInfo" class="border border-gray-200 bg-white">
-                  <CardContent class="p-6">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 mb-6">Return to Hotel</h2>
-                    <div class="space-y-3">
+                <Card v-if="selectedEventDetails.returnInfo" class="border border-[var(--border)] bg-[var(--card)]">
+                  <CardContent class="p-[var(--spacing-6)]">
+                    <h2 class="text-[var(--font-size-sm)] font-semibold uppercase tracking-wide text-[var(--muted-foreground)] mb-[var(--spacing-6)]">Return to Hotel</h2>
+                    <div class="space-y-[var(--spacing-3)]">
                       <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-gray-700">After Soundcheck:</span>
-                        <span class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.returnInfo.afterSoundcheck }}</span>
+                        <span class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">After Soundcheck:</span>
+                        <span class="text-[var(--font-size-sm)] font-semibold text-[var(--foreground)]">{{ selectedEventDetails.returnInfo.afterSoundcheck }}</span>
                       </div>
                       <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-gray-700">After Show:</span>
-                        <span class="text-sm font-semibold text-gray-900">{{ selectedEventDetails.returnInfo.afterShow }}</span>
+                        <span class="text-[var(--font-size-sm)] font-medium text-[var(--foreground)]">After Show:</span>
+                        <span class="text-[var(--font-size-sm)] font-semibold text-[var(--foreground)]">{{ selectedEventDetails.returnInfo.afterShow }}</span>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
                 <!-- Notes Card -->
-                <Card class="border border-gray-200 bg-white">
-                  <CardContent class="p-6">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 mb-4">Notes</h2>
-                    <p v-if="selectedEventDetails.notes" class="text-sm text-gray-700">
+                <Card class="border border-[var(--border)] bg-[var(--card)]">
+                  <CardContent class="p-[var(--spacing-6)]">
+                    <h2 class="text-[var(--font-size-sm)] font-semibold uppercase tracking-wide text-[var(--muted-foreground)] mb-[var(--spacing-4)]">Notes</h2>
+                    <p v-if="selectedEventDetails.notes" class="text-[var(--font-size-sm)] text-[var(--foreground)]">
                       {{ selectedEventDetails.notes }}
                     </p>
-                    <p v-else class="text-sm text-gray-400 italic">No notes for this event</p>
+                    <p v-else class="text-[var(--font-size-sm)] text-[var(--muted-foreground)] italic">No notes for this event</p>
                   </CardContent>
                 </Card>
               </div>
 
               <!-- Right Column: Venue, Hotel, Travel Info -->
-              <div class="space-y-6">
+              <div class="space-y-[var(--spacing-6)]">
                 <!-- Venue Info Card -->
-                <Card v-if="selectedEventDetails.venue.name !== 'N/A'" class="border border-gray-200 bg-white">
-                  <CardContent class="p-6">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 mb-4">Venue Info</h2>
-                    <div class="space-y-4">
+                <Card v-if="selectedEventDetails.venue.name !== 'N/A'" class="border border-[var(--border)] bg-[var(--card)]">
+                  <CardContent class="p-[var(--spacing-6)]">
+                    <h2 class="text-[var(--font-size-sm)] font-semibold uppercase tracking-wide text-[var(--muted-foreground)] mb-[var(--spacing-4)]">Venue Info</h2>
+                    <div class="space-y-[var(--spacing-4)]">
                       <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">{{ selectedEventDetails.venue.name }}</h3>
-                        <p class="text-sm text-gray-600">{{ selectedEventDetails.venue.address }}</p>
-                        <p class="text-sm text-gray-600">{{ selectedEventDetails.venue.city }}</p>
-                        <p class="text-sm text-gray-600 mt-2">{{ selectedEventDetails.venue.phone }}</p>
+                        <h3 class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] mb-[var(--spacing-1)]">{{ selectedEventDetails.venue.name }}</h3>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">{{ selectedEventDetails.venue.address }}</p>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">{{ selectedEventDetails.venue.city }}</p>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)] mt-[var(--spacing-2)]">{{ selectedEventDetails.venue.phone }}</p>
                       </div>
-                      <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                      <div class="flex items-center justify-between pt-[var(--spacing-4)] border-t border-[var(--border)]">
                         <div>
-                          <p class="text-xs font-medium uppercase text-gray-600">Capacity</p>
-                          <p class="text-lg font-bold text-gray-900">{{ selectedEventDetails.venue.capacity.toLocaleString() }}</p>
+                          <p class="text-[var(--font-size-xs)] font-medium uppercase text-[var(--muted-foreground)]">Capacity</p>
+                          <p class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)]">{{ selectedEventDetails.venue.capacity.toLocaleString() }}</p>
                         </div>
                         <div>
-                          <p class="text-xs font-medium uppercase text-gray-600">Type</p>
-                          <p class="text-lg font-bold text-gray-900">{{ selectedEventDetails.venue.type }}</p>
+                          <p class="text-[var(--font-size-xs)] font-medium uppercase text-[var(--muted-foreground)]">Type</p>
+                          <p class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)]">{{ selectedEventDetails.venue.type }}</p>
                         </div>
                       </div>
                     </div>
@@ -649,23 +649,23 @@ const selectedEventDetails = computed(() => {
                 </Card>
 
                 <!-- Hotel Info Card -->
-                <Card v-if="selectedEventDetails.hotel" class="border border-gray-200 bg-white">
-                  <CardContent class="p-6">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 mb-4">Hotel Info</h2>
-                    <div class="space-y-4">
+                <Card v-if="selectedEventDetails.hotel" class="border border-[var(--border)] bg-[var(--card)]">
+                  <CardContent class="p-[var(--spacing-6)]">
+                    <h2 class="text-[var(--font-size-sm)] font-semibold uppercase tracking-wide text-[var(--muted-foreground)] mb-[var(--spacing-4)]">Hotel Info</h2>
+                    <div class="space-y-[var(--spacing-4)]">
                       <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">{{ selectedEventDetails.hotel.name }}</h3>
-                        <p class="text-sm text-gray-600">{{ selectedEventDetails.hotel.address }}</p>
-                        <p class="text-sm text-gray-600">{{ selectedEventDetails.hotel.city }}</p>
-                        <p class="text-sm text-gray-600 mt-2">{{ selectedEventDetails.hotel.phone }}</p>
+                        <h3 class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] mb-[var(--spacing-1)]">{{ selectedEventDetails.hotel.name }}</h3>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">{{ selectedEventDetails.hotel.address }}</p>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">{{ selectedEventDetails.hotel.city }}</p>
+                        <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)] mt-[var(--spacing-2)]">{{ selectedEventDetails.hotel.phone }}</p>
                       </div>
-                      <div v-if="selectedEventDetails.hotel.amenities && selectedEventDetails.hotel.amenities.length > 0" class="pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
+                      <div v-if="selectedEventDetails.hotel.amenities && selectedEventDetails.hotel.amenities.length > 0" class="pt-[var(--spacing-4)] border-t border-[var(--border)]">
+                        <div class="flex flex-wrap gap-[var(--spacing-2)]">
                           <Badge
                             v-for="amenity in selectedEventDetails.hotel.amenities"
                             :key="amenity"
                             variant="secondary"
-                            class="text-xs"
+                            class="text-[var(--font-size-xs)]"
                           >
                             {{ amenity }}
                           </Badge>

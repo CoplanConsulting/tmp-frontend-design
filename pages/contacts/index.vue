@@ -105,16 +105,25 @@ const handleAddContact = () => {
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col gap-6">
+  <div class="flex flex-1 flex-col gap-[var(--spacing-6)]">
     <!-- Page Header -->
-    <div class="space-y-1">
-      <h1 class="text-3xl font-bold text-gray-900">Contacts Directory</h1>
-      <p class="text-sm text-gray-500">Manage external contacts, promoters, and venue representatives</p>
+    <div class="flex items-start justify-between">
+      <div class="flex flex-col gap-[var(--spacing-1)]">
+        <h1 class="text-[length:var(--font-size-3xl)] font-bold text-[var(--foreground)]">Contacts Directory</h1>
+        <p class="text-[length:var(--font-size-sm)] text-[var(--muted-foreground)]">Manage external contacts, promoters, and venue representatives</p>
+      </div>
+      <Button
+        class="bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 gap-[var(--spacing-2)] transition-colors duration-[var(--transition-duration-base)]"
+        @click="handleAddContact"
+      >
+        <UserPlus class="h-4 w-4" />
+        Add Contact
+      </Button>
     </div>
 
     <!-- Search and Filters Container -->
-    <div class="border border-gray-200 rounded-lg p-6 bg-white">
-      <div class="space-y-4">
+    <div class="border border-[var(--border)] rounded-[var(--radius-lg)] p-[var(--spacing-6)] bg-[var(--card)]">
+      <div class="flex flex-col gap-[var(--spacing-4)]">
         <!-- Search Input -->
         <SearchInput
           v-model="searchQuery"
@@ -122,13 +131,13 @@ const handleAddContact = () => {
         />
 
         <!-- Filters Row -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-3)]">
           <!-- Company Filter -->
           <Select v-model="selectedCompanyId">
-            <SelectTrigger class="bg-white">
+            <SelectTrigger class="bg-[var(--card)]">
               <SelectValue placeholder="All Companies" />
             </SelectTrigger>
-            <SelectContent class="bg-white">
+            <SelectContent class="bg-[var(--card)]">
               <SelectItem value="all">All Companies</SelectItem>
               <SelectItem v-for="company in uniqueCompanies" :key="company.id" :value="company.id">
                 {{ company.name }}
@@ -138,10 +147,10 @@ const handleAddContact = () => {
 
           <!-- Role Filter -->
           <Select v-model="selectedRole">
-            <SelectTrigger class="bg-white">
+            <SelectTrigger class="bg-[var(--card)]">
               <SelectValue placeholder="All Roles" />
             </SelectTrigger>
-            <SelectContent class="bg-white">
+            <SelectContent class="bg-[var(--card)]">
               <SelectItem value="all">All Roles</SelectItem>
               <SelectItem v-for="role in uniqueRoles" :key="role" :value="role">
                 {{ role }}
@@ -154,19 +163,19 @@ const handleAddContact = () => {
 
     <!-- View Toggle and Content -->
     <Tabs v-model="viewMode" class="w-full">
-      <TabsList class="grid w-full max-w-[400px] grid-cols-2 bg-gray-100">
-        <TabsTrigger value="all" class="flex items-center gap-2">
+      <TabsList class="grid w-full max-w-[400px] grid-cols-2 bg-[var(--muted)]">
+        <TabsTrigger value="all" class="flex items-center gap-[var(--spacing-2)]">
           <List class="h-4 w-4" />
           All Contacts
         </TabsTrigger>
-        <TabsTrigger value="grouped" class="flex items-center gap-2">
+        <TabsTrigger value="grouped" class="flex items-center gap-[var(--spacing-2)]">
           <LayoutGrid class="h-4 w-4" />
           By Company
         </TabsTrigger>
       </TabsList>
 
       <!-- All Contacts View (Flat Table) -->
-      <TabsContent value="all" class="mt-6">
+      <TabsContent value="all" class="mt-[var(--spacing-6)]">
         <!-- TRUE EMPTY STATE: No contacts exist at all -->
         <EmptyState
           v-if="contacts.length === 0"
@@ -177,7 +186,7 @@ const handleAddContact = () => {
         >
           <template #action>
             <Button
-              class="bg-black text-white hover:bg-gray-800 gap-2"
+              class="bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 gap-[var(--spacing-2)] transition-colors duration-[var(--transition-duration-base)]"
               @click="handleAddContact"
             >
               <UserPlus class="h-4 w-4" />
@@ -187,10 +196,10 @@ const handleAddContact = () => {
         </EmptyState>
 
         <!-- CONTACTS TABLE (when contacts exist) -->
-        <div v-else class="border border-gray-200 rounded-lg overflow-hidden bg-white">
+        <div v-else class="border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden bg-[var(--card)]">
           <Table>
             <TableHeader>
-              <TableRow class="bg-white border-b border-gray-200">
+              <TableRow class="bg-[var(--card)] border-b border-[var(--border)]">
                 <TableHead class="font-semibold">Name</TableHead>
                 <TableHead class="font-semibold">Role</TableHead>
                 <TableHead class="font-semibold">Company</TableHead>
@@ -207,9 +216,9 @@ const handleAddContact = () => {
               >
                 <TableCell colspan="6" class="h-64">
                   <div class="flex flex-col items-center justify-center text-center">
-                    <Briefcase class="h-12 w-12 text-gray-400 mb-4" />
-                    <p class="text-base font-semibold text-gray-900 mb-1">No contacts match your search</p>
-                    <p class="text-sm text-gray-600 mb-4">Try adjusting your search or filters</p>
+                    <Briefcase class="h-12 w-12 text-[var(--muted-foreground)] opacity-60 mb-[var(--spacing-4)]" />
+                    <p class="text-[length:var(--font-size-base)] font-semibold text-[var(--foreground)] mb-[var(--spacing-1)]">No contacts match your search</p>
+                    <p class="text-[length:var(--font-size-sm)] text-[var(--muted-foreground)] mb-[var(--spacing-4)]">Try adjusting your search or filters</p>
                     <Button
                       v-if="hasActiveFilters"
                       variant="outline"
@@ -226,18 +235,18 @@ const handleAddContact = () => {
               <TableRow
                 v-for="contact in filteredContacts"
                 :key="contact.id"
-                class="border-b border-gray-200 last:border-0 hover:bg-gray-50"
+                class="border-b border-[var(--border)] last:border-0 hover:bg-[var(--muted)]/50 transition-colors duration-[var(--transition-duration-fast)]"
               >
                 <TableCell class="font-medium">
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-[var(--spacing-3)]">
                     <Avatar class="h-9 w-9">
-                      <AvatarFallback class="bg-gray-100 text-gray-700">
+                      <AvatarFallback class="bg-[var(--muted)] text-[var(--foreground)]">
                         {{ contact.firstName.charAt(0) }}{{ contact.lastName.charAt(0) }}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <div class="font-semibold text-gray-900">{{ contact.firstName }} {{ contact.lastName }}</div>
-                      <div v-if="contact.title" class="text-xs text-gray-500">{{ contact.title }}</div>
+                      <div class="font-semibold text-[var(--foreground)]">{{ contact.firstName }} {{ contact.lastName }}</div>
+                      <div v-if="contact.title" class="text-[length:var(--font-size-xs)] text-[var(--muted-foreground)]">{{ contact.title }}</div>
                     </div>
                   </div>
                 </TableCell>
@@ -246,13 +255,13 @@ const handleAddContact = () => {
                     {{ contact.role }}
                   </Badge>
                 </TableCell>
-                <TableCell class="text-gray-900">
+                <TableCell class="text-[var(--foreground)]">
                   {{ contact.companyName || '—' }}
                 </TableCell>
-                <TableCell class="text-gray-600 text-sm">
+                <TableCell class="text-[var(--muted-foreground)] text-[length:var(--font-size-sm)]">
                   {{ contact.email || '—' }}
                 </TableCell>
-                <TableCell class="text-gray-600 text-sm">
+                <TableCell class="text-[var(--muted-foreground)] text-[length:var(--font-size-sm)]">
                   {{ contact.phone || '—' }}
                 </TableCell>
                 <TableCell class="text-right">
@@ -260,7 +269,7 @@ const handleAddContact = () => {
                     variant="link"
                     size="sm"
                     as-child
-                    class="text-gray-900 hover:text-gray-700"
+                    class="text-[var(--foreground)] hover:text-[var(--foreground)]/70 transition-colors duration-[var(--transition-duration-fast)]"
                   >
                     <NuxtLink :to="`/contacts/${contact.id}`">
                       View Details
@@ -274,7 +283,7 @@ const handleAddContact = () => {
       </TabsContent>
 
       <!-- Grouped by Company View -->
-      <TabsContent value="grouped" class="mt-6 space-y-4">
+      <TabsContent value="grouped" class="mt-[var(--spacing-6)] flex flex-col gap-[var(--spacing-4)]">
         <!-- TRUE EMPTY STATE: No contacts exist at all -->
         <EmptyState
           v-if="contacts.length === 0"
@@ -285,7 +294,7 @@ const handleAddContact = () => {
         >
           <template #action>
             <Button
-              class="bg-black text-white hover:bg-gray-800 gap-2"
+              class="bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 gap-[var(--spacing-2)] transition-colors duration-[var(--transition-duration-base)]"
               @click="handleAddContact"
             >
               <UserPlus class="h-4 w-4" />
@@ -297,27 +306,27 @@ const handleAddContact = () => {
         <!-- GROUPED VIEW CONTENT (when contacts exist) -->
         <template v-else>
           <!-- Companies Sections -->
-          <div v-for="item in groupedContacts.companies" :key="item.company.id" class="border border-gray-200 rounded-lg bg-white overflow-hidden">
+          <div v-for="item in groupedContacts.companies" :key="item.company.id" class="border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card)] overflow-hidden">
           <!-- Company Header -->
-          <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+          <div class="px-[var(--spacing-6)] py-[var(--spacing-4)] bg-[var(--muted)]/50 border-b border-[var(--border)]">
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="flex items-center justify-center w-10 h-10 border border-gray-200 rounded-md bg-white">
-                  <Building2 class="h-5 w-5 text-gray-600" />
+              <div class="flex items-center gap-[var(--spacing-3)]">
+                <div class="flex items-center justify-center w-10 h-10 border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card)]">
+                  <Building2 class="h-5 w-5 text-[var(--muted-foreground)]" />
                 </div>
                 <div>
-                  <h3 class="font-bold text-gray-900">{{ item.company.name }}</h3>
-                  <div class="flex items-center gap-2 mt-1">
+                  <h3 class="font-bold text-[var(--foreground)]">{{ item.company.name }}</h3>
+                  <div class="flex items-center gap-[var(--spacing-2)] mt-[var(--spacing-1)]">
                     <StatusBadge :type="item.company.type">
                       {{ item.company.type }}
                     </StatusBadge>
-                    <span v-if="item.company.city" class="text-xs text-gray-500">
+                    <span v-if="item.company.city" class="text-[length:var(--font-size-xs)] text-[var(--muted-foreground)]">
                       {{ item.company.city }}<span v-if="item.company.state">, {{ item.company.state }}</span>
                     </span>
                   </div>
                 </div>
               </div>
-              <Badge variant="secondary" class="text-xs">
+              <Badge variant="secondary" class="text-[length:var(--font-size-xs)]">
                 {{ item.contacts.length }} {{ item.contacts.length === 1 ? 'contact' : 'contacts' }}
               </Badge>
             </div>
@@ -326,7 +335,7 @@ const handleAddContact = () => {
           <!-- Company Contacts Table -->
           <Table>
             <TableHeader>
-              <TableRow class="bg-white border-b border-gray-200">
+              <TableRow class="bg-[var(--card)] border-b border-[var(--border)]">
                 <TableHead class="font-semibold">Name</TableHead>
                 <TableHead class="font-semibold">Role</TableHead>
                 <TableHead class="font-semibold">Email</TableHead>
@@ -338,18 +347,18 @@ const handleAddContact = () => {
               <TableRow
                 v-for="contact in item.contacts"
                 :key="contact.id"
-                class="border-b border-gray-200 last:border-0 hover:bg-gray-50"
+                class="border-b border-[var(--border)] last:border-0 hover:bg-[var(--muted)]/50 transition-colors duration-[var(--transition-duration-fast)]"
               >
                 <TableCell class="font-medium">
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-[var(--spacing-3)]">
                     <Avatar class="h-9 w-9">
-                      <AvatarFallback class="bg-gray-100 text-gray-700">
+                      <AvatarFallback class="bg-[var(--muted)] text-[var(--foreground)]">
                         {{ contact.firstName.charAt(0) }}{{ contact.lastName.charAt(0) }}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <div class="font-semibold text-gray-900">{{ contact.firstName }} {{ contact.lastName }}</div>
-                      <div v-if="contact.title" class="text-xs text-gray-500">{{ contact.title }}</div>
+                      <div class="font-semibold text-[var(--foreground)]">{{ contact.firstName }} {{ contact.lastName }}</div>
+                      <div v-if="contact.title" class="text-[length:var(--font-size-xs)] text-[var(--muted-foreground)]">{{ contact.title }}</div>
                     </div>
                   </div>
                 </TableCell>
@@ -358,10 +367,10 @@ const handleAddContact = () => {
                     {{ contact.role }}
                   </Badge>
                 </TableCell>
-                <TableCell class="text-gray-600 text-sm">
+                <TableCell class="text-[var(--muted-foreground)] text-[length:var(--font-size-sm)]">
                   {{ contact.email || '—' }}
                 </TableCell>
-                <TableCell class="text-gray-600 text-sm">
+                <TableCell class="text-[var(--muted-foreground)] text-[length:var(--font-size-sm)]">
                   {{ contact.phone || '—' }}
                 </TableCell>
                 <TableCell class="text-right">
@@ -369,7 +378,7 @@ const handleAddContact = () => {
                     variant="link"
                     size="sm"
                     as-child
-                    class="text-gray-900 hover:text-gray-700"
+                    class="text-[var(--foreground)] hover:text-[var(--foreground)]/70 transition-colors duration-[var(--transition-duration-fast)]"
                   >
                     <NuxtLink :to="`/contacts/${contact.id}`">
                       View Details
@@ -382,20 +391,20 @@ const handleAddContact = () => {
         </div>
 
         <!-- Independent Contacts Section -->
-        <div v-if="groupedContacts.independent.length > 0" class="border border-gray-200 rounded-lg bg-white overflow-hidden">
+        <div v-if="groupedContacts.independent.length > 0" class="border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card)] overflow-hidden">
           <!-- Independent Header -->
-          <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+          <div class="px-[var(--spacing-6)] py-[var(--spacing-4)] bg-[var(--muted)]/50 border-b border-[var(--border)]">
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="flex items-center justify-center w-10 h-10 border border-gray-200 rounded-md bg-white">
-                  <Briefcase class="h-5 w-5 text-gray-600" />
+              <div class="flex items-center gap-[var(--spacing-3)]">
+                <div class="flex items-center justify-center w-10 h-10 border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card)]">
+                  <Briefcase class="h-5 w-5 text-[var(--muted-foreground)]" />
                 </div>
                 <div>
-                  <h3 class="font-bold text-gray-900">Independent Contacts</h3>
-                  <p class="text-xs text-gray-500 mt-1">Contacts not associated with a company</p>
+                  <h3 class="font-bold text-[var(--foreground)]">Independent Contacts</h3>
+                  <p class="text-[length:var(--font-size-xs)] text-[var(--muted-foreground)] mt-[var(--spacing-1)]">Contacts not associated with a company</p>
                 </div>
               </div>
-              <Badge variant="secondary" class="text-xs">
+              <Badge variant="secondary" class="text-[length:var(--font-size-xs)]">
                 {{ groupedContacts.independent.length }} {{ groupedContacts.independent.length === 1 ? 'contact' : 'contacts' }}
               </Badge>
             </div>
@@ -404,7 +413,7 @@ const handleAddContact = () => {
           <!-- Independent Contacts Table -->
           <Table>
             <TableHeader>
-              <TableRow class="bg-white border-b border-gray-200">
+              <TableRow class="bg-[var(--card)] border-b border-[var(--border)]">
                 <TableHead class="font-semibold">Name</TableHead>
                 <TableHead class="font-semibold">Role</TableHead>
                 <TableHead class="font-semibold">Email</TableHead>
@@ -416,18 +425,18 @@ const handleAddContact = () => {
               <TableRow
                 v-for="contact in groupedContacts.independent"
                 :key="contact.id"
-                class="border-b border-gray-200 last:border-0 hover:bg-gray-50"
+                class="border-b border-[var(--border)] last:border-0 hover:bg-[var(--muted)]/50 transition-colors duration-[var(--transition-duration-fast)]"
               >
                 <TableCell class="font-medium">
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-[var(--spacing-3)]">
                     <Avatar class="h-9 w-9">
-                      <AvatarFallback class="bg-gray-100 text-gray-700">
+                      <AvatarFallback class="bg-[var(--muted)] text-[var(--foreground)]">
                         {{ contact.firstName.charAt(0) }}{{ contact.lastName.charAt(0) }}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <div class="font-semibold text-gray-900">{{ contact.firstName }} {{ contact.lastName }}</div>
-                      <div v-if="contact.title" class="text-xs text-gray-500">{{ contact.title }}</div>
+                      <div class="font-semibold text-[var(--foreground)]">{{ contact.firstName }} {{ contact.lastName }}</div>
+                      <div v-if="contact.title" class="text-[length:var(--font-size-xs)] text-[var(--muted-foreground)]">{{ contact.title }}</div>
                     </div>
                   </div>
                 </TableCell>
@@ -436,10 +445,10 @@ const handleAddContact = () => {
                     {{ contact.role }}
                   </Badge>
                 </TableCell>
-                <TableCell class="text-gray-600 text-sm">
+                <TableCell class="text-[var(--muted-foreground)] text-[length:var(--font-size-sm)]">
                   {{ contact.email || '—' }}
                 </TableCell>
-                <TableCell class="text-gray-600 text-sm">
+                <TableCell class="text-[var(--muted-foreground)] text-[length:var(--font-size-sm)]">
                   {{ contact.phone || '—' }}
                 </TableCell>
                 <TableCell class="text-right">
@@ -447,7 +456,7 @@ const handleAddContact = () => {
                     variant="link"
                     size="sm"
                     as-child
-                    class="text-gray-900 hover:text-gray-700"
+                    class="text-[var(--foreground)] hover:text-[var(--foreground)]/70 transition-colors duration-[var(--transition-duration-fast)]"
                   >
                     <NuxtLink :to="`/contacts/${contact.id}`">
                       View Details
@@ -460,11 +469,11 @@ const handleAddContact = () => {
         </div>
 
           <!-- FILTERED EMPTY STATE for Grouped View -->
-          <div v-if="groupedContacts.companies.length === 0 && groupedContacts.independent.length === 0" class="border border-gray-200 rounded-lg bg-white">
-            <div class="flex flex-col items-center justify-center py-16 px-8 text-center">
-              <Briefcase class="h-12 w-12 text-gray-400 mb-4" />
-              <p class="text-base font-semibold text-gray-900 mb-1">No contacts match your search</p>
-              <p class="text-sm text-gray-600 mb-4">Try adjusting your search or filters</p>
+          <div v-if="groupedContacts.companies.length === 0 && groupedContacts.independent.length === 0" class="border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card)]">
+            <div class="flex flex-col items-center justify-center py-[var(--spacing-16)] px-[var(--spacing-8)] text-center">
+              <Briefcase class="h-12 w-12 text-[var(--muted-foreground)] opacity-60 mb-[var(--spacing-4)]" />
+              <p class="text-[length:var(--font-size-base)] font-semibold text-[var(--foreground)] mb-[var(--spacing-1)]">No contacts match your search</p>
+              <p class="text-[length:var(--font-size-sm)] text-[var(--muted-foreground)] mb-[var(--spacing-4)]">Try adjusting your search or filters</p>
               <Button
                 v-if="hasActiveFilters"
                 variant="outline"

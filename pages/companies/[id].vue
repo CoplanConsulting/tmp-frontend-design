@@ -35,20 +35,6 @@ const contactEmails = computed(() => {
     .join(',')
 })
 
-// Enhanced badge styling with custom colors
-const getTypeBadgeClass = (type: string) => {
-  switch (type) {
-    case 'Promoter':
-      return 'bg-purple-100 text-purple-700 border-purple-300'
-    case 'Venue':
-      return 'bg-green-100 text-green-700 border-green-300'
-    case 'Production':
-      return 'bg-blue-100 text-blue-700 border-blue-300'
-    default:
-      return 'bg-gray-100 text-gray-700 border-gray-300'
-  }
-}
-
 // Navigate back to companies list
 const goBack = () => {
   router.push('/companies')
@@ -77,79 +63,101 @@ const callContact = (phone: string) => {
 </script>
 
 <template>
-  <div class="flex-1 p-8 bg-gray-50" v-if="company">
+  <div class="flex-1 p-[var(--spacing-8)] bg-[var(--background)]" v-if="company">
     <!-- Back Button -->
-    <Button variant="ghost" @click="goBack" class="mb-4 text-gray-600 hover:text-gray-900">
-      <ArrowLeft class="h-4 w-4 mr-2" />
+    <Button
+      variant="ghost"
+      @click="goBack"
+      class="mb-[var(--spacing-4)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors duration-[var(--transition-duration-fast)]"
+    >
+      <ArrowLeft class="h-4 w-4 mr-[var(--spacing-2)]" />
       Back to Companies
     </Button>
 
     <!-- Page Header -->
-    <div class="flex items-start justify-between mb-6">
+    <div class="flex items-start justify-between mb-[var(--spacing-6)]">
       <div>
-        <div class="flex items-center gap-3 mb-3">
-          <h1 class="text-2xl font-bold text-gray-900">{{ company.name }}</h1>
-          <Badge :class="getTypeBadgeClass(company.type)" class="font-bold border text-sm px-3 py-1">
+        <div class="flex items-center gap-[var(--spacing-3)] mb-[var(--spacing-3)]">
+          <h1 class="text-[var(--font-size-2xl)] font-bold text-[var(--foreground)]">{{ company.name }}</h1>
+          <StatusBadge :type="company.type">
             {{ company.type }}
-          </Badge>
+          </StatusBadge>
         </div>
-        <div class="flex items-center gap-4 text-sm text-gray-600">
-          <div v-if="company.mainPhone" class="flex items-center gap-2">
+        <div class="flex items-center gap-[var(--spacing-4)] text-[var(--font-size-sm)] text-[var(--muted-foreground)]">
+          <div v-if="company.mainPhone" class="flex items-center gap-[var(--spacing-2)]">
             <Phone class="h-4 w-4" />
-            <a :href="`tel:${company.mainPhone}`" class="hover:text-blue-600 transition-colors">
+            <a
+              :href="`tel:${company.mainPhone}`"
+              class="hover:text-[var(--accent)] transition-colors duration-[var(--transition-duration-fast)]"
+            >
               {{ company.mainPhone }}
             </a>
           </div>
-          <div v-if="company.website" class="flex items-center gap-2">
+          <div v-if="company.website" class="flex items-center gap-[var(--spacing-2)]">
             <Globe class="h-4 w-4" />
-            <a :href="company.website" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-700 hover:underline transition-colors">
+            <a
+              :href="company.website"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[var(--accent)] hover:opacity-80 hover:underline transition-all duration-[var(--transition-duration-fast)]"
+            >
               Website
             </a>
           </div>
-          <div v-if="company.mainEmail" class="flex items-center gap-2">
+          <div v-if="company.mainEmail" class="flex items-center gap-[var(--spacing-2)]">
             <Mail class="h-4 w-4" />
-            <a :href="`mailto:${company.mainEmail}`" class="text-blue-600 hover:text-blue-700 hover:underline transition-colors">
+            <a
+              :href="`mailto:${company.mainEmail}`"
+              class="text-[var(--accent)] hover:opacity-80 hover:underline transition-all duration-[var(--transition-duration-fast)]"
+            >
               {{ company.mainEmail }}
             </a>
           </div>
         </div>
       </div>
 
-      <Button variant="outline" class="text-gray-900 hover:bg-gray-50">
-        <FileEdit class="h-4 w-4 mr-2" />
+      <Button
+        variant="outline"
+        class="text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors duration-[var(--transition-duration-base)]"
+      >
+        <FileEdit class="h-4 w-4 mr-[var(--spacing-2)]" />
         Edit Company
       </Button>
     </div>
 
     <!-- Company Information Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-6)] mb-[var(--spacing-8)]">
       <!-- Company Details -->
-      <Card class="border border-gray-200 bg-white">
-        <CardHeader class="pb-3">
-          <div class="flex items-center gap-2">
-            <Building2 class="h-5 w-5 text-gray-600" />
-            <CardTitle class="text-base font-bold text-gray-900">Company Information</CardTitle>
+      <Card class="border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
+        <CardHeader class="pb-[var(--spacing-3)]">
+          <div class="flex items-center gap-[var(--spacing-2)]">
+            <Building2 class="h-5 w-5 text-[var(--muted-foreground)]" />
+            <CardTitle class="text-[var(--font-size-base)] font-bold text-[var(--foreground)]">Company Information</CardTitle>
           </div>
         </CardHeader>
-        <CardContent class="space-y-3">
+        <CardContent class="space-y-[var(--spacing-3)]">
           <div>
-            <p class="text-xs font-semibold text-gray-500 uppercase">Company Type</p>
-            <p class="text-sm text-gray-900 mt-1">{{ company.type }}</p>
+            <p class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase">Company Type</p>
+            <p class="text-[var(--font-size-sm)] text-[var(--foreground)] mt-[var(--spacing-1)]">{{ company.type }}</p>
           </div>
-          <Separator class="bg-slate-200" v-if="company.mainPhone || company.mainEmail" />
+          <Separator class="bg-[var(--border)]" v-if="company.mainPhone || company.mainEmail" />
           <div v-if="company.mainPhone">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Main Phone</p>
-            <p class="text-sm text-gray-900 mt-1">{{ company.mainPhone }}</p>
+            <p class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase">Main Phone</p>
+            <p class="text-[var(--font-size-sm)] text-[var(--foreground)] mt-[var(--spacing-1)]">{{ company.mainPhone }}</p>
           </div>
-          <Separator class="bg-slate-200" v-if="company.mainEmail" />
+          <Separator class="bg-[var(--border)]" v-if="company.mainEmail" />
           <div v-if="company.mainEmail">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Main Email</p>
-            <p class="text-sm text-gray-900 mt-1">{{ company.mainEmail }}</p>
+            <p class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase">Main Email</p>
+            <p class="text-[var(--font-size-sm)] text-[var(--foreground)] mt-[var(--spacing-1)]">{{ company.mainEmail }}</p>
           </div>
-          <Separator class="bg-slate-200" v-if="company.website" />
+          <Separator class="bg-[var(--border)]" v-if="company.website" />
           <div v-if="company.website">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Website</p>
-            <a :href="company.website" target="_blank" class="text-sm text-blue-600 hover:underline mt-1 inline-block">
+            <p class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase">Website</p>
+            <a
+              :href="company.website"
+              target="_blank"
+              class="text-[var(--font-size-sm)] text-[var(--accent)] hover:underline mt-[var(--spacing-1)] inline-block transition-all duration-[var(--transition-duration-fast)]"
+            >
               {{ company.website }}
             </a>
           </div>
@@ -157,133 +165,133 @@ const callContact = (phone: string) => {
       </Card>
 
       <!-- Location Information -->
-      <Card class="border border-gray-200 bg-white" v-if="company.address || company.city">
-        <CardHeader class="pb-3">
-          <div class="flex items-center gap-2">
-            <MapPin class="h-5 w-5 text-gray-600" />
-            <CardTitle class="text-base font-bold text-gray-900">Location</CardTitle>
+      <Card class="border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]" v-if="company.address || company.city">
+        <CardHeader class="pb-[var(--spacing-3)]">
+          <div class="flex items-center gap-[var(--spacing-2)]">
+            <MapPin class="h-5 w-5 text-[var(--muted-foreground)]" />
+            <CardTitle class="text-[var(--font-size-base)] font-bold text-[var(--foreground)]">Location</CardTitle>
           </div>
         </CardHeader>
-        <CardContent class="space-y-3">
+        <CardContent class="space-y-[var(--spacing-3)]">
           <div v-if="company.address">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Address</p>
-            <p class="text-sm text-gray-900 mt-1">{{ company.address }}</p>
+            <p class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase">Address</p>
+            <p class="text-[var(--font-size-sm)] text-[var(--foreground)] mt-[var(--spacing-1)]">{{ company.address }}</p>
           </div>
-          <Separator class="bg-slate-200" v-if="company.city" />
+          <Separator class="bg-[var(--border)]" v-if="company.city" />
           <div v-if="company.city">
-            <p class="text-xs font-semibold text-gray-500 uppercase">City / State</p>
-            <p class="text-sm text-gray-900 mt-1">
+            <p class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase">City / State</p>
+            <p class="text-[var(--font-size-sm)] text-[var(--foreground)] mt-[var(--spacing-1)]">
               {{ company.city }}{{ company.state ? `, ${company.state}` : '' }}
             </p>
           </div>
-          <Separator class="bg-slate-200" v-if="company.country" />
+          <Separator class="bg-[var(--border)]" v-if="company.country" />
           <div v-if="company.country">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Country</p>
-            <p class="text-sm text-gray-900 mt-1">{{ company.country }}</p>
+            <p class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase">Country</p>
+            <p class="text-[var(--font-size-sm)] text-[var(--foreground)] mt-[var(--spacing-1)]">{{ company.country }}</p>
           </div>
-          <Separator class="bg-slate-200" v-if="company.postalCode" />
+          <Separator class="bg-[var(--border)]" v-if="company.postalCode" />
           <div v-if="company.postalCode">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Postal Code</p>
-            <p class="text-sm text-gray-900 mt-1">{{ company.postalCode }}</p>
+            <p class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase">Postal Code</p>
+            <p class="text-[var(--font-size-sm)] text-[var(--foreground)] mt-[var(--spacing-1)]">{{ company.postalCode }}</p>
           </div>
         </CardContent>
       </Card>
 
       <!-- Notes -->
-      <Card class="border border-gray-200 bg-white lg:col-span-2" v-if="company.notes">
-        <CardHeader class="pb-3">
-          <CardTitle class="text-base font-bold text-gray-900">Notes</CardTitle>
+      <Card class="border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)] lg:col-span-2" v-if="company.notes">
+        <CardHeader class="pb-[var(--spacing-3)]">
+          <CardTitle class="text-[var(--font-size-base)] font-bold text-[var(--foreground)]">Notes</CardTitle>
         </CardHeader>
         <CardContent>
-          <p class="text-sm text-gray-900">{{ company.notes }}</p>
+          <p class="text-[var(--font-size-sm)] text-[var(--foreground)]">{{ company.notes }}</p>
         </CardContent>
       </Card>
     </div>
 
     <!-- Contacts Section -->
     <div>
-      <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-2">
-          <Users class="h-5 w-5 text-gray-600" />
-          <h2 class="text-lg font-bold text-gray-900">Contacts</h2>
-          <Badge variant="secondary" class="font-semibold border border-gray-200">{{ companyContacts.length }}</Badge>
+      <div class="flex items-center justify-between mb-[var(--spacing-4)]">
+        <div class="flex items-center gap-[var(--spacing-2)]">
+          <Users class="h-5 w-5 text-[var(--muted-foreground)]" />
+          <h2 class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)]">Contacts</h2>
+          <Badge variant="secondary" class="font-semibold border border-[var(--border)]">{{ companyContacts.length }}</Badge>
         </div>
         <Button
           v-if="contactEmails"
           variant="outline"
           @click="emailAllContacts"
-          class="text-gray-900 hover:bg-gray-50"
+          class="text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors duration-[var(--transition-duration-base)]"
         >
-          <Send class="h-4 w-4 mr-2" />
+          <Send class="h-4 w-4 mr-[var(--spacing-2)]" />
           Email All Contacts
         </Button>
       </div>
 
       <!-- Contacts Table -->
-      <Card class="border border-gray-200 bg-white" v-if="companyContacts.length > 0">
+      <Card class="border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]" v-if="companyContacts.length > 0">
         <Table>
           <TableHeader>
-            <TableRow class="border-b border-gray-200">
-              <TableHead class="font-bold text-gray-900">Name</TableHead>
-              <TableHead class="font-bold text-gray-900">Role / Title</TableHead>
-              <TableHead class="font-bold text-gray-900">Email</TableHead>
-              <TableHead class="font-bold text-gray-900">Phone</TableHead>
-              <TableHead class="font-bold text-gray-900 text-right">Actions</TableHead>
+            <TableRow class="border-b border-[var(--border)]">
+              <TableHead class="font-bold text-[var(--foreground)]">Name</TableHead>
+              <TableHead class="font-bold text-[var(--foreground)]">Role / Title</TableHead>
+              <TableHead class="font-bold text-[var(--foreground)]">Email</TableHead>
+              <TableHead class="font-bold text-[var(--foreground)]">Phone</TableHead>
+              <TableHead class="font-bold text-[var(--foreground)] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow
               v-for="contact in companyContacts"
               :key="contact.id"
-              class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors group"
+              class="border-b border-[var(--border)] hover:bg-[var(--muted)] cursor-pointer transition-colors duration-[var(--transition-duration-fast)] group"
               @click="viewContact(contact.id)"
             >
-              <TableCell class="font-semibold text-gray-900">
-                <div class="flex items-center gap-3">
-                  <div class="flex-shrink-0 flex items-center justify-center w-9 h-9 border border-gray-200 rounded-md bg-white shadow-sm">
-                    <User class="h-4 w-4 text-gray-600" />
+              <TableCell class="font-semibold text-[var(--foreground)]">
+                <div class="flex items-center gap-[var(--spacing-3)]">
+                  <div class="flex-shrink-0 flex items-center justify-center w-9 h-9 border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card)] shadow-[var(--shadow-xs)]">
+                    <User class="h-4 w-4 text-[var(--muted-foreground)]" />
                   </div>
-                  <span class="group-hover:text-black transition-colors">
+                  <span class="group-hover:text-[var(--accent)] transition-colors duration-[var(--transition-duration-fast)]">
                     {{ contact.firstName }} {{ contact.lastName }}
                   </span>
                 </div>
               </TableCell>
-              <TableCell class="text-gray-600">
+              <TableCell class="text-[var(--muted-foreground)]">
                 <div class="flex flex-col">
-                  <span class="font-medium text-gray-900">{{ contact.role }}</span>
-                  <span v-if="contact.title" class="text-xs text-gray-500">{{ contact.title }}</span>
+                  <span class="font-medium text-[var(--foreground)]">{{ contact.role }}</span>
+                  <span v-if="contact.title" class="text-[var(--font-size-xs)] text-[var(--muted-foreground)]">{{ contact.title }}</span>
                 </div>
               </TableCell>
-              <TableCell class="text-gray-600">
+              <TableCell class="text-[var(--muted-foreground)]">
                 <a
                   v-if="contact.email"
                   :href="`mailto:${contact.email}`"
-                  class="text-blue-600 hover:text-blue-700 hover:underline text-sm transition-colors"
+                  class="text-[var(--accent)] hover:opacity-80 hover:underline text-[var(--font-size-sm)] transition-all duration-[var(--transition-duration-fast)]"
                   @click.stop
                 >
                   {{ contact.email }}
                 </a>
-                <span v-else class="text-gray-400">-</span>
+                <span v-else class="opacity-40">-</span>
               </TableCell>
-              <TableCell class="text-gray-600">
+              <TableCell class="text-[var(--muted-foreground)]">
                 <a
                   v-if="contact.phone"
                   :href="`tel:${contact.phone}`"
-                  class="hover:text-blue-600 transition-colors"
+                  class="hover:text-[var(--accent)] transition-colors duration-[var(--transition-duration-fast)]"
                   @click.stop
                 >
                   {{ contact.phone }}
                 </a>
-                <span v-else class="text-gray-400">-</span>
+                <span v-else class="opacity-40">-</span>
               </TableCell>
               <TableCell class="text-right">
-                <div class="flex items-center justify-end gap-2">
+                <div class="flex items-center justify-end gap-[var(--spacing-2)]">
                   <Button
                     v-if="contact.email"
                     variant="ghost"
                     size="sm"
                     @click.stop="emailContact(contact.email)"
-                    class="h-8 px-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                    class="h-8 px-[var(--spacing-2)] text-[var(--muted-foreground)] hover:text-[var(--accent)] hover:bg-[var(--muted)] transition-colors duration-[var(--transition-duration-fast)]"
                   >
                     <Mail class="h-4 w-4" />
                   </Button>
@@ -292,7 +300,7 @@ const callContact = (phone: string) => {
                     variant="ghost"
                     size="sm"
                     @click.stop="callContact(contact.phone)"
-                    class="h-8 px-2 text-gray-600 hover:text-green-600 hover:bg-green-50"
+                    class="h-8 px-[var(--spacing-2)] text-[var(--muted-foreground)] hover:text-[var(--accent)] hover:bg-[var(--muted)] transition-colors duration-[var(--transition-duration-fast)]"
                   >
                     <Phone class="h-4 w-4" />
                   </Button>
@@ -304,23 +312,27 @@ const callContact = (phone: string) => {
       </Card>
 
       <!-- Empty State -->
-      <Card class="border border-gray-200 bg-white" v-else>
-        <CardContent class="py-12 text-center">
-          <Users class="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p class="text-gray-600">No contacts found for this company</p>
+      <Card class="border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]" v-else>
+        <CardContent class="py-[var(--spacing-12)] text-center">
+          <Users class="h-12 w-12 text-[var(--muted-foreground)] mx-auto mb-[var(--spacing-4)]" />
+          <p class="text-[var(--muted-foreground)]">No contacts found for this company</p>
         </CardContent>
       </Card>
     </div>
   </div>
 
   <!-- Company Not Found -->
-  <div v-else class="flex-1 p-8 bg-gray-50">
-    <Card class="border border-gray-200 bg-white">
-      <CardContent class="py-12 text-center">
-        <Building2 class="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <p class="text-gray-600 mb-4">Company not found</p>
-        <Button @click="goBack" variant="outline">
-          <ArrowLeft class="h-4 w-4 mr-2" />
+  <div v-else class="flex-1 p-[var(--spacing-8)] bg-[var(--background)]">
+    <Card class="border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
+      <CardContent class="py-[var(--spacing-12)] text-center">
+        <Building2 class="h-12 w-12 text-[var(--muted-foreground)] mx-auto mb-[var(--spacing-4)]" />
+        <p class="text-[var(--muted-foreground)] mb-[var(--spacing-4)]">Company not found</p>
+        <Button
+          @click="goBack"
+          variant="outline"
+          class="transition-colors duration-[var(--transition-duration-base)]"
+        >
+          <ArrowLeft class="h-4 w-4 mr-[var(--spacing-2)]" />
           Back to Companies
         </Button>
       </CardContent>

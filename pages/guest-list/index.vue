@@ -18,7 +18,7 @@ if (firstEventId) {
 </script>
 
 <template>
-  <div class="flex items-center justify-center h-screen">
-    <p class="text-gray-600">Loading guest list...</p>
+  <div class="flex items-center justify-center h-screen bg-[var(--background)]">
+    <p class="text-[var(--muted-foreground)] text-[var(--font-size-sm)]">Loading guest list...</p>
   </div>
 </template>

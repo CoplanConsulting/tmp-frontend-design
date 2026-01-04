@@ -190,305 +190,302 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-1 gap-0 bg-gray-50 h-[calc(100vh-4rem)]">
-        <!-- Timeline Sidebar -->
-        <div class="w-[300px] border-r border-gray-200 bg-white overflow-y-auto">
-          <div class="p-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-              <Button variant="outline" size="sm" class="gap-2 border-gray-300">
-                <CalendarIcon class="h-4 w-4" />
-                Today
-              </Button>
-              <Button variant="outline" size="sm" class="gap-2 border-gray-300">
-                <Map class="h-4 w-4" />
-                Go To
-              </Button>
-            </div>
+  <div class="flex flex-1 gap-0 bg-[var(--background)] h-[calc(100vh-4rem)]">
+    <!-- Timeline Sidebar -->
+    <div class="w-[var(--sidebar-width)] border-r border-[var(--border)] bg-[var(--card)] overflow-y-auto">
+      <div class="p-[var(--spacing-6)]">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-[var(--spacing-6)]">
+          <Button variant="outline" size="sm" class="gap-[var(--spacing-2)] border-[var(--border)]">
+            <CalendarIcon class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
+            Today
+          </Button>
+          <Button variant="outline" size="sm" class="gap-[var(--spacing-2)] border-[var(--border)]">
+            <Map class="h-[var(--spacing-4)] w-[var(--spacing-4)]" />
+            Go To
+          </Button>
+        </div>
 
-            <!-- Days List -->
-            <div class="space-y-4">
-              <NuxtLink
-                v-for="event in timelineEvents"
-                :key="event.id"
-                :to="`/events/advance/${event.id}`"
-                class="flex items-start gap-4 cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-2 rounded-md transition-colors"
-                :class="{ 'bg-gray-100': event.id === eventId }"
-              >
-                <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-200 bg-secondary flex-shrink-0">
-                  <span class="text-xs font-semibold text-gray-900 leading-none">{{ event.dayOfWeek }}</span>
-                  <span class="text-xs text-gray-600 leading-none mt-1">{{ event.dateShort }}</span>
-                </div>
-                <div class="flex-1 pt-1">
-                  <h3 class="text-lg font-semibold text-gray-900 leading-tight">
-                    {{ event.location }}
-                  </h3>
-                  <p class="text-sm text-gray-500 mt-1">
-                    {{ event.venueName }}
-                  </p>
-                </div>
-              </NuxtLink>
+        <!-- Days List -->
+        <div class="space-y-[var(--spacing-4)]">
+          <NuxtLink
+            v-for="event in timelineEvents"
+            :key="event.id"
+            :to="`/events/advance/${event.id}`"
+            class="flex items-start gap-[var(--spacing-4)] cursor-pointer hover:bg-[var(--muted)] -mx-[var(--spacing-2)] px-[var(--spacing-2)] py-[var(--spacing-2)] rounded-md transition-colors duration-[var(--transition-duration-fast)]"
+            :class="{ 'bg-[var(--muted)]': event.id === eventId }"
+          >
+            <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-[var(--border)] bg-secondary flex-shrink-0">
+              <span class="text-[var(--font-size-xs)] font-semibold text-[var(--foreground)] leading-none">{{ event.dayOfWeek }}</span>
+              <span class="text-[var(--font-size-xs)] text-[var(--muted-foreground)] leading-none mt-[var(--spacing-1)]">{{ event.dateShort }}</span>
             </div>
+            <div class="flex-1 pt-[var(--spacing-1)]">
+              <h3 class="text-[var(--font-size-lg)] font-semibold text-[var(--foreground)] leading-tight">
+                {{ event.location }}
+              </h3>
+              <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)] mt-[var(--spacing-1)]">
+                {{ event.venueName }}
+              </p>
+            </div>
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden bg-[var(--background)]">
+      <header class="flex items-center gap-[var(--spacing-4)] border-b border-[var(--border)] bg-[var(--card)] py-[var(--spacing-3)] px-[var(--spacing-6)]">
+        <div class="flex flex-col gap-[var(--spacing-3)]">
+          <div class="flex items-center gap-[var(--spacing-2)] text-[var(--font-size-sm)] text-muted-foreground mb-[var(--spacing-2)]">
+            <span class="px-[var(--spacing-2)] py-0.5 bg-primary/10 text-primary rounded font-medium">{{ headerDate.dayOfWeek }}</span>
+            <span>•</span>
+            <span>{{ headerDate.dateShort }}</span>
+          </div>
+
+          <div>
+            <h1 class="text-[var(--font-size-4xl)] font-semibold text-[var(--foreground)]">
+              {{ currentEvent?.day ? getLocation(currentEvent.day.city, currentEvent.day.state) : 'Event' }}
+            </h1>
+            <p class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">{{ currentEvent?.venue?.name ?? 'TBD' }}</p>
           </div>
         </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden bg-gray-50">
-          <header class="flex items-center gap-4 border-b border-gray-200 bg-white py-3 px-6">
-            <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                    <span class="px-2 py-0.5 bg-primary/10 text-primary rounded font-medium">{{ headerDate.dayOfWeek }}</span>
-                    <span>•</span>
-                    <span>{{ headerDate.dateShort }}</span></div>
-
-
-              <!-- <div class="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-md border border-gray-300 bg-white flex-shrink-0">
-                <span class="text-xs font-semibold text-gray-900 leading-none">{{ headerDate.dayOfWeek }}</span>
-                <span class="text-xs text-gray-600 leading-none mt-1">{{ headerDate.dateShort }}</span>
-              </div> -->
-              <div>
-                <h1 class="text-4xl font-semibold text-gray-900">
-                  {{ currentEvent?.day ? getLocation(currentEvent.day.city, currentEvent.day.state) : 'Event' }}
-                </h1>
-                <p class="text-sm text-gray-500">{{ currentEvent?.venue?.name ?? 'TBD' }}</p>
-              </div>
-            </div>
-            <div class="ml-auto flex items-center gap-2">
-              <Button
-                v-if="isEditMode"
-                size="sm"
-                variant="outline"
-                @click="isEditMode = false; editableEvent = null"
-              >
-                <X class="h-4 w-4 mr-2" />
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                class="bg-black text-white hover:bg-gray-800"
-                @click="toggleEditMode"
-              >
-                <Edit v-if="!isEditMode" class="h-4 w-4 mr-2" />
-                <Save v-else class="h-4 w-4 mr-2" />
-                {{ isEditMode ? 'Save Changes' : 'Edit Event' }}
-              </Button>
-            </div>
-          </header>
-
-          <main class="flex-1 overflow-y-auto p-8">
-            <div v-if="currentEvent">
-              <!-- Info Cards Grid -->
-              <div class="grid grid-cols-2 gap-4 mb-6">
-                <EditableInfoCard
-                  title="Day of Show Contact"
-                  :icon="Contact"
-                  :data="displayEvent?.dayOfShowContact ?? null"
-                  :fields="contactFields"
-                  :is-edit-mode="isEditMode"
-                  helper-text="💡 In production: Search existing contacts"
-                  @update:data="(c) => updateEventField('dayOfShowContact', c)"
-                />
-
-                <EditableInfoCard
-                  title="Promoter"
-                  :icon="Users"
-                  :data="displayEvent?.promoter ?? null"
-                  :fields="contactFields"
-                  :is-edit-mode="isEditMode"
-                  helper-text="💡 In production: Search existing contacts"
-                  @update:data="(p) => updateEventField('promoter', p)"
-                />
-
-                <EditableInfoCard
-                  title="Venue"
-                  :icon="MapPin"
-                  :data="displayEvent?.venue ?? null"
-                  :fields="venueFields"
-                  :is-edit-mode="isEditMode"
-                  helper-text="💡 In production: Search venues database"
-                  @update:data="(v) => updateEventField('venue', v)"
-                />
-
-                <EditableInfoCard
-                  title="Hotel"
-                  :icon="Hotel"
-                  :data="displayEvent?.hotel ?? null"
-                  :fields="hotelFields"
-                  :is-edit-mode="isEditMode"
-                  @update:data="(h) => updateEventField('hotel', h)"
-                />
-              </div>
-
-              <!-- Event Details Accordions -->
-              <div class="space-y-4 mb-8">
-                <Accordion type="multiple" :default-value="['production', 'facilities']" class="w-full">
-                  <!-- Schedule Accordion -->
-                  <AccordionItem value="schedule" class="border border-gray-200/80 bg-white rounded-lg mb-4 px-6 shadow-sm hover:shadow-md transition-shadow data-[state=open]:shadow-md data-[state=open]:pb-6 data-[state=open]:border-gray-300">
-                    <AccordionTrigger class="py-5 text-base font-semibold text-gray-900 hover:no-underline">
-                      Schedule
-                    </AccordionTrigger>
-                    <AccordionContent class="pt-4">
-                      <div v-if="currentEvent.showTime || currentEvent.loadIn || currentEvent.soundCheck || currentEvent.doors">
-                        <!-- Showtime Section -->
-                        <div v-if="currentEvent.showTime" class="pb-6 mb-6 border-b border-gray-200">
-                          <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Showtime</div>
-                          <div class="text-5xl font-bold text-gray-900 mb-2 tracking-tight">{{ currentEvent.showTime }}</div>
-                          <div v-if="currentEvent.setLength" class="text-sm text-gray-600 font-medium">
-                            Length: {{ currentEvent.setLength }}mins
-                          </div>
-                        </div>
-
-                        <!-- Timeline Section -->
-                        <div class="grid gap-y-3" style="grid-template-columns: auto 1fr; column-gap: 1.5rem; align-items: baseline;">
-                          <template v-if="currentEvent.crewDepartHotel">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.crewDepartHotel }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">Crew departs hotel for venue</span>
-                            </div>
-                          </template>
-
-                          <template v-if="currentEvent.lunch">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.lunch }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">Lunch at venue</span>
-                            </div>
-                          </template>
-
-                          <template v-if="currentEvent.loadIn">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.loadIn }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">Load-In</span>
-                            </div>
-                          </template>
-
-                          <template v-if="currentEvent.soundCheck">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.soundCheck }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">Sound Check</span>
-                            </div>
-                          </template>
-
-                          <template v-if="currentEvent.dinner">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.dinner }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">Dinner at venue</span>
-                            </div>
-                          </template>
-
-                          <template v-if="currentEvent.doors">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.doors }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">Doors open</span>
-                            </div>
-                          </template>
-
-                          <template v-if="currentEvent.showTime">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.showTime }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">The Big Show begins</span>
-                            </div>
-                          </template>
-
-                          <template v-if="currentEvent.showEnds">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.showEnds }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">Show ends</span>
-                            </div>
-                          </template>
-
-                          <template v-if="currentEvent.loadOut">
-                            <div class="text-right">
-                              <span class="text-lg font-bold text-gray-900 tabular-nums">{{ currentEvent.loadOut }}</span>
-                            </div>
-                            <div>
-                              <span class="text-sm text-gray-700">Load Out begins</span>
-                            </div>
-                          </template>
-                        </div>
-                      </div>
-                      <div v-else class="text-sm text-gray-500">
-                        No schedule information available.
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <!-- Production Accordion -->
-                  <EditableAccordion
-                    value="production"
-                    title="Production"
-                    :data="displayEvent"
-                    :sections="productionSections"
-                    :is-edit-mode="isEditMode"
-                    @update:data="(d) => Object.assign(editableEvent || {}, d)"
-                  />
-
-                  <!-- Facilities Accordion -->
-                  <FacilitiesAccordion
-                    :facilities="displayEvent?.facilities ?? null"
-                    :is-edit-mode="isEditMode"
-                    @update:facilities="(f) => updateEventField('facilities', f)"
-                  />
-
-                  <!-- Equipment Accordion -->
-                  <EditableAccordion
-                    value="equipment"
-                    title="Equipment"
-                    :data="displayEvent?.production ?? null"
-                    :sections="equipmentSections"
-                    :is-edit-mode="isEditMode"
-                    @update:data="(d) => updateEventField('production', d)"
-                  />
-
-                  <!-- Logistics Accordion -->
-                  <EditableAccordion
-                    value="logistics"
-                    title="Logistics"
-                    :data="displayEvent?.logistics ?? null"
-                    :sections="logisticsSections"
-                    :is-edit-mode="isEditMode"
-                    @update:data="(d) => updateEventField('logistics', d)"
-                  />
-
-                  <!-- Local Crew Accordion -->
-                  <EditableAccordion
-                    value="local-crew"
-                    title="Local Crew"
-                    :data="displayEvent?.localCrew ?? null"
-                    :sections="localCrewSections"
-                    :is-edit-mode="isEditMode"
-                    @update:data="(d) => updateEventField('localCrew', d)"
-                  />
-
-                  <!-- Labor Call Table -->
-                  <LaborCallTable
-                    :labor-call="displayEvent?.laborCall"
-                    :is-edit-mode="isEditMode"
-                    @update:labor-call="(l) => updateEventField('laborCall', l)"
-                  />
-                </Accordion>
-              </div>
-
-            </div>
-            <div v-else class="text-center py-12 text-gray-500">
-              Event not found.
-            </div>
-          </main>
+        <div class="ml-auto flex items-center gap-[var(--spacing-2)]">
+          <Button
+            v-if="isEditMode"
+            size="sm"
+            variant="outline"
+            class="border-[var(--border)]"
+            @click="isEditMode = false; editableEvent = null"
+          >
+            <X class="h-[var(--spacing-4)] w-[var(--spacing-4)] mr-[var(--spacing-2)]" />
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            class="bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 transition-colors duration-[var(--transition-duration-base)]"
+            @click="toggleEditMode"
+          >
+            <Edit v-if="!isEditMode" class="h-[var(--spacing-4)] w-[var(--spacing-4)] mr-[var(--spacing-2)]" />
+            <Save v-else class="h-[var(--spacing-4)] w-[var(--spacing-4)] mr-[var(--spacing-2)]" />
+            {{ isEditMode ? 'Save Changes' : 'Edit Event' }}
+          </Button>
         </div>
+      </header>
+
+      <main class="flex-1 overflow-y-auto p-[var(--spacing-8)]">
+        <div v-if="currentEvent">
+          <!-- Info Cards Grid -->
+          <div class="grid grid-cols-2 gap-[var(--spacing-4)] mb-[var(--spacing-6)]">
+            <EditableInfoCard
+              title="Day of Show Contact"
+              :icon="Contact"
+              :data="displayEvent?.dayOfShowContact ?? null"
+              :fields="contactFields"
+              :is-edit-mode="isEditMode"
+              helper-text="💡 In production: Search existing contacts"
+              @update:data="(c) => updateEventField('dayOfShowContact', c)"
+            />
+
+            <EditableInfoCard
+              title="Promoter"
+              :icon="Users"
+              :data="displayEvent?.promoter ?? null"
+              :fields="contactFields"
+              :is-edit-mode="isEditMode"
+              helper-text="💡 In production: Search existing contacts"
+              @update:data="(p) => updateEventField('promoter', p)"
+            />
+
+            <EditableInfoCard
+              title="Venue"
+              :icon="MapPin"
+              :data="displayEvent?.venue ?? null"
+              :fields="venueFields"
+              :is-edit-mode="isEditMode"
+              helper-text="💡 In production: Search venues database"
+              @update:data="(v) => updateEventField('venue', v)"
+            />
+
+            <EditableInfoCard
+              title="Hotel"
+              :icon="Hotel"
+              :data="displayEvent?.hotel ?? null"
+              :fields="hotelFields"
+              :is-edit-mode="isEditMode"
+              @update:data="(h) => updateEventField('hotel', h)"
+            />
+          </div>
+
+          <!-- Event Details Accordions -->
+          <div class="space-y-[var(--spacing-4)] mb-[var(--spacing-8)]">
+            <Accordion type="multiple" :default-value="['production', 'facilities']" class="w-full">
+              <!-- Schedule Accordion -->
+              <AccordionItem value="schedule" class="border border-[var(--border)] bg-[var(--card)] rounded-lg mb-[var(--spacing-4)] px-[var(--spacing-6)] shadow-sm hover:shadow-md transition-shadow data-[state=open]:shadow-md data-[state=open]:border-[var(--border)] data-[state=open]:pb-[var(--spacing-6)]">
+                <AccordionTrigger class="py-[var(--spacing-5)] text-[var(--font-size-base)] font-semibold text-[var(--foreground)] hover:no-underline">
+                  Schedule
+                </AccordionTrigger>
+                <AccordionContent class="pt-[var(--spacing-4)]">
+                  <div v-if="currentEvent.showTime || currentEvent.loadIn || currentEvent.soundCheck || currentEvent.doors">
+                    <!-- Showtime Section -->
+                    <div v-if="currentEvent.showTime" class="pb-[var(--spacing-6)] mb-[var(--spacing-6)] border-b border-[var(--border)]">
+                      <div class="text-[var(--font-size-xs)] font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-[var(--spacing-3)]">Showtime</div>
+                      <div class="text-5xl font-bold text-[var(--foreground)] mb-[var(--spacing-2)] tracking-tight">{{ currentEvent.showTime }}</div>
+                      <div v-if="currentEvent.setLength" class="text-[var(--font-size-sm)] text-[var(--muted-foreground)] font-medium">
+                        Length: {{ currentEvent.setLength }}mins
+                      </div>
+                    </div>
+
+                    <!-- Timeline Section -->
+                    <div class="grid gap-y-[var(--spacing-3)]" style="grid-template-columns: auto 1fr; column-gap: 1.5rem; align-items: baseline;">
+                      <template v-if="currentEvent.crewDepartHotel">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.crewDepartHotel }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Crew departs hotel for venue</span>
+                        </div>
+                      </template>
+
+                      <template v-if="currentEvent.lunch">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.lunch }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Lunch at venue</span>
+                        </div>
+                      </template>
+
+                      <template v-if="currentEvent.loadIn">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.loadIn }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Load-In</span>
+                        </div>
+                      </template>
+
+                      <template v-if="currentEvent.soundCheck">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.soundCheck }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Sound Check</span>
+                        </div>
+                      </template>
+
+                      <template v-if="currentEvent.dinner">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.dinner }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Dinner at venue</span>
+                        </div>
+                      </template>
+
+                      <template v-if="currentEvent.doors">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.doors }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Doors open</span>
+                        </div>
+                      </template>
+
+                      <template v-if="currentEvent.showTime">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.showTime }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">The Big Show begins</span>
+                        </div>
+                      </template>
+
+                      <template v-if="currentEvent.showEnds">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.showEnds }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Show ends</span>
+                        </div>
+                      </template>
+
+                      <template v-if="currentEvent.loadOut">
+                        <div class="text-right">
+                          <span class="text-[var(--font-size-lg)] font-bold text-[var(--foreground)] tabular-nums">{{ currentEvent.loadOut }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">Load Out begins</span>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                  <div v-else class="text-[var(--font-size-sm)] text-[var(--muted-foreground)]">
+                    No schedule information available.
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <!-- Production Accordion -->
+              <EditableAccordion
+                value="production"
+                title="Production"
+                :data="displayEvent"
+                :sections="productionSections"
+                :is-edit-mode="isEditMode"
+                @update:data="(d) => Object.assign(editableEvent || {}, d)"
+              />
+
+              <!-- Facilities Accordion -->
+              <FacilitiesAccordion
+                :facilities="displayEvent?.facilities ?? null"
+                :is-edit-mode="isEditMode"
+                @update:facilities="(f) => updateEventField('facilities', f)"
+              />
+
+              <!-- Equipment Accordion -->
+              <EditableAccordion
+                value="equipment"
+                title="Equipment"
+                :data="displayEvent?.production ?? null"
+                :sections="equipmentSections"
+                :is-edit-mode="isEditMode"
+                @update:data="(d) => updateEventField('production', d)"
+              />
+
+              <!-- Logistics Accordion -->
+              <EditableAccordion
+                value="logistics"
+                title="Logistics"
+                :data="displayEvent?.logistics ?? null"
+                :sections="logisticsSections"
+                :is-edit-mode="isEditMode"
+                @update:data="(d) => updateEventField('logistics', d)"
+              />
+
+              <!-- Local Crew Accordion -->
+              <EditableAccordion
+                value="local-crew"
+                title="Local Crew"
+                :data="displayEvent?.localCrew ?? null"
+                :sections="localCrewSections"
+                :is-edit-mode="isEditMode"
+                @update:data="(d) => updateEventField('localCrew', d)"
+              />
+
+              <!-- Labor Call Table -->
+              <LaborCallTable
+                :labor-call="displayEvent?.laborCall"
+                :is-edit-mode="isEditMode"
+                @update:labor-call="(l) => updateEventField('laborCall', l)"
+              />
+            </Accordion>
+          </div>
+
+        </div>
+        <div v-else class="text-center py-[var(--spacing-12)] text-[var(--muted-foreground)]">
+          Event not found.
+        </div>
+      </main>
+    </div>
   </div>
 </template>

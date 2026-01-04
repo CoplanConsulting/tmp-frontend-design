@@ -38,7 +38,7 @@ const selectVenue = (id: string) => {
 <template>
   <div class="flex flex-1 gap-0 bg-gray-50 h-[calc(100vh-6rem)] -m-4">
     <!-- Venue List Column -->
-    <div class="w-[300px] border-r border-gray-200 bg-white overflow-y-auto">
+    <div class="w-[var(--sidebar-width)] border-r border-gray-200 bg-white overflow-y-auto">
       <Sidebar collapsible="none" variant="sidebar" side="left" class="border-none bg-transparent">
       <SidebarHeader class="border-b border-gray-200 px-4 py-3">
         <div class="flex items-center justify-between">
