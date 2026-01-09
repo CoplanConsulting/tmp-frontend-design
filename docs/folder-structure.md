@@ -1,9 +1,13 @@
 # Project Folder Structure
 
-Last updated: 2026-01-03
+Last updated: 2026-01-08
 .
+├── .claude
+│   └── rules
+│       ├── calendar.md
+│       ├── styling.md
+│       └── ui.md
 ├── app.vue
-├── assets├── app.vue
 ├── assets
 │   ├── css
 │   │   └── main.css
@@ -187,3 +191,20 @@ Last updated: 2026-01-03
     └── scheduleXAdapter.ts
 
 64 directories, 269 files
+
+## Recent Additions
+
+### 2026-01-08: Task-Master Architecture
+- Added `.claude/rules/` directory with context-specific rules:
+  - `calendar.md` - schedule-x/calendar patterns (Target: `pages/calendar/**/*`)
+  - `styling.md` - Tailwind 4/BEM rules (Target: `**/*`)
+  - `ui.md` - shadcn-vue/component guidelines (Target: `components/**/*`)
+- Added `docs/prompts/system/` directory with development framework prompts:
+  - `PRD_ARCHITECT.md` - Transform brain dumps into PRDs
+  - `TASK_PARSER.md` - Break PRDs into 10 actionable tasks (S/M/L sizing)
+  - `PROJECT_AUDIT_MASTER.md` - Deep-dive audits to generate living Master Plan
+  - `SESSION_SYNC.md` - Post-session debriefs and documentation updates
+- Added `docs/MASTER_PLAN.md` - Living document of project status (DONE, IN PROGRESS, DEBT)
+- Added `docs/specs/` directory for Product Requirement Documents
+- Added `docs/dumps/` directory for brain dumps and raw input
+- Updated `CLAUDE.md` to reference new rule files and Task-Master architecture

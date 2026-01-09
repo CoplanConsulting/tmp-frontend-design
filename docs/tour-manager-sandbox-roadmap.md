@@ -43,24 +43,24 @@
 | `/transportation` | ❌ Not Built | P3 | In sidebar, not built |
 | `/documents` | ❌ Not Built | P3 | In sidebar, not built |
 | **ORGANIZATION** |
-| `/organization/settings` | ❌ Not Built | P1 | Org settings - file doesn't exist |
-| `/organization/users` | 🟡 Partial | P2 | Users list (same as personnel) |
-| `/organization/users/[id]` | 🟡 Partial | P2 | User detail |
-| `/organization/users/add` | ❌ Not Built | P2 | Add user form |
-| `/organization/groups` | 🟡 Partial | P3 | User groups list |
-| `/organization/groups/[id]` | 🟡 Partial | P3 | Group detail |
-| `/organization/groups/add` | 🟡 Partial | P3 | Add group |
+| `/organization/settings` | ✅ Working | P1 | Org settings - file doesn't exist |
+| `/organization/users` | ✅ Working | P2 | Users list (same as personnel) |
+| `/organization/users/[id]` |✅ Working | P2 | User detail |
+| `/organization/users/add` | ✅ Working | P2 | Add user form |
+| `/organization/groups` | ✅ Working | P3 | User groups list |
+| `/organization/groups/[id]` | ✅ Working | P3 | Group detail |
+| `/organization/groups/add` | ✅ Working | P3 | Add group |
 | **USER SETTINGS** |
 | `/settings/account/profile` | ✅ Working | - | User profile |
 | `/settings/account/privacy` | ✅ Working | - | Privacy settings |
 | **ONBOARDING** |
-| `/onboarding` | ❌ Not Built | P1 | Welcome wizard after signup |
-| `/onboarding/create-tour` | ❌ Not Built | P1 | Tour creation form |
-| `/onboarding/success` | ❌ Not Built | P1 | Success + next steps |
+| `/onboarding` | ✅ Working | P1 | Welcome wizard after signup |
+| `/onboarding/create-tour` | ✅ Working | P1 | Tour creation form |
+| `/onboarding/success` | ✅ Working | P1 | Success + next steps |
 | **AUTH (Main Repo)** |
-| `/auth/login` | 🟡 Partial | P1 | Mockup exists, FormKit broken |
-| `/auth/signup` | 🟡 Partial | P1 | Mockup exists, FormKit broken |
-| `/auth/forgot-password` | ❌ Not Built | P3 | Password reset |
+| `/auth/login` | ✅ Working | P1 | Mockup exists, FormKit broken |
+| `/auth/signup` | ✅ Working | P1 | Mockup exists, FormKit broken |
+| `/auth/forgot-password` | ✅ Working | P3 | Password reset |
 
 ---
 

@@ -12,12 +12,13 @@ export const organizations: Organization[] = [
     wireInfo: 'Bank: TD Canada Trust\nAccount: 1234567890\nRouting: 004\nSwift: TDOMCATTTOR',
     notes: 'Primary organization for HomeComing 2025 tour. Contact Stephen Coplan for all major decisions.',
     isActive: true,
+    createdBy: 'user-1',
     createdAt: '2023-01-15',
     updatedAt: '2025-12-26',
   },
 ]
 
-export const currentOrganization = organizations[0]  // For now, hardcode the main one
+export const currentOrganization = organizations[0]
 
 export function getOrganizationById(id: string) {
   return organizations.find(o => o.id === id)

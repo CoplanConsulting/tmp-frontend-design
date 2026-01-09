@@ -20,7 +20,18 @@ function createDay(data: Omit<Day, 'dayOfWeek' | 'dateShort' | 'location'>): Day
 
 export const days: Day[] = [
   // Week 1: Oct 14-20 (Maritimes)
-  createDay({ id: 'day-1', tourIds: 'tour-1', date: '2025-10-14', dayType: 'Travel Day', status: 'confirmed', city: 'Nashville', state: 'TN', country: 'USA', timezone: 'Central', notes: 'Fly to Moncton' }),
+  createDay({ 
+        id: 'day-1', 
+        tourIds: 'tour-1', 
+        date: '2025-10-14', 
+        dayType: 'Travel Day', 
+        status: 'confirmed', 
+        city: 'Nashville', 
+        state: 'TN', 
+        country: 'USA', 
+        timezone: 'Central', 
+        notes: 'Fly to Moncton'
+    }),
   createDay({ id: 'day-2', tourIds: 'tour-1', date: '2025-10-15', dayType: 'Travel Day', status: 'confirmed', city: 'Moncton', state: 'NB', country: 'Canada', timezone: 'Atlantic' }),
   createDay({ id: 'day-3', tourIds: 'tour-1', date: '2025-10-16', dayType: 'Rehearsal', status: 'confirmed', city: 'Moncton', state: 'NB', country: 'Canada', timezone: 'Atlantic', hasEvent: true }),
   createDay({ id: 'day-4', tourIds: 'tour-1', date: '2025-10-17', dayType: 'Show Day', status: 'confirmed', city: 'Moncton', state: 'NB', country: 'Canada', timezone: 'Atlantic', hasEvent: true }),

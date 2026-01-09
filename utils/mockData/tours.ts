@@ -53,6 +53,19 @@ export const tours: Tour[] = [
     totalShows: 25,
     completedShows: 25,
     totalCrew: 15,
+  },{
+    id: 'tour-4',
+    organizationId: 'org-1',
+    name: 'HomeComing Tour 2023',
+    artist: 'Terri Clark & Paul Brandt',
+    startDate: '2023-10-29',
+    endDate: '2023-12-2',
+    tourManager: 'Steve Coplan',
+    status: 'Completed',
+    totalDays: 35,
+    totalShows: 24,
+    completedShows: 24,
+    totalCrew: 9,
   },
 ]
 
