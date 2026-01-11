@@ -145,14 +145,13 @@ See `.claude/rules/styling.md` for detailed styling guidelines, Tailwind 4 confi
 
 ### Documentation
 - **IMPORTANT**: When creating new files/folders or modifying project structure, ALWAYS update `docs/folder-structure.md`
-- Update the folder tree to reflect new pages, components, schemas, or utilities
-- Add a "Recent Additions" entry with date and description
+- Update the folder tree to reflect new pages, components, schemas, or utilities and last update date
 - This keeps the project documentation accurate and helps onboarding
 
 ## Domain-Specific Notes
 
 ### Tour Management Features
-- **Events**: Shows, travel days, off days
+- **Events**: Shows, media promotions, radio promotions
 - **Advance**: Detailed event planning (venue, production, facilities, crew, etc.)
 - **Personnel**: Crew directory with roles and departments
 - **Guest Lists**: Per-event guest management

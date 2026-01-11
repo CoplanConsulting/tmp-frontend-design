@@ -111,6 +111,8 @@
   /* Semantic aliases (extend as needed) */
   --color-card: oklch(1 0 0); /* Pure white for elevated surfaces */
   --color-card-foreground: var(--color-text-primary);
+  --color-popover: oklch(1 0 0); /* White for popovers/dropdowns */
+  --color-popover-foreground: oklch(0.129 0.042 264.695); /* Dark blue-gray */
   --color-primary: var(--color-accent);
   --color-primary-foreground: oklch(0.98 0.002 240); /* White on accent */
   --color-muted: var(--color-neutral-light);
@@ -156,8 +158,8 @@
   --sidebar-border: var(--color-sidebar-border);
   --sidebar-ring: var(--color-sidebar-ring);
 
-  --popover: oklch(1 0 0); /* White */
-  --popover-foreground: oklch(0.129 0.042 264.695); /* Dark blue-gray */
+  --popover: var(--color-popover);
+  --popover-foreground: var(--color-popover-foreground);
 
   /* --------------------------------------------------------------------------
      BRAND COLORS
@@ -231,6 +233,11 @@
   --accent: oklch(0.6 0.22 250);
   --border: oklch(0.3 0.01 240); /* Darker border */
   --ring: oklch(0.6 0.22 250);
+
+  /* Popover/Dropdown backgrounds */
+  --popover: oklch(0.15 0.01 240); /* Dark gray background */
+  --popover-foreground: oklch(0.98 0.002 240); /* Off-white text */
+
   /* Sidebar dark */
   --sidebar: oklch(0.15 0.01 240);
   --sidebar-foreground: oklch(0.98 0.002 240);

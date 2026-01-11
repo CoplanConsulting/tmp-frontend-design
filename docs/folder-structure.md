@@ -1,6 +1,10 @@
 # Project Folder Structure
+**Project**: Tour Management Pro (tmp_frontend_design)
+**Last Updated**: 2026-01-10
+**Status**: Active Development - UI Sandbox Phase
 
-Last updated: 2026-01-08
+tree -I 'node_modules' > folder-structure.md
+
 .
 ├── .claude
 │   └── rules
@@ -75,18 +79,27 @@ Last updated: 2026-01-08
 │   ├── useNavigation.ts
 │   └── useSelectedEvent.ts
 ├── docs
-│   ├── AUDIT_REPORT.md
-│   ├── CSS_AUDIT_SUMMARY.md
-│   ├── CSS_REFACTOR_ROADMAP.md
-│   ├── DESIGN_SYSTEM.md
+│   ├── dumps
+│   │   ├── AUDIT_REPORT.md
+│   │   ├── component-ideas.md
+│   │   ├── CSS_AUDIT_SUMMARY.md
+│   │   ├── CSS_REFACTOR_ROADMAP.md
+│   │   ├── DESIGN_SYSTEM.md
+│   │   └── MIGRATION-CHECKLIST.md
 │   ├── folder-structure.md
-│   ├── MIGRATION-CHECKLIST.md
-│   ├── Page_By_Page_Review_Notes.rtf
+│   ├── MASTER_PLAN.md
+│   ├── Page_By_Page_Review_Notes.md
 │   ├── prompts
-│   │   └── OPUS-PROMPT-UX-FLOW-PLANNING.md
+│   │   ├── OPUS-PROMPT-UX-FLOW-PLANNING.md
+│   │   └── system
+│   │       ├── PRD_ARCHITECT.md
+│   │       ├── PROJECT_AUDIT_MASTER.md
+│   │       ├── SESSION_SYNC.md
+│   │       └── TASK_PARSER.md
+│   ├── specs
 │   ├── TMP-Frontend-Schema-Audit.md
 │   └── tour-manager-sandbox-roadmap.md
-├── folder-structure.md
+├── folder-structure.txt
 ├── layouts
 │   └── default.vue
 ├── lib
@@ -129,6 +142,7 @@ Last updated: 2026-01-08
 │   │   ├── add.vue
 │   │   ├── advance
 │   │   │   └── [slug].vue
+│   │   ├── empty.vue
 │   │   └── index.vue
 │   ├── guest-list
 │   │   ├── [id]
@@ -168,6 +182,7 @@ Last updated: 2026-01-08
 │   └── img
 │       ├── me.jpg
 │       └── shadcn.jpg
+├── refactor-output.json
 ├── sandbox.html
 ├── schemas
 │   └── tour.ts
@@ -190,7 +205,7 @@ Last updated: 2026-01-08
     ├── navigation.ts
     └── scheduleXAdapter.ts
 
-64 directories, 269 files
+67 directories, 277 files
 
 ## Recent Additions
 
